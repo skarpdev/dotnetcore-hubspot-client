@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Skarp.HubSpotClient.Interfaces
+﻿namespace Skarp.HubSpotClient.Interfaces
 {
     public interface ICompanyHubSpotEntity : IHubSpotEntity
     {

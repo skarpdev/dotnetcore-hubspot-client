@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
+﻿using System.Reflection;
 using Microsoft.Extensions.Logging;
-using RapidCore.Network;
 using Skarp.HubSpotClient.Interfaces;
 
 namespace Skarp.HubSpotClient.Requests
@@ -29,7 +25,7 @@ namespace Skarp.HubSpotClient.Requests
             var mapped = new HubspotDataEntity();
             bool isv2Route = entity.RoutePath.Contains("/v2/");
             _logger.LogDebug("isv2route: {0}", isv2Route);
-            
+
             var allProps = entity.GetType().GetProperties();
             _logger.LogDebug("Have {0} props to map", allProps.Length);
 

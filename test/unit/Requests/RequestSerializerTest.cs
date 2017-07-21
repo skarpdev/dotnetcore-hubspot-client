@@ -1,4 +1,3 @@
-using System;
 using Microsoft.Extensions.Logging;
 using Skarp.HubSpotClient.Dto;
 using Skarp.HubSpotClient.Requests;

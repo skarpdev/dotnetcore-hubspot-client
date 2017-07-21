@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Skarp.HubSpotClient.Interfaces;
+﻿using Skarp.HubSpotClient.Interfaces;
 
 namespace Skarp.HubSpotClient.Dto
 {
