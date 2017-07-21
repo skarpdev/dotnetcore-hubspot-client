@@ -4,6 +4,10 @@ namespace Skarp.HubSpotClient.Dto
 {
     public class ContactHubSpotEntity : IContactHubSpotEntity
     {
+        /// <summary>
+        /// Contacts unique Id in HubSpot
+        /// </summary>
+        public long? Vid { get; set; }
         public string Email { get; set; }
         public string FirstName { get; set; }
         public string Lastname { get; set; }

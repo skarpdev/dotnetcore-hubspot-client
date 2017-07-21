@@ -2,6 +2,7 @@
 {
     public interface IContactHubSpotEntity : IHubSpotEntity
     {
+        long? Vid { get; set; }
         string Email { get; set; }
         string FirstName { get; set; }
         string Lastname { get; set; }
