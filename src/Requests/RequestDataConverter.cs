@@ -46,6 +46,7 @@ namespace Skarp.HubSpotClient.Requests
                     item.Property = null;
                     item.Name = prop.Name;
                 }
+                if(item.Value == null) continue;
 
                 mapped.Properties.Add(item);
             }
