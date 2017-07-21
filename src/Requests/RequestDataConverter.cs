@@ -2,16 +2,20 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using Microsoft.Extensions.Logging;
 using RapidCore.Network;
 using Skarp.HubSpotClient.Interfaces;
 
 namespace Skarp.HubSpotClient.Requests
 {
-    internal class RequestDataConverter
+    public class RequestDataConverter
     {
-        public RequestDataConverter()
-        {
+        private readonly ILogger<RequestDataConverter> _logger;
 
+        public RequestDataConverter(
+            ILogger<RequestDataConverter> logger)
+        {
+            _logger = logger;
         }
 
         /// <summary>
@@ -21,12 +25,17 @@ namespace Skarp.HubSpotClient.Requests
         /// <returns></returns>
         public HubspotDataEntity ToHubspotDataEntity(IHubSpotEntity entity)
         {
+            _logger.LogDebug("Convert ToHubspotDataEntity");
             var mapped = new HubspotDataEntity();
             bool isv2Route = entity.RoutePath.Contains("/v2/");
+            _logger.LogDebug("isv2route: {0}", isv2Route);
+            
             var allProps = entity.GetType().GetProperties();
+            _logger.LogDebug("Have {0} props to map", allProps.Length);
 
             foreach (var prop in allProps)
             {
+                _logger.LogDebug("Mapping prop: '{0}'", prop.Name);
                 if (prop.Name.Equals("RoutePath")) continue;
 
                 var propValue = prop.GetValue(entity);
@@ -45,6 +54,7 @@ namespace Skarp.HubSpotClient.Requests
                 mapped.Properties.Add(item);
             }
 
+            _logger.LogDebug("Mapping complete, returning data");
             return mapped;
         }
     }

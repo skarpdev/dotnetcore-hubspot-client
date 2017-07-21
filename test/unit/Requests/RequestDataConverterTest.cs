@@ -2,22 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Extensions.Logging;
 using Skarp.HubSpotClient.Dto;
 using Skarp.HubSpotClient.Requests;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Skarp.HubSpotClient.UnitTest
 {
-    public class RequestDataConverterTest
+    public class RequestDataConverterTest : UnitTestBase<RequestDataConverter>
     {
         private readonly RequestDataConverter _converter;
         private readonly ContactHubSpotEntity _contactDto;
         private readonly CustomContactHubSpotEntity _customContactDto;
         private CompanyHubSpotEntity _companyDto;
 
-        public RequestDataConverterTest()
+        public RequestDataConverterTest(ITestOutputHelper output) : base(output)
         {
-            _converter = new RequestDataConverter();
+            _converter = new RequestDataConverter(Logger);
             _contactDto = new ContactHubSpotEntity()
             {
                 Address = "25 First Street",

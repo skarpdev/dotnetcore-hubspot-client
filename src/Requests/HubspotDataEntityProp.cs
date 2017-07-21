@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents a property value instance that can be sent to HubSpot
     /// </summary>
-    internal class HubspotDataEntityProp
+    public class HubspotDataEntityProp
     {
         /// <summary>
         /// Gets or sets the property that has a value.

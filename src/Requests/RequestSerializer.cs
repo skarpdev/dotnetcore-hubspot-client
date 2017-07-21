@@ -6,7 +6,7 @@ using Skarp.HubSpotClient.Interfaces;
 
 namespace Skarp.HubSpotClient.Requests
 {
-    internal class RequestSerializer
+    public class RequestSerializer
     {
         private readonly RequestDataConverter _requestDataConverter;
         private readonly JsonSerializerSettings _jsonSerializerSettings;
@@ -14,15 +14,13 @@ namespace Skarp.HubSpotClient.Requests
         /// <summary>
         /// Initializes a new instance of the <see cref="RequestSerializer"/> class.
         /// </summary>
-        public RequestSerializer()
+        protected RequestSerializer()
         {
             _jsonSerializerSettings = new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
                 NullValueHandling = NullValueHandling.Ignore
             };
-            
-            _requestDataConverter = new RequestDataConverter();
         }
 
         /// <summary>

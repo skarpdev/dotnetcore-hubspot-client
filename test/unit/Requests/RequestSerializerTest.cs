@@ -1,4 +1,5 @@
 using System;
+using Microsoft.Extensions.Logging;
 using Skarp.HubSpotClient.Dto;
 using Skarp.HubSpotClient.Requests;
 using Xunit;
@@ -6,16 +7,17 @@ using Xunit.Abstractions;
 
 namespace Skarp.HubSpotClient.UnitTest
 {
-    public class RequestSerializerTest
+    public class RequestSerializerTest : UnitTestBase<RequestSerializer>
     {
         private readonly ITestOutputHelper _output;
         private readonly RequestSerializer _serializer;
         private readonly ContactHubSpotEntity _contactDto;
 
-        public RequestSerializerTest(ITestOutputHelper output)
+        public RequestSerializerTest(ITestOutputHelper output) : base(output)
         {
             _output = output;
-            _serializer = new RequestSerializer();
+            _serializer =
+                new RequestSerializer(new RequestDataConverter(LoggerFactory.CreateLogger<RequestDataConverter>()));
             _contactDto = new ContactHubSpotEntity()
             {
                 Address = "25 First Street",

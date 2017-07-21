@@ -5,7 +5,7 @@ namespace Skarp.HubSpotClient.Requests
     /// <summary>
     /// Class that represents the input data model for hubspot API endpoints
     /// </summary>
-    internal class HubspotDataEntity
+    public class HubspotDataEntity
     {
         /// <summary>
         /// Gets or sets the properties.
