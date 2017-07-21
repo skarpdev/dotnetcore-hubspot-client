@@ -8,6 +8,7 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="RapidCore" Version="0.14.0" />
+    <PackageReference Include="System.Reflection.TypeExtensions" Version="4.3.0" />
     <DotNetCliToolReference Include="dotnet-version-cli" Version="0.3.1" />
   </ItemGroup>
 </Project>
