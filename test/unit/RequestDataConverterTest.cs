@@ -12,7 +12,8 @@ namespace Skarp.HubSpotClient.UnitTest
     {
         private readonly RequestDataConverter _converter;
         private readonly ContactHubSpotEntity _contactDto;
-        private CustomContactHubSpotEntity _customContactDto;
+        private readonly CustomContactHubSpotEntity _customContactDto;
+        private CompanyHubSpotEntity _companyDto;
 
         public RequestDataConverterTest()
         {
@@ -44,6 +45,12 @@ namespace Skarp.HubSpotClient.UnitTest
                 Website = "http://hubspot.com",
                 ZipCode = "02139",
                 MyCustomProp = "Has a value!"
+            };
+
+            _companyDto = new CompanyHubSpotEntity
+            {
+                Name = "Acme Inc",
+                Description = "The world famous Acme Inc"
             };
         }
 
@@ -80,6 +87,23 @@ namespace Skarp.HubSpotClient.UnitTest
             Assert.Equal(prop.Value, "Has a value!");
         }
 
+        [Fact]
+        public void RequestDataConvert_converts_company_to_internal_repsentation()
+        {
+            var converted = _converter.ToHubspotDataEntity(_companyDto);
+            
+            Assert.NotNull(converted);
+            var allProps = converted.Properties;
+            Assert.NotEmpty(allProps);
+            
+            Assert.True(allProps.Count == 2, "converted.Properties.Count == 2");
+
+            foreach (var prop in allProps)
+            {
+                Assert.NotNull(prop.Name);
+                Assert.NotNull(prop.Value);
+            }
+        }
 
         private class CustomContactHubSpotEntity : ContactHubSpotEntity
         {
