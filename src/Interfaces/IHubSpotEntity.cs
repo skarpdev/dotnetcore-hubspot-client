@@ -8,6 +8,6 @@
         /// e.g /companies/v2/companies/
         /// </summary>
         /// <returns></returns>
-        string RoutePath { get;  }
+        string RouteBasePath { get;  }
     }
 }

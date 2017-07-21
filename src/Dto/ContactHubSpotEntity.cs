@@ -15,6 +15,6 @@ namespace Skarp.HubSpotClient.Dto
         public string State { get; set; }
         public string ZipCode { get; set; }
         
-        public string RoutePath => "/contacts/v1/contact";
+        public string RouteBasePath => "/contacts/v1";
     }
 }

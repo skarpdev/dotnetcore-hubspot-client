@@ -23,7 +23,7 @@ namespace Skarp.HubSpotClient.Requests
         {
             _logger.LogDebug("Convert ToHubspotDataEntity");
             var mapped = new HubspotDataEntity();
-            bool isv2Route = entity.RoutePath.Contains("/v2/");
+            bool isv2Route = entity.RouteBasePath.Contains("/v2");
             _logger.LogDebug("isv2route: {0}", isv2Route);
 
             var allProps = entity.GetType().GetProperties();
@@ -32,7 +32,7 @@ namespace Skarp.HubSpotClient.Requests
             foreach (var prop in allProps)
             {
                 _logger.LogDebug("Mapping prop: '{0}'", prop.Name);
-                if (prop.Name.Equals("RoutePath")) continue;
+                if (prop.Name.Equals("RouteBasePath")) continue;
 
                 var propValue = prop.GetValue(entity);
                 var item = new HubspotDataEntityProp
