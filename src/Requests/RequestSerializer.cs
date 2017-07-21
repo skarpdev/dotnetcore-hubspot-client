@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Dynamic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using Skarp.HubSpotClient.Interfaces;
 
@@ -32,20 +34,31 @@ namespace Skarp.HubSpotClient.Requests
         {
             _requestDataConverter = requestDataConverter;
         }
-        
+
         /// <summary>
         /// Serializes the entity to JSON.
         /// </summary>
         /// <param name="entity">The entity.</param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
+        /// <returns>The serialized entity</returns>
         public virtual string SerializeEntity(IHubSpotEntity entity)
         {
             var converted = _requestDataConverter.ToHubspotDataEntity(entity);
-            
+
             return JsonConvert.SerializeObject(
                    converted,
                    _jsonSerializerSettings);
+        }
+
+        /// <summary>
+        /// Deserialize the given JSON into a <see cref="IHubSpotEntity"/>
+        /// </summary>
+        /// <param name="json">The json data returned by HubSpot that should be converted</param>
+        /// <returns>The deserialized entity</returns>
+        public virtual IHubSpotEntity DeserializeEntity<T>(string json) where T : IHubSpotEntity, new()
+        {
+            var jobj = JsonConvert.DeserializeObject<ExpandoObject>(json);
+            var converted = _requestDataConverter.FromHubSpotResponse<T>(jobj);
+            return converted;
         }
     }
 }
