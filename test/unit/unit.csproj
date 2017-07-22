@@ -6,6 +6,7 @@
     <RootNamespace>Skarp.HubSpotClient.UnitTest</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="FakeItEasy" Version="3.4.2" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="1.1.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0" />
     <PackageReference Include="RapidCore.Xunit" Version="0.14.0" />

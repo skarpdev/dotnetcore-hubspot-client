@@ -1,10 +1,9 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using RapidCore.Network;
 
-namespace Skarp.HubSpotClient.UnitTest
+namespace Skarp.HubSpotClient.FunctionalTests.Mocks
 {
     public class CreateContactMockTestCase : IMockRapidHttpClientTestCase
     {

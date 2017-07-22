@@ -1,9 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using FakeItEasy;
 using Microsoft.Extensions.Logging;
 using RapidCore.Network;
 using Skarp.HubSpotClient.Dto;
+using Skarp.HubSpotClient.Interfaces;
 using Skarp.HubSpotClient.Requests;
 using Xunit;
 using Xunit.Abstractions;
@@ -12,20 +16,40 @@ namespace Skarp.HubSpotClient.UnitTest
 {
     public class HubSpotContactClientTest : UnitTestBase<HubSpotContactClient>
     {
-        private HubSpotContactClient _client;
+        private readonly HubSpotContactClient _client;
+        private IRapidHttpClient _mockHttpClient;
+        private RequestSerializer _mockSerializer;
 
         public HubSpotContactClientTest(ITestOutputHelper output) : base(output)
         {
-            var mockHttpClient = new MockRapidHttpClient()
-                .AddTestCase(new CreateContactMockTestCase());
-            
+            _mockHttpClient = A.Fake<IRapidHttpClient>(opts => opts.Strict());
+
+            A.CallTo(() => _mockHttpClient.SendAsync(A<HttpRequestMessage>.Ignored))
+                .Returns(Task.FromResult(CreateNewEmptyOkResponse()));
+
+            _mockSerializer = A.Fake<RequestSerializer>(opts => opts.Strict());
+            A.CallTo(() => _mockSerializer.SerializeEntity(A<ContactHubSpotEntity>.Ignored))
+                .Returns("{}");
+
+            A.CallTo(() => _mockSerializer.DeserializeEntity<ContactHubSpotEntity>(A<string>.Ignored))
+                .Returns(new ContactHubSpotEntity());
+
             _client = new HubSpotContactClient(
-                mockHttpClient, 
+                _mockHttpClient,
                 Logger,
-                new RequestSerializer(new RequestDataConverter(LoggerFactory.CreateLogger<RequestDataConverter>())), 
-                "https://api.hubapi.com/",
+                _mockSerializer,
+                "https://api.hubapi.com",
                 "HapiKeyFisk"
                 );
+        }
+
+        private HttpResponseMessage CreateNewEmptyOkResponse()
+        {
+            var response = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new JsonContent("{}")
+            };
+            return response;
         }
 
         [Theory]
@@ -41,24 +65,20 @@ namespace Skarp.HubSpotClient.UnitTest
         }
 
         [Fact]
-        public async Task ContactClient_can_create_contacts()
+        public async Task ContactClient_create_contact_works()
         {
-            var data = await _client.CreateAsync<ContactHubSpotEntity>(new ContactHubSpotEntity
+            var response = await _client.CreateAsync<ContactHubSpotEntity>(new ContactHubSpotEntity
             {
-                FirstName = "Mr",
-                Lastname = "Test miaki",
-                Address = "Æblevej 42",
-                City = "Copenhagen",
-                ZipCode = "2300",
-                Company = "Acme inc",
-                Email = "that@email.com",
-
+                FirstName = "Adrian",
+                Lastname = "Baws",
+                Email = "adrian@the-email.com"
             });
-            
-            Assert.NotNull(data);
-            
-            // Should have replied with mocked data, so it does not really correspond to our input data, but it proves the "flow"
-            Assert.Equal(61574, data.Vid);
+
+            Assert.NotNull(response);
+
+            A.CallTo(() => _mockHttpClient.SendAsync(A<HttpRequestMessage>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _mockSerializer.SerializeEntity(A<IHubSpotEntity>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _mockSerializer.DeserializeEntity<ContactHubSpotEntity>("{}")).MustHaveHappened();
         }
     }
 }
