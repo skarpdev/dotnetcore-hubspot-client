@@ -53,7 +53,7 @@ namespace Skarp.HubSpotClient
                 throw new NotImplementedException("Deal with non success codes somehow!");
             }
 
-            T data = (T)_serializer.DeserializeEntity<T>(responseData);
+            var data = (T)_serializer.DeserializeEntity<T>(responseData);
             return data;
         }
     }

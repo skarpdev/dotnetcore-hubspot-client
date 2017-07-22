@@ -74,8 +74,6 @@ namespace Skarp.HubSpotClient.UnitTest
                 Email = "adrian@the-email.com"
             });
 
-            Assert.NotNull(response);
-
             A.CallTo(() => _mockHttpClient.SendAsync(A<HttpRequestMessage>.Ignored)).MustHaveHappened();
             A.CallTo(() => _mockSerializer.SerializeEntity(A<IHubSpotEntity>.Ignored)).MustHaveHappened();
             A.CallTo(() => _mockSerializer.DeserializeEntity<ContactHubSpotEntity>("{}")).MustHaveHappened();
