@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using RapidCore.Network;
 using RapidCore.Threading;
+using Skarp.HubSpotClient.Contact;
+using Skarp.HubSpotClient.Dto;
 using Skarp.HubSpotClient.Interfaces;
 using Skarp.HubSpotClient.Requests;
 
@@ -37,14 +41,26 @@ namespace Skarp.HubSpotClient
             return data;
         }
 
-        public async Task<object> GetAsync(long contactId)
+        public async Task<object> GetSingleAsync(long contactId)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<object> ListAsync()
+        public async Task<T> ListAsync<T>(ContactListRequestOptions opts = null) where T : IHubSpotEntity, new()
         {
-            throw new NotImplementedException();
+            Logger.LogDebug("Contact ListAsync");
+            if (opts == null)
+            {
+                opts = new ContactListRequestOptions();
+            }
+            var path = PathResolver(new ContactListHubSpotEntity<ContactHubSpotEntity>(), HubSpotAction.List) + $"&count={opts.NumberOfContactsToReturn}";
+            if (opts.ContactOffset.HasValue)
+            {
+                path = path + $"?vidOffset={opts.ContactOffset}";
+            }
+
+            var data = await ListAsync<T>(path);
+            return data;
         }
 
         public async Task<object> UpdateAsync(long contactId)
@@ -57,7 +73,7 @@ namespace Skarp.HubSpotClient
             throw new NotImplementedException();
         }
 
-        public string PathResolver(IContactHubSpotEntity entity, HubSpotAction action)
+        public string PathResolver(IHubSpotEntity entity, HubSpotAction action)
         {
             switch (action)
             {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Dynamic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -58,6 +59,18 @@ namespace Skarp.HubSpotClient.Requests
         {
             var jobj = JsonConvert.DeserializeObject<ExpandoObject>(json);
             var converted = _requestDataConverter.FromHubSpotResponse<T>(jobj);
+            return converted;
+        }
+
+        /// <summary>
+        /// Deserialize the given JSON from a List requet into a <see cref="IHubSpotEntity"/>
+        /// </summary>
+        /// <param name="json">The JSON data returned from a List request to HubSpot</param>
+        /// <returns></returns>
+        public virtual IHubSpotEntity DeserializeListEntity<T>(string json) where T : IHubSpotEntity, new()
+        {
+            var expandoObject = JsonConvert.DeserializeObject<ExpandoObject>(json);
+            var converted = _requestDataConverter.FromHubSpotListResponse<T>(expandoObject);
             return converted;
         }
     }

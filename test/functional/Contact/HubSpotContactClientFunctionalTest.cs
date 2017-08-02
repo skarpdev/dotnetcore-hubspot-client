@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using RapidCore.Network;
+using Skarp.HubSpotClient.Contact;
 using Skarp.HubSpotClient.Dto;
 using Skarp.HubSpotClient.FunctionalTests.Mocks;
 using Skarp.HubSpotClient.Requests;
@@ -20,7 +21,8 @@ namespace Skarp.HubSpotClient.FunctionalTests.Contact
         : base(output)
         {
             var mockHttpClient = new MockRapidHttpClient()
-                .AddTestCase(new CreateContactMockTestCase());
+                .AddTestCase(new CreateContactMockTestCase())
+                .AddTestCase(new ListContactMockTestCase());
 
             _client = new HubSpotContactClient(
                 mockHttpClient,
@@ -50,6 +52,20 @@ namespace Skarp.HubSpotClient.FunctionalTests.Contact
 
             // Should have replied with mocked data, so it does not really correspond to our input data, but it proves the "flow"
             Assert.Equal(61574, data.Vid);
+        }
+
+        [Fact]
+        public async Task ContactClient_can_list_contacts()
+        {
+            var data = await _client.ListAsync<ContactListHubSpotEntity<ContactHubSpotEntity>>(new ContactListRequestOptions
+            {
+                NumberOfContactsToReturn = 1
+            });
+
+            Assert.NotNull(data);
+            Assert.True(data.MoreResultsAvailable);
+            Assert.InRange(data.ContinuationOffset, 1, long.MaxValue);
+            Assert.True(data.Contacts.Count == 2, "data.Contacts.Count == 2");
         }
     }
 }

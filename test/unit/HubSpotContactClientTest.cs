@@ -34,6 +34,9 @@ namespace Skarp.HubSpotClient.UnitTest
             A.CallTo(() => _mockSerializer.DeserializeEntity<ContactHubSpotEntity>(A<string>.Ignored))
                 .Returns(new ContactHubSpotEntity());
 
+            A.CallTo(() => _mockSerializer.DeserializeListEntity<ContactListHubSpotEntity<ContactHubSpotEntity>>(A<string>.Ignored))
+                .Returns(new ContactListHubSpotEntity<ContactHubSpotEntity>());
+            
             _client = new HubSpotContactClient(
                 _mockHttpClient,
                 Logger,
@@ -65,7 +68,7 @@ namespace Skarp.HubSpotClient.UnitTest
         }
 
         [Fact]
-        public async Task ContactClient_create_contact_works()
+        public async Task ContactClient_create_contact_work()
         {
             var response = await _client.CreateAsync<ContactHubSpotEntity>(new ContactHubSpotEntity
             {
@@ -77,6 +80,16 @@ namespace Skarp.HubSpotClient.UnitTest
             A.CallTo(() => _mockHttpClient.SendAsync(A<HttpRequestMessage>.Ignored)).MustHaveHappened();
             A.CallTo(() => _mockSerializer.SerializeEntity(A<IHubSpotEntity>.Ignored)).MustHaveHappened();
             A.CallTo(() => _mockSerializer.DeserializeEntity<ContactHubSpotEntity>("{}")).MustHaveHappened();
+        }
+
+        [Fact]
+        public async Task ContactClient_list_contacts_work()
+        {
+            var response = await _client.ListAsync<ContactListHubSpotEntity<ContactHubSpotEntity>>();
+
+            A.CallTo(() => _mockHttpClient.SendAsync(A<HttpRequestMessage>.Ignored)).MustHaveHappened();
+            //A.CallTo(() => _mockSerializer.SerializeEntity(A<IHubSpotEntity>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _mockSerializer.DeserializeListEntity<ContactListHubSpotEntity<ContactHubSpotEntity>>("{}")).MustHaveHappened();
         }
     }
 }
