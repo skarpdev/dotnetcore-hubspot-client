@@ -45,6 +45,7 @@ namespace Skarp.HubSpotClient.Requests
                 var propValue = prop.GetValue(entity);
                 var item = new HubspotDataEntityProp
                 {
+                    //TODO use the correct serialized name for the Property value!
                     Property = prop.Name,
                     Value = propValue?.ToString()
                 };
@@ -179,6 +180,7 @@ namespace Skarp.HubSpotClient.Requests
             // The vid is the "id" of the entity
             if (expandoDict.TryGetValue("vid", out var vidData))
             {
+                // TODO use properly serialized name of prop to find it
                 var vidProp = dtoProps.SingleOrDefault(q => q.Name.ToLowerInvariant() == "vid");
                 vidProp?.SetValue(dto, vidData);
             }
@@ -195,10 +197,11 @@ namespace Skarp.HubSpotClient.Requests
                     continue;
                 }
 
+                // TODO use properly serialized name of prop to find and set it's value
                 var targetProp =
                     dtoProps.SingleOrDefault(q => q.Name.ToLowerInvariant() == dynamicProp.Key.ToLowerInvariant());
                 _logger.LogDebug("Have target prop? '{0}' with name: '{1}' and actual value: '{2}'", targetProp != null,
-                    targetProp?.Name ?? "N/A", dynamicValue);
+                    dynamicProp.Key, dynamicValue);
                 targetProp?.SetValue(dto, dynamicValue);
             }
             return dto;
