@@ -74,6 +74,26 @@ namespace Skarp.HubSpotClient
         }
 
         /// <summary>
+        /// Send a get request
+        /// </summary>
+        /// <param name="absoluteUriPath"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        protected async Task<T> GetAsync<T>(string absoluteUriPath) where T : IHubSpotEntity, new()
+        {
+            Logger.LogDebug("Get async for uri path: '{0}'", absoluteUriPath);
+            var httpMethod = HttpMethod.Get;
+
+            var data = await SendRequestAsync<T>(
+                absoluteUriPath,
+                httpMethod,
+                null,
+                responseData => (T)_serializer.DeserializeEntity<T>(responseData)
+            );
+
+            return data;
+        }
+        /// <summary>
         /// Helper method for dispatching the requet and dealing with response errors
         /// </summary>
         /// <typeparam name="T">The type to deserialize as</typeparam>
@@ -85,7 +105,9 @@ namespace Skarp.HubSpotClient
         private async Task<T> SendRequestAsync<T>(string absoluteUriPath, HttpMethod httpMethod, string json, Func<string, T> deserializeFunc)
             where T : IHubSpotEntity, new()
         {
-            var fullUrl = ConstructFullUrl(absoluteUriPath);
+            var fullUrl = $"{HubSpotBaseUrl}{absoluteUriPath}?hapikey={_apiKey}";
+            Logger.LogDebug("Full url: '{0}'", fullUrl);
+            
             var request = new HttpRequestMessage
             {
                 Method = httpMethod,
@@ -106,13 +128,5 @@ namespace Skarp.HubSpotClient
 
             return deserializeFunc(responseData);
         }
-
-        private string ConstructFullUrl(string absoluteUriPath)
-        {
-            var fullUrl = $"{HubSpotBaseUrl}{absoluteUriPath}?hapikey={_apiKey}";
-            Logger.LogDebug("Full url: '{0}'", fullUrl);
-            return fullUrl;
-        }
-
     }
 }

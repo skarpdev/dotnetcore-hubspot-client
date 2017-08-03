@@ -41,11 +41,26 @@ namespace Skarp.HubSpotClient
             return data;
         }
 
-        public async Task<object> GetSingleAsync(long contactId)
+        /// <summary>
+        /// Return a single contact by id from hubspot
+        /// </summary>
+        /// <param name="contactId"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public async Task<T> GetByIdAsync<T>(long contactId) where T : IHubSpotEntity, new()
         {
-            throw new NotImplementedException();
+            Logger.LogDebug("Contact Get by id ");
+            var path = PathResolver(new ContactHubSpotEntity(), HubSpotAction.Get).Replace(":contactId:", contactId.ToString());
+            var data = await GetAsync<T>(path);
+            return data;
         }
 
+        /// <summary>
+        /// List contacts 
+        /// </summary>
+        /// <param name="opts">Request options - use for pagination</param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public async Task<T> ListAsync<T>(ContactListRequestOptions opts = null) where T : IHubSpotEntity, new()
         {
             Logger.LogDebug("Contact ListAsync");

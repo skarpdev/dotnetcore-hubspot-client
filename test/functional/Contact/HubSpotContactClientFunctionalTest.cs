@@ -23,7 +23,8 @@ namespace Skarp.HubSpotClient.FunctionalTests.Contact
         {
             var mockHttpClient = new MockRapidHttpClient()
                 .AddTestCase(new CreateContactMockTestCase())
-                .AddTestCase(new ListContactMockTestCase());
+                .AddTestCase(new ListContactMockTestCase())
+                .AddTestCase(new GetContactMockTestCase());
 
             _client = new HubSpotContactClient(
                 mockHttpClient,
@@ -67,6 +68,18 @@ namespace Skarp.HubSpotClient.FunctionalTests.Contact
             Assert.True(data.MoreResultsAvailable);
             Assert.InRange(data.ContinuationOffset, 1, long.MaxValue);
             Assert.True(data.Contacts.Count == 2, "data.Contacts.Count == 2");
+        }
+
+        [Fact]
+        public async Task ContactClient_can_get_contact()
+        {
+            const int contactId = 3234574;
+            var data = await _client.GetByIdAsync<ContactHubSpotEntity>(contactId);
+
+            Assert.NotNull(data);
+            Assert.Equal("Codey", data.FirstName);
+            Assert.Equal("Huang", data.Lastname);
+            Assert.Equal(contactId, data.Vid);
         }
     }
 }
