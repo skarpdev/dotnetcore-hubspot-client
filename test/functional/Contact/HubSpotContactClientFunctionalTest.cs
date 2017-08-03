@@ -10,6 +10,7 @@ using Skarp.HubSpotClient.FunctionalTests.Mocks;
 using Skarp.HubSpotClient.Requests;
 using Xunit;
 using Xunit.Abstractions;
+using Skarp.HubSpotClient.FunctionalTests.Mocks.Contact;
 
 namespace Skarp.HubSpotClient.FunctionalTests.Contact
 {
