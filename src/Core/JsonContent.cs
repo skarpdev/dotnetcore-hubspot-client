@@ -1,7 +1,7 @@
 using System.Net.Http;
 using System.Text;
 
-namespace Skarp.HubSpotClient
+namespace Skarp.HubSpotClient.Core
 {
     public class JsonContent : StringContent
     {

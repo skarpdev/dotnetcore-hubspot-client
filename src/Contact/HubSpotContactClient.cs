@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using RapidCore.Network;
-using RapidCore.Threading;
-using Skarp.HubSpotClient.Contact;
-using Skarp.HubSpotClient.Dto;
-using Skarp.HubSpotClient.Interfaces;
-using Skarp.HubSpotClient.Requests;
+using Skarp.HubSpotClient.Contact.Dto;
+using Skarp.HubSpotClient.Contact.Interfaces;
+using Skarp.HubSpotClient.Core;
+using Skarp.HubSpotClient.Core.Interfaces;
+using Skarp.HubSpotClient.Core.Requests;
 
-namespace Skarp.HubSpotClient
+namespace Skarp.HubSpotClient.Contact
 {
     public class HubSpotContactClient : HubSpotBaseClient
     {

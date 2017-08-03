@@ -1,4 +1,4 @@
-﻿namespace Skarp.HubSpotClient.Interfaces
+﻿namespace Skarp.HubSpotClient.Core.Interfaces
 {
     public interface IHubSpotEntity
     {

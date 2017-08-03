@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using RapidCore.Network;
+using Skarp.HubSpotClient.Core;
 
 namespace Skarp.HubSpotClient.FunctionalTests.Mocks.Contact
 {

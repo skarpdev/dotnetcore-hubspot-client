@@ -1,6 +1,6 @@
-﻿using Skarp.HubSpotClient.Interfaces;
+﻿using Skarp.HubSpotClient.Company.Interfaces;
 
-namespace Skarp.HubSpotClient.Dto
+namespace Skarp.HubSpotClient.Company.Dto
 {
     public class CompanyHubSpotEntity : ICompanyHubSpotEntity
     {

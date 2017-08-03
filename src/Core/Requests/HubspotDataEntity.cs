@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Skarp.HubSpotClient.Requests
+namespace Skarp.HubSpotClient.Core.Requests
 {
     /// <summary>
     /// Class that represents the input data model for hubspot API endpoints

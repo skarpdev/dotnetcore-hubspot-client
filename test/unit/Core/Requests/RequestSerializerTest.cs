@@ -1,10 +1,10 @@
 using Microsoft.Extensions.Logging;
-using Skarp.HubSpotClient.Dto;
-using Skarp.HubSpotClient.Requests;
+using Skarp.HubSpotClient.Contact.Dto;
+using Skarp.HubSpotClient.Core.Requests;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Skarp.HubSpotClient.UnitTest
+namespace Skarp.HubSpotClient.UnitTest.Core.Requests
 {
     public class RequestSerializerTest : UnitTestBase<RequestSerializer>
     {

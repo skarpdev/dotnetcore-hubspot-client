@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
+﻿using System.Dynamic;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
-using Skarp.HubSpotClient.Interfaces;
+using Skarp.HubSpotClient.Core.Interfaces;
 
-namespace Skarp.HubSpotClient.Requests
+namespace Skarp.HubSpotClient.Core.Requests
 {
     public class RequestSerializer
     {

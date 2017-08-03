@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.Text;
-using Skarp.HubSpotClient.Dto;
-using Skarp.HubSpotClient.Requests;
+using Skarp.HubSpotClient.Contact.Dto;
+using Skarp.HubSpotClient.Core;
 using Xunit;
 
-namespace Skarp.HubSpotClient.UnitTest
+namespace Skarp.HubSpotClient.UnitTest.Core
 {
     public class ReflectionExtensionTest
     {

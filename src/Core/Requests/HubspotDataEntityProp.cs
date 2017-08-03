@@ -1,4 +1,4 @@
-﻿namespace Skarp.HubSpotClient.Requests
+﻿namespace Skarp.HubSpotClient.Core.Requests
 {
     /// <summary>
     /// Represents a property value instance that can be sent to HubSpot

@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using RapidCore.Network;
-using Skarp.HubSpotClient.Interfaces;
-using Skarp.HubSpotClient.Requests;
+using Skarp.HubSpotClient.Core.Interfaces;
+using Skarp.HubSpotClient.Core.Requests;
 
-namespace Skarp.HubSpotClient
+namespace Skarp.HubSpotClient.Core
 {
     public abstract class HubSpotBaseClient
     {

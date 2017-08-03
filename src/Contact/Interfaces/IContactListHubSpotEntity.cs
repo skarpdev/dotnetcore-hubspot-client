@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using Skarp.HubSpotClient.Core.Interfaces;
 
-namespace Skarp.HubSpotClient.Interfaces
+namespace Skarp.HubSpotClient.Contact.Interfaces
 {
     public interface IContactListHubSpotEntity<T> : IHubSpotEntity where T : IContactHubSpotEntity
     {

@@ -1,4 +1,4 @@
-﻿namespace Skarp.HubSpotClient
+﻿namespace Skarp.HubSpotClient.Core
 {
     /// <summary>
     /// Enumerates the possible actions against the hubspot api

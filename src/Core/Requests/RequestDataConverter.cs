@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Serialization;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
-using RapidCore.Reflection;
-using Skarp.HubSpotClient.Interfaces;
+using Skarp.HubSpotClient.Core.Interfaces;
 
-namespace Skarp.HubSpotClient.Requests
+namespace Skarp.HubSpotClient.Core.Requests
 {
     public class RequestDataConverter
     {

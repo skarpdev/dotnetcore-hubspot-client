@@ -1,18 +1,17 @@
-﻿using System.Collections.Generic;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using FakeItEasy;
-using Microsoft.Extensions.Logging;
 using RapidCore.Network;
-using Skarp.HubSpotClient.Dto;
-using Skarp.HubSpotClient.Interfaces;
-using Skarp.HubSpotClient.Requests;
+using Skarp.HubSpotClient.Contact;
+using Skarp.HubSpotClient.Contact.Dto;
+using Skarp.HubSpotClient.Core;
+using Skarp.HubSpotClient.Core.Interfaces;
+using Skarp.HubSpotClient.Core.Requests;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Skarp.HubSpotClient.UnitTest
+namespace Skarp.HubSpotClient.UnitTest.Contact
 {
     public class HubSpotContactClientTest : UnitTestBase<HubSpotContactClient>
     {

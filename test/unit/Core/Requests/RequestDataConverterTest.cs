@@ -1,15 +1,13 @@
 ﻿using System.Dynamic;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.Serialization;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Skarp.HubSpotClient.Dto;
-using Skarp.HubSpotClient.Requests;
+using Skarp.HubSpotClient.Company.Dto;
+using Skarp.HubSpotClient.Contact.Dto;
+using Skarp.HubSpotClient.Core.Requests;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Skarp.HubSpotClient.UnitTest
+namespace Skarp.HubSpotClient.UnitTest.Core.Requests
 {
     public class RequestDataConverterTest : UnitTestBase<RequestDataConverter>
     {
