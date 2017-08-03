@@ -8,6 +8,8 @@
         Create,
 
         Get,
+        
+        GetByEmail,
 
         List,
 

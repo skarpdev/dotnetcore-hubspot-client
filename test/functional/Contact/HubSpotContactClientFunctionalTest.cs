@@ -18,13 +18,14 @@ namespace Skarp.HubSpotClient.FunctionalTests.Contact
     {
         private readonly HubSpotContactClient _client;
 
-        public HubSpotContactClientFunctionalTest(ITestOutputHelper output) 
-        : base(output)
+        public HubSpotContactClientFunctionalTest(ITestOutputHelper output)
+            : base(output)
         {
             var mockHttpClient = new MockRapidHttpClient()
                 .AddTestCase(new CreateContactMockTestCase())
                 .AddTestCase(new ListContactMockTestCase())
-                .AddTestCase(new GetContactMockTestCase());
+                .AddTestCase(new GetContactMockTestCase())
+                .AddTestCase(new GetContactByEmailMockTestCase());
 
             _client = new HubSpotContactClient(
                 mockHttpClient,
@@ -32,7 +33,7 @@ namespace Skarp.HubSpotClient.FunctionalTests.Contact
                 new RequestSerializer(new RequestDataConverter(LoggerFactory.CreateLogger<RequestDataConverter>())),
                 "https://api.hubapi.com/",
                 "HapiKeyFisk"
-                );
+            );
         }
 
         [Fact]
@@ -47,7 +48,6 @@ namespace Skarp.HubSpotClient.FunctionalTests.Contact
                 ZipCode = "2300",
                 Company = "Acme inc",
                 Email = "that@email.com",
-
             });
 
             Assert.NotNull(data);
@@ -59,10 +59,11 @@ namespace Skarp.HubSpotClient.FunctionalTests.Contact
         [Fact]
         public async Task ContactClient_can_list_contacts()
         {
-            var data = await _client.ListAsync<ContactListHubSpotEntity<ContactHubSpotEntity>>(new ContactListRequestOptions
-            {
-                NumberOfContactsToReturn = 1
-            });
+            var data = await _client.ListAsync<ContactListHubSpotEntity<ContactHubSpotEntity>>(
+                new ContactListRequestOptions
+                {
+                    NumberOfContactsToReturn = 1
+                });
 
             Assert.NotNull(data);
             Assert.True(data.MoreResultsAvailable);
@@ -80,6 +81,18 @@ namespace Skarp.HubSpotClient.FunctionalTests.Contact
             Assert.Equal("Codey", data.FirstName);
             Assert.Equal("Huang", data.Lastname);
             Assert.Equal(contactId, data.Vid);
+        }
+
+        [Fact]
+        public async Task ContactClient_can_get_contact_by_email()
+        {
+            const string email = "testingapis@hubspot.com";
+            var data = await _client.GetByEmailAsync<ContactHubSpotEntity>(email);
+
+            Assert.NotNull(data);
+            Assert.Equal("Codey", data.FirstName);
+            Assert.Equal("Huang", data.Lastname);
+            Assert.Equal(email, data.Email);
         }
     }
 }

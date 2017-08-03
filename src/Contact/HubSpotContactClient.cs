@@ -16,14 +16,13 @@ namespace Skarp.HubSpotClient
 {
     public class HubSpotContactClient : HubSpotBaseClient
     {
-
         public HubSpotContactClient(
             IRapidHttpClient httpClient,
             ILogger<HubSpotContactClient> logger,
             RequestSerializer serializer,
             string hubSpotBaseUrl,
             string apiKey)
-        : base(httpClient, logger, serializer, hubSpotBaseUrl, apiKey)
+            : base(httpClient, logger, serializer, hubSpotBaseUrl, apiKey)
         {
         }
 
@@ -50,7 +49,23 @@ namespace Skarp.HubSpotClient
         public async Task<T> GetByIdAsync<T>(long contactId) where T : IHubSpotEntity, new()
         {
             Logger.LogDebug("Contact Get by id ");
-            var path = PathResolver(new ContactHubSpotEntity(), HubSpotAction.Get).Replace(":contactId:", contactId.ToString());
+            var path = PathResolver(new ContactHubSpotEntity(), HubSpotAction.Get)
+                .Replace(":contactId:", contactId.ToString());
+            var data = await GetAsync<T>(path);
+            return data;
+        }
+
+        /// <summary>
+        /// Get a contact by email address
+        /// </summary>
+        /// <param name="email"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public async Task<T> GetByEmailAsync<T>(string email) where T : IHubSpotEntity, new()
+        {
+            Logger.LogDebug("Contact get by email");
+            var path = PathResolver(new ContactHubSpotEntity(), HubSpotAction.GetByEmail)
+                .Replace(":contactEmail:", email);
             var data = await GetAsync<T>(path);
             return data;
         }
@@ -68,7 +83,8 @@ namespace Skarp.HubSpotClient
             {
                 opts = new ContactListRequestOptions();
             }
-            var path = PathResolver(new ContactListHubSpotEntity<ContactHubSpotEntity>(), HubSpotAction.List) + $"&count={opts.NumberOfContactsToReturn}";
+            var path = PathResolver(new ContactListHubSpotEntity<ContactHubSpotEntity>(), HubSpotAction.List) +
+                       $"&count={opts.NumberOfContactsToReturn}";
             if (opts.ContactOffset.HasValue)
             {
                 path = path + $"?vidOffset={opts.ContactOffset}";
@@ -88,6 +104,13 @@ namespace Skarp.HubSpotClient
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Resolve a hubspot API path based off the entity and opreation that is about to happen
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         public string PathResolver(IHubSpotEntity entity, HubSpotAction action)
         {
             switch (action)
@@ -96,6 +119,8 @@ namespace Skarp.HubSpotClient
                     return $"{entity.RouteBasePath}/contact";
                 case HubSpotAction.Get:
                     return $"{entity.RouteBasePath}/contact/vid/:contactId:/profile";
+                case HubSpotAction.GetByEmail:
+                    return $"{entity.RouteBasePath}/contact/email/:contactEmail:/profile";
                 case HubSpotAction.List:
                     return $"{entity.RouteBasePath}/lists/all/contacts/all";
                 case HubSpotAction.Update:
