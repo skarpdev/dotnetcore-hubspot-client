@@ -27,7 +27,7 @@ namespace Skarp.HubSpotClient
             HttpClient = httpClient;
             Logger = logger;
             _serializer = serializer;
-            HubSpotBaseUrl = hubSpotBaseUrl;
+            HubSpotBaseUrl = hubSpotBaseUrl.TrimEnd('/');
             _apiKey = apiKey;
         }
 
@@ -38,7 +38,8 @@ namespace Skarp.HubSpotClient
         /// <param name="absoluteUriPath"></param>
         /// <param name="entity"></param>
         /// <returns></returns>
-        protected async Task<T> PostAsync<T>(string absoluteUriPath, IHubSpotEntity entity) where T : IHubSpotEntity, new()
+        protected async Task<T> PostAsync<T>(string absoluteUriPath, IHubSpotEntity entity)
+            where T : IHubSpotEntity, new()
         {
             Logger.LogDebug("Post async for uri path: '{0}' with type: '{1}'", absoluteUriPath, entity.GetType().Name);
             var json = _serializer.SerializeEntity(entity);
@@ -48,7 +49,7 @@ namespace Skarp.HubSpotClient
                 absoluteUriPath,
                 httpMethod,
                 json,
-                responseData => (T)_serializer.DeserializeEntity<T>(responseData));
+                responseData => (T) _serializer.DeserializeEntity<T>(responseData));
 
             return data;
         }
@@ -65,10 +66,10 @@ namespace Skarp.HubSpotClient
             var httpMethod = HttpMethod.Get;
 
             var data = await SendRequestAsync<T>(
-                absoluteUriPath, 
-                httpMethod, 
-                null, 
-                responseData => (T)_serializer.DeserializeListEntity<T>(responseData));
+                absoluteUriPath,
+                httpMethod,
+                null,
+                responseData => (T) _serializer.DeserializeListEntity<T>(responseData));
 
             return data;
         }
@@ -88,11 +89,12 @@ namespace Skarp.HubSpotClient
                 absoluteUriPath,
                 httpMethod,
                 null,
-                responseData => (T)_serializer.DeserializeEntity<T>(responseData)
+                responseData => (T) _serializer.DeserializeEntity<T>(responseData)
             );
 
             return data;
         }
+
         /// <summary>
         /// Helper method for dispatching the requet and dealing with response errors
         /// </summary>
@@ -102,12 +104,13 @@ namespace Skarp.HubSpotClient
         /// <param name="json">Optional json to send with the request</param>
         /// <param name="deserializeFunc">Func to handle deserialization of data when the request goes well</param>
         /// <returns>A deserialized entity with data when things go well, exceptionns otherwise</returns>
-        private async Task<T> SendRequestAsync<T>(string absoluteUriPath, HttpMethod httpMethod, string json, Func<string, T> deserializeFunc)
+        private async Task<T> SendRequestAsync<T>(string absoluteUriPath, HttpMethod httpMethod, string json,
+            Func<string, T> deserializeFunc)
             where T : IHubSpotEntity, new()
         {
             var fullUrl = $"{HubSpotBaseUrl}{absoluteUriPath}?hapikey={_apiKey}";
             Logger.LogDebug("Full url: '{0}'", fullUrl);
-            
+
             var request = new HttpRequestMessage
             {
                 Method = httpMethod,
