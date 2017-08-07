@@ -22,12 +22,10 @@ Currently in the works:
 
 ## Dotnet targets
 
-We hope to be able to publish packages for the following dotnet versions:
+Packages for the following dotnet versions are available:
 
 - dotnet 4.6
 - netstandard 1.6
-
-As of now we publish for dotnetstandard 1.6
 
 ## Versioning
 
