@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard1.6</TargetFramework>
+    <TargetFrameworks>netstandard1.6;net46</TargetFrameworks>
     <Version>0.0.2</Version>
     <AssemblyName>Skarp.HubSpotClient</AssemblyName>
     <RootNamespace>Skarp.HubSpotClient</RootNamespace>
