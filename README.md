@@ -12,11 +12,13 @@ Currently in the works:
   - [ ] Update
   - [x] Get by Id (aka Vid)
   - [x] Get by email
+  - [x] List with pagination support
   - [ ] Delete
 - [ ] Company CRUD
   - [x] Create
   - [ ] Update
   - [ ] Get by Id
+  - [ ] List with pagination support
   - [ ] Delete
 - [x] Support for mapping custom props to / from HubSpot
 
