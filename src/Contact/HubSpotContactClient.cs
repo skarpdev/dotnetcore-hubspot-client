@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using RapidCore.Network;
@@ -12,6 +13,14 @@ namespace Skarp.HubSpotClient.Contact
 {
     public class HubSpotContactClient : HubSpotBaseClient
     {
+        /// <summary>
+        /// Mockable and container ready constructor
+        /// </summary>
+        /// <param name="httpClient"></param>
+        /// <param name="logger"></param>
+        /// <param name="serializer"></param>
+        /// <param name="hubSpotBaseUrl"></param>
+        /// <param name="apiKey"></param>
         public HubSpotContactClient(
             IRapidHttpClient httpClient,
             ILogger<HubSpotContactClient> logger,
@@ -21,6 +30,25 @@ namespace Skarp.HubSpotClient.Contact
             : base(httpClient, logger, serializer, hubSpotBaseUrl, apiKey)
         {
         }
+
+        /// <summary>
+        /// Create a new instance of the HubSpotContactClient with default dependencies
+        /// </summary>
+        /// <remarks>
+        /// This constructor creates a HubSpotContactClient using "real" dependencies that will send requests 
+        /// via the network - if you wish to have support for functional tests and mocking use the "eager" constructor
+        /// that takes in all underlying dependecies
+        /// </remarks>
+        /// <param name="hubSpotBaseUrl"></param>
+        /// <param name="apiKey"></param>
+        public HubSpotContactClient(string hubSpotBaseUrl, string apiKey)
+        : base(
+              new RealRapidHttpClient(new HttpClient()), 
+              NoopLoggerFactory.Get(), 
+              new RequestSerializer(new RequestDataConverter(NoopLoggerFactory.Get<RequestDataConverter>())), 
+              hubSpotBaseUrl, 
+              apiKey)
+        { }
 
         /// <summary>
         /// Creates the contact entity asyncrhounously.
