@@ -4,6 +4,17 @@
     <Version>0.0.0</Version>
     <AssemblyName>Skarp.HubSpotClient</AssemblyName>
     <RootNamespace>Skarp.HubSpotClient</RootNamespace>
+    <Title>HubSpotClient</Title>
+    <Authors>nover</Authors>
+    <Description>Provides a dotnet/dotnet core HubSpot client with support for custom properties on your models</Description>
+    <PackageTags>hubspot;hubspot client;</PackageTags>
+    <PackageProjectUrl>https://github.com/skarpdev/dotnetcore-hubspot-client/</PackageProjectUrl>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/skarpdev/dotnetcore-hubspot-client/master/LICENSE</PackageLicenseUrl>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/skarpdev/dotnetcore-hubspot-client/</RepositoryUrl>
+    <PackageId>HubSpotClient</PackageId>
+    <Company>SKARP ApS</Company>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="1.1.2" />
