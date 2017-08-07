@@ -4,7 +4,7 @@ namespace Skarp.HubSpotClient.Contact.Interfaces
 {
     public interface IContactHubSpotEntity : IHubSpotEntity
     {
-        long? Vid { get; set; }
+        long? Id { get; set; }
         string Email { get; set; }
         string FirstName { get; set; }
         string Lastname { get; set; }

@@ -36,7 +36,7 @@ namespace Skarp.HubSpotClient.UnitTest.Core.Requests
         public void RequestSerializer_serializes_contact_entity()
         {
             var json = _serializer.SerializeEntity(_contactDto);
-            const string expectedJson = "{\"properties\":[{\"property\":\"Email\",\"value\":\"testingapis@hubspot.com\"},{\"property\":\"FirstName\",\"value\":\"Adrian\"},{\"property\":\"Lastname\",\"value\":\"Mott\"},{\"property\":\"Website\",\"value\":\"http://hubspot.com\"},{\"property\":\"Company\",\"value\":\"HubSpot\"},{\"property\":\"Phone\",\"value\":\"555-122-2323\"},{\"property\":\"Address\",\"value\":\"25 First Street\"},{\"property\":\"City\",\"value\":\"Cambridge\"},{\"property\":\"State\",\"value\":\"MA\"},{\"property\":\"ZipCode\",\"value\":\"02139\"}]}";
+            const string expectedJson = "{\"properties\":[{\"property\":\"email\",\"value\":\"testingapis@hubspot.com\"},{\"property\":\"firstname\",\"value\":\"Adrian\"},{\"property\":\"lastname\",\"value\":\"Mott\"},{\"property\":\"website\",\"value\":\"http://hubspot.com\"},{\"property\":\"company\",\"value\":\"HubSpot\"},{\"property\":\"phone\",\"value\":\"555-122-2323\"},{\"property\":\"address\",\"value\":\"25 First Street\"},{\"property\":\"city\",\"value\":\"Cambridge\"},{\"property\":\"state\",\"value\":\"MA\"},{\"property\":\"zipcode\",\"value\":\"02139\"}]}";
             Assert.Equal(expectedJson, json);
         }
     }

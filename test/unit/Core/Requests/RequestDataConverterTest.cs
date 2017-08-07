@@ -115,11 +115,11 @@ namespace Skarp.HubSpotClient.UnitTest.Core.Requests
             var contact = _converter.FromHubSpotResponse<ContactHubSpotEntity>(jobj);
             Assert.NotNull(contact);
 
-            Assert.Equal(contact.Vid, 61574);
-            Assert.Equal(contact.Website, "http://hubspot.com");
-            Assert.Equal(contact.Email, "fumanchu@hubspot.com");
-            Assert.Equal(contact.FirstName, "Adrian");
-            Assert.Equal(contact.ZipCode, "02139");
+            Assert.Equal(61574, contact.Id);
+            Assert.Equal("http://hubspot.com", contact.Website);
+            Assert.Equal("fumanchu@hubspot.com", contact.Email);
+            Assert.Equal("Adrian", contact.FirstName);
+            Assert.Equal("02139", contact.ZipCode);
         }
 
         [Fact]

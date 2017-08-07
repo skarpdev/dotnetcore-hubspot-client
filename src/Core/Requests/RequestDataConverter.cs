@@ -35,21 +35,21 @@ namespace Skarp.HubSpotClient.Core.Requests
 
             foreach (var prop in allProps)
             {
-                _logger.LogDebug("Mapping prop: '{0}'", prop.Name);
+                var propSerializedName = prop.GetPropSerializedName();
+                _logger.LogDebug("Mapping prop: '{0}' with serialization name: '{1}'", prop.Name, propSerializedName);
                 if (prop.Name.Equals("RouteBasePath")) continue;
 
                 var propValue = prop.GetValue(entity);
                 var item = new HubspotDataEntityProp
                 {
-                    //TODO use the correct serialized name for the Property value!
-                    Property = prop.Name,
+                    Property = propSerializedName,
                     Value = propValue?.ToString()
                 };
 
                 if (isv2Route)
                 {
                     item.Property = null;
-                    item.Name = prop.Name;
+                    item.Name = propSerializedName;
                 }
                 if (item.Value == null) continue;
 
@@ -177,7 +177,7 @@ namespace Skarp.HubSpotClient.Core.Requests
             if (expandoDict.TryGetValue("vid", out var vidData))
             {
                 // TODO use properly serialized name of prop to find it
-                var vidProp = dtoProps.SingleOrDefault(q => q.Name.ToLowerInvariant() == "vid");
+                var vidProp = dtoProps.SingleOrDefault(q => q.GetPropSerializedName() == "vid");
                 vidProp?.SetValue(dto, vidData);
             }
 
@@ -195,7 +195,7 @@ namespace Skarp.HubSpotClient.Core.Requests
 
                 // TODO use properly serialized name of prop to find and set it's value
                 var targetProp =
-                    dtoProps.SingleOrDefault(q => q.Name.ToLowerInvariant() == dynamicProp.Key.ToLowerInvariant());
+                    dtoProps.SingleOrDefault(q => q.GetPropSerializedName() == dynamicProp.Key);
                 _logger.LogDebug("Have target prop? '{0}' with name: '{1}' and actual value: '{2}'", targetProp != null,
                     dynamicProp.Key, dynamicValue);
                 targetProp?.SetValue(dto, dynamicValue);

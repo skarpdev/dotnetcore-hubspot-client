@@ -53,7 +53,7 @@ namespace Skarp.HubSpotClient.FunctionalTests.Contact
             Assert.NotNull(data);
 
             // Should have replied with mocked data, so it does not really correspond to our input data, but it proves the "flow"
-            Assert.Equal(61574, data.Vid);
+            Assert.Equal(61574, data.Id);
         }
 
         [Fact]
@@ -80,7 +80,7 @@ namespace Skarp.HubSpotClient.FunctionalTests.Contact
             Assert.NotNull(data);
             Assert.Equal("Codey", data.FirstName);
             Assert.Equal("Huang", data.Lastname);
-            Assert.Equal(contactId, data.Vid);
+            Assert.Equal(contactId, data.Id);
         }
 
         [Fact]
