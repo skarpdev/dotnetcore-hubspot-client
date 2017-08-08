@@ -1,5 +1,6 @@
 ﻿using System.Dynamic;
 using System.Linq;
+using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Skarp.HubSpotClient.Company.Dto;
 using Skarp.HubSpotClient.Contact.Dto;
@@ -45,7 +46,8 @@ namespace Skarp.HubSpotClient.UnitTest.Core.Requests
                 State = "MA",
                 Website = "http://hubspot.com",
                 ZipCode = "02139",
-                MyCustomProp = "Has a value!"
+                MyCustomProp = "Has a value!",
+                IgnoreMe = "Even though I have a value! muhahahah"
             };
 
             _companyDto = new CompanyHubSpotEntity
@@ -149,8 +151,9 @@ namespace Skarp.HubSpotClient.UnitTest.Core.Requests
         private class CustomContactHubSpotEntity : ContactHubSpotEntity
         {
             public string MyCustomProp { get; set; }
-        }
 
-       
+            [IgnoreDataMember]
+            public string IgnoreMe { get; set; }
+        }
     }
 }
