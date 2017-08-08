@@ -1,4 +1,4 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/xmrqd652rxk8gmbg?svg=true)](https://ci.appveyor.com/project/nover/dotnetcore-hubspot-client)
+[![Build status](https://ci.appveyor.com/api/projects/status/kwl0jx7cfmeel1jh?svg=true)](https://ci.appveyor.com/project/nover/dotnetcore-hubspot-client-qxwcp)
 [![nuget version][nuget-image]][nuget-url]
 
 # dotnet core HubSpot client
