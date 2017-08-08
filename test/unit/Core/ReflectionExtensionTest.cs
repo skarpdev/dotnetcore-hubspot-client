@@ -44,6 +44,9 @@ namespace Skarp.HubSpotClient.UnitTest.Core
             var propWithIgnore = dto.GetType().GetProperties().Single(p => p.Name == "IgnoreMePlease");
             var hasAttr = propWithIgnore.HasIgnoreDataMemberAttribute();
             Assert.True(hasAttr);
+
+            var propNoIgnore = dto.GetType().GetProperties().Single(p => p.Name == "MemberWithCustomName");
+            Assert.False(propNoIgnore.HasIgnoreDataMemberAttribute());
         }
 
         [DataContract]
