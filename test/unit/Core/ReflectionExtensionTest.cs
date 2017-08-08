@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
+using RapidCore.Reflection;
 using Skarp.HubSpotClient.Contact.Dto;
 using Skarp.HubSpotClient.Core;
 using Xunit;
@@ -31,9 +32,18 @@ namespace Skarp.HubSpotClient.UnitTest.Core
 
             // find the Add(T) method on the List entity!
             var listProp = dto.GetType().GetProperties().Single(p => p.Name == "Contacts");
-            var method = listProp.PropertyType.FindMethodRecursively("Add", new [] {typeof(ContactHubSpotEntity) });
+            var method = listProp.PropertyType.FindMethodRecursively("Add", new[] { typeof(ContactHubSpotEntity) });
 
             Assert.NotNull(method);
+        }
+
+        [Fact]
+        public void ReflectionExtension_can_determine_if_prop_has_ignore_data_member()
+        {
+            var dto = new ClassWithDataMembers();
+            var propWithIgnore = dto.GetType().GetProperties().Single(p => p.Name == "IgnoreMePlease");
+            var hasAttr = propWithIgnore.HasIgnoreDataMemberAttribute();
+            Assert.True(hasAttr);
         }
 
         [DataContract]
@@ -45,6 +55,9 @@ namespace Skarp.HubSpotClient.UnitTest.Core
 
             [DataMember(Name = "CallMeThis")]
             public string MemberWithCustomName { get; set; }
+
+            [IgnoreDataMember]
+            public string IgnoreMePlease { get; set; }
         }
     }
 }

@@ -35,9 +35,11 @@ namespace Skarp.HubSpotClient.Core.Requests
 
             foreach (var prop in allProps)
             {
+                if (prop.HasIgnoreDataMemberAttribute()) { continue; }
+
                 var propSerializedName = prop.GetPropSerializedName();
                 _logger.LogDebug("Mapping prop: '{0}' with serialization name: '{1}'", prop.Name, propSerializedName);
-                if (prop.Name.Equals("RouteBasePath")) continue;
+                if (prop.Name.Equals("RouteBasePath")) { continue; }
 
                 var propValue = prop.GetValue(entity);
                 var item = new HubspotDataEntityProp
@@ -51,7 +53,7 @@ namespace Skarp.HubSpotClient.Core.Requests
                     item.Property = null;
                     item.Name = propSerializedName;
                 }
-                if (item.Value == null) continue;
+                if (item.Value == null) { continue; }
 
                 mapped.Properties.Add(item);
             }
