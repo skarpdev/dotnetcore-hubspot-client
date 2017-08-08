@@ -27,7 +27,8 @@ namespace Skarp.HubSpotClient.FunctionalTests.Contact
                 .AddTestCase(new GetContactMockTestCase())
                 .AddTestCase(new GetContactByEmailMockTestCase())
                 .AddTestCase(new GetContactByEmailNotFoundMockTestCase())
-                .AddTestCase(new UpdateContactMockTestCase());
+                .AddTestCase(new UpdateContactMockTestCase())
+                .AddTestCase(new DeleteContactMockTestCase());
 
             _client = new HubSpotContactClient(
                 mockHttpClient,
@@ -118,6 +119,12 @@ namespace Skarp.HubSpotClient.FunctionalTests.Contact
             };
 
             await _client.UpdateAsync(contact);
+        }
+
+        [Fact]
+        public async Task ContactClient_delete_contact_works()
+        {
+            await _client.DeleteAsync(61571);
         }
     }
 }

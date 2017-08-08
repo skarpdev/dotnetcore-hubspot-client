@@ -130,9 +130,14 @@ namespace Skarp.HubSpotClient.Contact
             await PostAsync<ContactHubSpotEntity>(path, contact);
         }
 
-        public async Task<object> DeleteAsync(long contactId)
+        public async Task DeleteAsync(long contactId)
         {
-            throw new NotImplementedException();
+            Logger.LogDebug("Contact delete w. id: {0}", contactId);
+
+            var path = PathResolver(new ContactHubSpotEntity(), HubSpotAction.Delete)
+                .Replace(":contactId:", contactId.ToString());
+
+            await DeleteAsync<ContactHubSpotEntity>(path);
         }
 
         /// <summary>

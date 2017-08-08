@@ -166,13 +166,6 @@ namespace Skarp.HubSpotClient.Core.Requests
             var expandoDict = (IDictionary<string, object>)dynamicObject;
             var dtoProps = dto.GetType().GetProperties();
 
-            // The Properties object in the json / response data contains all the props we wish to map - if that does not exist
-            // we cannot proceeed
-            if (!expandoDict.TryGetValue("properties", out var dynamicProperties))
-            {
-                throw new ArgumentException("The given JSON document does not contain a properties object");
-            }
-
             // The vid is the "id" of the entity
             if (expandoDict.TryGetValue("vid", out var vidData))
             {
@@ -180,6 +173,10 @@ namespace Skarp.HubSpotClient.Core.Requests
                 var vidProp = dtoProps.SingleOrDefault(q => q.GetPropSerializedName() == "vid");
                 vidProp?.SetValue(dto, vidData);
             }
+
+            // The Properties object in the json / response data contains all the props we wish to map - if that does not exist
+            // we cannot proceeed
+            if (!expandoDict.TryGetValue("properties", out var dynamicProperties)) return dto;
 
             foreach (var dynamicProp in dynamicProperties as ExpandoObject)
             {
@@ -202,6 +199,5 @@ namespace Skarp.HubSpotClient.Core.Requests
             }
             return dto;
         }
-
     }
 }

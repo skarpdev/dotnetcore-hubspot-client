@@ -95,6 +95,17 @@ namespace Skarp.HubSpotClient.Core
             return data;
         }
 
+        protected async Task DeleteAsync<T>(string absoluteUriPath) where T : IHubSpotEntity, new()
+        {
+            Logger.LogDebug("Delete async for uri path: '{0}'", absoluteUriPath);
+            var httpMethod = HttpMethod.Delete;
+
+            await SendRequestAsync<T>(
+                absoluteUriPath,
+                httpMethod,
+                null,
+                responseData => (T) _serializer.DeserializeEntity<T>(responseData));
+        }
         /// <summary>
         /// Helper method for dispatching the requet and dealing with response errors
         /// </summary>
