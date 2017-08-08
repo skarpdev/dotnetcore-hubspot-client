@@ -10,6 +10,7 @@ namespace Skarp.HubSpotClient.Contact.Dto
         /// Contacts unique Id in HubSpot
         /// </summary>
         [DataMember(Name = "vid")]
+        [IgnoreDataMember]
         public long? Id { get; set; }
         [DataMember(Name = "email")]
         public string Email { get; set; }
