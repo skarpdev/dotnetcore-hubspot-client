@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -125,7 +126,12 @@ namespace Skarp.HubSpotClient.Core
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new NotImplementedException("Deal with non success codes somehow!");
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return default(T);
+                }
+
+                throw new HubSpotException("Error from HubSpot", responseData);
             }
 
             return deserializeFunc(responseData);
