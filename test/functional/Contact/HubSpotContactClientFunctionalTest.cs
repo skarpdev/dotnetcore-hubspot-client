@@ -26,7 +26,8 @@ namespace Skarp.HubSpotClient.FunctionalTests.Contact
                 .AddTestCase(new ListContactMockTestCase())
                 .AddTestCase(new GetContactMockTestCase())
                 .AddTestCase(new GetContactByEmailMockTestCase())
-                .AddTestCase(new GetContactByEmailNotFoundMockTestCase());
+                .AddTestCase(new GetContactByEmailNotFoundMockTestCase())
+                .AddTestCase(new UpdateContactMockTestCase());
 
             _client = new HubSpotContactClient(
                 mockHttpClient,
@@ -103,6 +104,20 @@ namespace Skarp.HubSpotClient.FunctionalTests.Contact
             var data = await _client.GetByEmailAsync<ContactHubSpotEntity>(email);
 
             Assert.Null(data);
+        }
+
+        [Fact]
+        public async Task ContactClient_update_contact_works()
+        {
+            var contact = new ContactHubSpotEntity
+            {
+                Id = 2340324,
+                Email = "new-email@hubspot.com",
+                FirstName = "Da First",
+                Lastname = "Da last"
+            };
+
+            await _client.UpdateAsync(contact);
         }
     }
 }

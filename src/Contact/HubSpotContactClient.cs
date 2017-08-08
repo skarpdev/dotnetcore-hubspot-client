@@ -117,9 +117,17 @@ namespace Skarp.HubSpotClient.Contact
             return data;
         }
 
-        public async Task<object> UpdateAsync(long contactId)
+        public async Task UpdateAsync(IContactHubSpotEntity contact)
         {
-            throw new NotImplementedException();
+            Logger.LogDebug("Contact update w. id: {0}", contact.Id);
+            if (contact.Id < 1)
+            {
+                throw new ArgumentException("Contact entity must have an id set!");
+            }
+            var path = PathResolver(contact, HubSpotAction.Update)
+                .Replace(":contactId:", contact.Id.ToString());
+
+            await PostAsync<ContactHubSpotEntity>(path, contact);
         }
 
         public async Task<object> DeleteAsync(long contactId)

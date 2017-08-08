@@ -122,7 +122,11 @@ namespace Skarp.HubSpotClient.Core
             }
 
             var response = await HttpClient.SendAsync(request);
-            var responseData = await response.Content.ReadAsStringAsync();
+            var responseData = "";
+            if (response.Content != null)
+            {
+                responseData = await response.Content.ReadAsStringAsync();
+            }
 
             if (!response.IsSuccessStatusCode)
             {
@@ -132,6 +136,10 @@ namespace Skarp.HubSpotClient.Core
                 }
 
                 throw new HubSpotException("Error from HubSpot", responseData);
+            }
+            if (string.IsNullOrWhiteSpace(responseData))
+            {
+                return default(T);
             }
 
             return deserializeFunc(responseData);
