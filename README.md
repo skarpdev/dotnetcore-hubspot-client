@@ -7,13 +7,13 @@ This repository contains a dotnet / dotnet core compatible HubSpot client.
 
 Currently in the works:
 
-- [ ] Contact CRUD
+- [x] Contact CRUD
   - [x] Create
-  - [ ] Update
+  - [x] Update
   - [x] Get by Id (aka Vid)
   - [x] Get by email
   - [x] List with pagination support
-  - [ ] Delete
+  - [x] Delete
 - [ ] Company CRUD
   - [x] Create
   - [ ] Update
