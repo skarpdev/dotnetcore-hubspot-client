@@ -25,7 +25,8 @@ namespace Skarp.HubSpotClient.FunctionalTests.Contact
                 .AddTestCase(new CreateContactMockTestCase())
                 .AddTestCase(new ListContactMockTestCase())
                 .AddTestCase(new GetContactMockTestCase())
-                .AddTestCase(new GetContactByEmailMockTestCase());
+                .AddTestCase(new GetContactByEmailMockTestCase())
+                .AddTestCase(new GetContactByEmailNotFoundMockTestCase());
 
             _client = new HubSpotContactClient(
                 mockHttpClient,
@@ -93,6 +94,15 @@ namespace Skarp.HubSpotClient.FunctionalTests.Contact
             Assert.Equal("Codey", data.FirstName);
             Assert.Equal("Huang", data.Lastname);
             Assert.Equal(email, data.Email);
+        }
+
+        [Fact]
+        public async Task ContactClient_returns_null_when_contact_not_found()
+        {
+            const string email = "not@here.com";
+            var data = await _client.GetByEmailAsync<ContactHubSpotEntity>(email);
+
+            Assert.Null(data);
         }
     }
 }

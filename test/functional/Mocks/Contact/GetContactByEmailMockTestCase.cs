@@ -10,7 +10,7 @@ namespace Skarp.HubSpotClient.FunctionalTests.Mocks.Contact
     {
         public bool IsMatch(HttpRequestMessage request)
         {
-            return request.RequestUri.AbsolutePath.Contains("/contacts/v1/contact/email/");
+            return request.RequestUri.AbsolutePath.Contains("/contacts/v1/contact/email/testingapis@hubspot.com");
         }
 
         public Task<HttpResponseMessage> GetResponseAsync(HttpRequestMessage request)
