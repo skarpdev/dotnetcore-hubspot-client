@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Runtime.Serialization;
+using RapidCore.Reflection;
 
 namespace Skarp.HubSpotClient.Core
 {
@@ -59,6 +60,20 @@ namespace Skarp.HubSpotClient.Core
 
             // TODO better bailout exception?
             throw new ArgumentException($"Unable to locate method with name: {name}");
+        }
+
+        /// <summary>
+        /// Determines whether the given property has the <see cref="IgnoreDataMemberAttribute"/>
+        /// </summary>
+        /// <param name="prop">The property.</param>
+        /// <returns>
+        ///   <c>true</c> if [has ignore data member attribute] [the specified property]; otherwise, <c>false</c>.
+        /// </returns>
+        internal static bool HasIgnoreDataMemberAttribute(this PropertyInfo prop)
+        {
+            if (prop == null) return false;
+
+            return prop.HasAttribute(typeof(IgnoreDataMemberAttribute));
         }
     }
 }
