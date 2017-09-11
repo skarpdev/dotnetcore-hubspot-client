@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard1.6;net46</TargetFrameworks>
     <Version>0.1.1</Version>
@@ -21,6 +21,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="RapidCore" Version="0.14.0" />
     <PackageReference Include="System.Reflection.TypeExtensions" Version="4.3.0" />
+    <PackageReference Include="xunit" Version="2.2.0" />
     <DotNetCliToolReference Include="dotnet-version-cli" Version="0.4.1" />
   </ItemGroup>
 </Project>
