@@ -88,8 +88,8 @@ namespace Skarp.HubSpotClient.Company
         {
             Logger.LogDebug("Company get by email domain");
             var path = PathResolver(new CompanyHubSpotEntity(), HubSpotAction.GetByEmail)
-                .Replace(":domain:", email.Substring(email.IndexOf("@")));
-            var data = await GetAsync<T>(path);
+                .Replace(":domain:", email.Substring(email.IndexOf("@")+1));
+            var data = await PostAsync<T>(path, null);
             return data;
         }
 
