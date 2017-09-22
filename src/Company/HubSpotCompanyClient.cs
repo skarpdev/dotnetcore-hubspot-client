@@ -84,12 +84,17 @@ namespace Skarp.HubSpotClient.Company
         /// <param name="email"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public async Task<T> GetByEmailAsync<T>(string email) where T : IHubSpotEntity, new()
+        public async Task<T> GetByEmailAsync<T>(string email, CompanySearchByDomain opts = null) where T : IHubSpotEntity, new()
         {
             Logger.LogDebug("Company get by email domain");
+            if (opts == null)
+            {
+                opts = new CompanySearchByDomain();
+            }
+
             var path = PathResolver(new CompanyHubSpotEntity(), HubSpotAction.GetByEmail)
                 .Replace(":domain:", email.Substring(email.IndexOf("@")+1));
-            var data = await PostAsync<T>(path, null);
+            var data = await PostAsync<T>(path, opts);
             return data;
         }
 
