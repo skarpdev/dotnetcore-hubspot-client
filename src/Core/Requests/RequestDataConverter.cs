@@ -184,6 +184,14 @@ namespace Skarp.HubSpotClient.Core.Requests
                 dealIdProp?.SetValue(dto, dealIdData);
             }
 
+            // The companyId is the "id" of the company entity
+            if (expandoDict.TryGetValue("companyId", out var companyIdData))
+            {
+                // TODO use properly serialized name of prop to find it
+                var companyIdProp = dtoProps.SingleOrDefault(q => q.GetPropSerializedName() == "companyId");
+                companyIdProp?.SetValue(dto, companyIdData);
+            }
+
             // The Properties object in the json / response data contains all the props we wish to map - if that does not exist
             // we cannot proceeed
             if (!expandoDict.TryGetValue("properties", out var dynamicProperties)) return dto;
