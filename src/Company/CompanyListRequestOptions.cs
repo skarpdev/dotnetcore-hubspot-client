@@ -19,7 +19,7 @@ namespace Skarp.HubSpotClient.Company
         CompanySearchOffset Offset { get; set; } = new CompanySearchOffset();
 
         public string RouteBasePath => "/companies/v2";
-
+        public bool IsNameValue => true;
     }
 
     [DataContract]

@@ -19,5 +19,6 @@ namespace Skarp.HubSpotClient.Company.Dto
         public string Description { get; set; }
 
         public string RouteBasePath => "/companies/v2";
+        public bool IsNameValue => true;
     }
 }

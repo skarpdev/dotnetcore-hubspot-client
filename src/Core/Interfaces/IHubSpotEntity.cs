@@ -9,5 +9,7 @@
         /// </summary>
         /// <returns></returns>
         string RouteBasePath { get;  }
+
+        bool IsNameValue { get; }
     }
 }

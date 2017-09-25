@@ -34,5 +34,6 @@ namespace Skarp.HubSpotClient.Contact.Dto
         public string ZipCode { get; set; }
 
         public string RouteBasePath => "/contacts/v1";
+        public bool IsNameValue => false;
     }
 }

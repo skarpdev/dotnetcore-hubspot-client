@@ -27,7 +27,7 @@ namespace Skarp.HubSpotClient.Core.Requests
         {
             _logger.LogDebug("Convert ToHubspotDataEntity");
             var mapped = new HubspotDataEntity();
-            bool isv2Route = entity.RouteBasePath.Contains("/v2");
+            bool isv2Route = entity.IsNameValue;
             _logger.LogDebug("isv2route: {0}", isv2Route);
 
             var allProps = entity.GetType().GetProperties();
@@ -39,7 +39,7 @@ namespace Skarp.HubSpotClient.Core.Requests
 
                 var propSerializedName = prop.GetPropSerializedName();
                 _logger.LogDebug("Mapping prop: '{0}' with serialization name: '{1}'", prop.Name, propSerializedName);
-                if (prop.Name.Equals("RouteBasePath")) { continue; }
+                if (prop.Name.Equals("RouteBasePath") || prop.Name.Equals("IsNameValue")) { continue; }
 
                 var propValue = prop.GetValue(entity);
                 var item = new HubspotDataEntityProp
@@ -213,7 +213,8 @@ namespace Skarp.HubSpotClient.Core.Requests
                     dtoProps.SingleOrDefault(q => q.GetPropSerializedName() == dynamicProp.Key);
                 _logger.LogDebug("Have target prop? '{0}' with name: '{1}' and actual value: '{2}'", targetProp != null,
                     dynamicProp.Key, dynamicValue);
-                targetProp?.SetValue(dto, dynamicValue);
+
+                targetProp?.SetValue(dto, dynamicValue.GetType() == targetProp.PropertyType? dynamicValue: Convert.ChangeType(dynamicValue, targetProp.PropertyType));
             }
             return dto;
         }
