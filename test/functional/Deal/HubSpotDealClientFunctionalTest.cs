@@ -40,7 +40,7 @@ namespace Skarp.HubSpotClient.FunctionalTests.Deal
             {
                 Name = "A new deal",
                 Pipeline = "default",
-                Amount = "60000",
+                Amount = 60000,
                 DealType = "newbusiness"
             });
 
@@ -58,7 +58,7 @@ namespace Skarp.HubSpotClient.FunctionalTests.Deal
 
             Assert.NotNull(data);
             Assert.Equal("This is a Deal", data.Name);
-            Assert.Equal("560", data.Amount);
+            Assert.Equal(560, data.Amount);
             Assert.Equal(dealId, data.Id);
         }
 
@@ -79,14 +79,14 @@ namespace Skarp.HubSpotClient.FunctionalTests.Deal
             {
                 Id = 151088,
                 Name = "This is an updated deal",
-                Amount = "560"
+                Amount = 560
             }
             );
 
             Assert.NotNull(data);
 
             // Should have replied with mocked data, so it does not really correspond to our input data, but it proves the "flow"
-            Assert.Equal("560", data.Amount);
+            Assert.Equal(560, data.Amount);
             Assert.Equal(151088, data.Id);
         }
 

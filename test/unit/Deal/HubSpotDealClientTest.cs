@@ -69,7 +69,7 @@ namespace Skarp.HubSpotClient.UnitTest.Contact
             {
                 Name = "A new deal",
                 Pipeline = "default",
-                Amount = "60000",
+                Amount = 60000,
                 DealType = "newbusiness"
             });
 
