@@ -44,5 +44,11 @@ namespace Skarp.HubSpotClient.Contact.Dto
         public long ContinuationOffset { get; set; }
 
         public string RouteBasePath => "/contacts/v1";
+
+        public bool IsNameValue => false;
+        public virtual void AcceptHubSpotDataEntity(ref dynamic converted)
+        {
+
+        }
     }
 }

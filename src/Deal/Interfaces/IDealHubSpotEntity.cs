@@ -10,7 +10,7 @@ namespace Skarp.HubSpotClient.Deal.Interfaces
         string Pipeline { get; set; }
         string OwnerId { get; set; }
         string CloseDate { get; set; }
-        string Amount { get; set; }
+        int Amount { get; set; }
         string DealType { get; set; }
     }
 }

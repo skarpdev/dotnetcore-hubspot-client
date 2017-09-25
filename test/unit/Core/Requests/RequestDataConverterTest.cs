@@ -1,4 +1,5 @@
-﻿using System.Dynamic;
+﻿using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
@@ -86,7 +87,10 @@ namespace Skarp.HubSpotClient.UnitTest.Core.Requests
             Assert.True(converted.Properties.Count == 11, $"converted.Properties.Count == 11, count is {converted.Properties.Count}");
 
             // check that the custom prop was properly mapped
-            var prop = converted.Properties.Single(q => q.Property == "MyCustomProp");
+            List<HubspotDataEntityProp> props = converted.Properties;
+
+            var prop = props.Single(q => q.Property == "MyCustomProp");
+
             Assert.Equal(prop.Value, "Has a value!");
         }
 
