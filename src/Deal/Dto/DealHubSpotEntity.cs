@@ -6,7 +6,18 @@ using System.Text;
 
 namespace Skarp.HubSpotClient.Deal.Dto
 {
-    
+    [DataContract]
+    public class DealHubSpotAssociations
+    {
+
+        [DataMember(Name = "associatedCompanyIds")]
+        public long[] AssociatedCompany { get; set; }
+
+        [DataMember(Name = "associatedVids")]
+        public long[] AssociatedContacts { get; set; }
+    }
+
+
     [DataContract]
     public class DealHubSpotEntity : IDealHubSpotEntity
     {
@@ -31,8 +42,14 @@ namespace Skarp.HubSpotClient.Deal.Dto
         [DataMember(Name = "dealtype")]
         public string DealType { get; set; }
 
-        public string RouteBasePath => "/deals/v1";
 
+        [IgnoreDataMember]
+        public DealHubSpotAssociations Associations { get; set; }
+        public string RouteBasePath => "/deals/v1";
         public bool IsNameValue => true;
+        public virtual void AcceptHubSpotDataEntity(ref dynamic converted)
+        {
+            converted.Associations = Associations;
+        }
     }
 }

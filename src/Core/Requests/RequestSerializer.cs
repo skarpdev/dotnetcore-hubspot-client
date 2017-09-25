@@ -40,7 +40,9 @@ namespace Skarp.HubSpotClient.Core.Requests
         /// <returns>The serialized entity</returns>
         public virtual string SerializeEntity(IHubSpotEntity entity)
         {
-            var converted = _requestDataConverter.ToHubspotDataEntity(entity);
+            dynamic converted = _requestDataConverter.ToHubspotDataEntity(entity);
+
+            entity.AcceptHubSpotDataEntity(ref converted);
 
             return JsonConvert.SerializeObject(
                    converted,

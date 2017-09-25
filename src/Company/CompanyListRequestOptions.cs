@@ -20,6 +20,10 @@ namespace Skarp.HubSpotClient.Company
 
         public string RouteBasePath => "/companies/v2";
         public bool IsNameValue => true;
+        public void AcceptHubSpotDataEntity(ref object converted)
+        {
+
+        }
     }
 
     [DataContract]

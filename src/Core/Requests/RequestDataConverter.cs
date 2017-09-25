@@ -23,10 +23,13 @@ namespace Skarp.HubSpotClient.Core.Requests
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <returns></returns>
-        public HubspotDataEntity ToHubspotDataEntity(IHubSpotEntity entity)
+        public dynamic ToHubspotDataEntity(IHubSpotEntity entity)
         {
             _logger.LogDebug("Convert ToHubspotDataEntity");
-            var mapped = new HubspotDataEntity();
+            dynamic mapped = new ExpandoObject();
+
+            mapped.Properties = new List<HubspotDataEntityProp>();
+
             bool isv2Route = entity.IsNameValue;
             _logger.LogDebug("isv2route: {0}", isv2Route);
 
@@ -59,6 +62,7 @@ namespace Skarp.HubSpotClient.Core.Requests
             }
 
             _logger.LogDebug("Mapping complete, returning data");
+
             return mapped;
         }
 

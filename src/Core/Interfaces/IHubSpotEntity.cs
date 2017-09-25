@@ -11,5 +11,7 @@
         string RouteBasePath { get;  }
 
         bool IsNameValue { get; }
+
+        void AcceptHubSpotDataEntity(ref dynamic dataEntity);
     }
 }
