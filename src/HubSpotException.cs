@@ -24,5 +24,13 @@ namespace Skarp.HubSpotClient
         public HubSpotException(string message, Exception innerException) : base(message, innerException)
         {
         }
+
+        public override String Message
+        {
+            get
+            {
+                return base.Message + $", JSONResponse={RawJsonResponse??"Empty"}";
+            }
+        }
     }
 }
