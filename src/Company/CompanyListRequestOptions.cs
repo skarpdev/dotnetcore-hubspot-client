@@ -13,10 +13,10 @@ namespace Skarp.HubSpotClient.Company
         public int Limit { get; set; } = 100;
 
         [DataMember(Name = "requestOptions")]
-        CompanySearchRequestOptions RequestOptions { get; set; } = new CompanySearchRequestOptions();
+        public CompanySearchRequestOptions RequestOptions { get; set; } = new CompanySearchRequestOptions();
 
         [DataMember(Name = "offset")]
-        CompanySearchOffset Offset { get; set; } = new CompanySearchOffset();
+        public CompanySearchOffset Offset { get; set; } = new CompanySearchOffset();
 
         public string RouteBasePath => "/companies/v2";
 
