@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Runtime.Serialization;
 using RapidCore.Reflection;
+using Skarp.HubSpotClient.Company;
 using Skarp.HubSpotClient.Contact.Dto;
 using Skarp.HubSpotClient.Core;
 using Xunit;
@@ -47,6 +48,21 @@ namespace Skarp.HubSpotClient.UnitTest.Core
 
             var propNoIgnore = dto.GetType().GetProperties().Single(p => p.Name == "MemberWithCustomName");
             Assert.False(propNoIgnore.HasIgnoreDataMemberAttribute());
+        }
+
+        [Fact]
+        public void ReflectionExtension_can_determine_if_stuff_is_complex()
+        {
+            string nuller = null;
+            var str = " Hey I am a string!";
+            var theAnswer = 42;
+
+            var complexBeast = new CompanySearchByDomain();
+
+            Assert.False(str.IsComplexType(), "str.IsComplexType()");
+            Assert.False(theAnswer.IsComplexType(), "theAnswer.IsComplexType()");
+            Assert.True(complexBeast.IsComplexType(), "complexBeast.IsComplexType()");
+            Assert.False(nuller.IsComplexType());
         }
 
         [DataContract]

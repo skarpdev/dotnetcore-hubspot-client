@@ -75,5 +75,23 @@ namespace Skarp.HubSpotClient.Core
 
             return prop.HasAttribute(typeof(IgnoreDataMemberAttribute));
         }
+
+        /// <summary>
+        /// Determines whether the given <param name="instance"></param> is a complex type or a simple ValueType
+        /// </summary>
+        /// <param name="instance">The type.</param>
+        /// <returns>
+        ///   <c>true</c> if [is complex type] [the specified type]; otherwise, <c>false</c>.
+        /// </returns>
+        internal static bool IsComplexType(this Object instance)
+        {
+            if (instance == null) return false;
+
+            var type = instance.GetType();
+            if (type.GetTypeInfo().IsSubclassOf(typeof(ValueType)) || type == (typeof(string)))
+                return false;
+
+            return true;
+        }
     }
 }
