@@ -13,7 +13,7 @@ namespace Skarp.HubSpotClient.UnitTest.Core.Requests
         private readonly ITestOutputHelper _output;
         private readonly RequestSerializer _serializer;
         private readonly ContactHubSpotEntity _contactDto;
-        private CompanySearchByDomain _companySearch;
+        private readonly CompanySearchByDomain _companySearch;
 
         public RequestSerializerTest(ITestOutputHelper output) : base(output)
         {

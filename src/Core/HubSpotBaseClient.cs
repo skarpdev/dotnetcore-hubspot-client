@@ -75,6 +75,28 @@ namespace Skarp.HubSpotClient.Core
         }
 
         /// <summary>
+        /// Send a "list" request / search request but using POST so that a body can be sent along
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="absoluteUriPath"></param>
+        /// <returns></returns>
+        protected async Task<T> ListAsPostAsync<T>(string absoluteUriPath, object entity) where T : IHubSpotEntity, new()
+        {
+            Logger.LogDebug("List async for uri path: '{0}'", absoluteUriPath);
+            var json = _serializer.SerializeEntity(entity);
+
+            var httpMethod = HttpMethod.Post;
+
+            var data = await SendRequestAsync<T>(
+                absoluteUriPath,
+                httpMethod,
+                json,
+                responseData => (T)_serializer.DeserializeListEntity<T>(responseData));
+
+            return data;
+        }
+
+        /// <summary>
         /// Send a get request
         /// </summary>
         /// <param name="absoluteUriPath"></param>

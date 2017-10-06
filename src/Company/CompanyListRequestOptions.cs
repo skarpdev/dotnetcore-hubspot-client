@@ -7,7 +7,7 @@ using System.Text;
 namespace Skarp.HubSpotClient.Company
 {
     [DataContract]
-    public class CompanySearchByDomain : IHubSpotEntity
+    public class CompanySearchByDomain
     {
         [DataMember(Name = "limit")]
         public int Limit { get; set; } = 100;
