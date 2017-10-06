@@ -29,9 +29,8 @@ namespace Skarp.HubSpotClient.Core.Requests
             dynamic mapped = new ExpandoObject();
 
             mapped.Properties = new List<HubspotDataEntityProp>();
-
-            bool isv2Route = entity.IsNameValue;
-            _logger.LogDebug("isv2route: {0}", isv2Route);
+;
+            _logger.LogDebug("Use nameValue mapping?: {0}", entity.IsNameValue);
 
             var allProps = entity.GetType().GetProperties();
             _logger.LogDebug("Have {0} props to map", allProps.Length);
@@ -51,7 +50,7 @@ namespace Skarp.HubSpotClient.Core.Requests
                     Value = propValue?.ToString()
                 };
 
-                if (isv2Route)
+                if (entity.IsNameValue)
                 {
                     item.Property = null;
                     item.Name = propSerializedName;
