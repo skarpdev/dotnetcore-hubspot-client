@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Skarp.HubSpotClient.Core.Interfaces;
 
 namespace Skarp.HubSpotClient.Core.Requests
@@ -43,11 +44,14 @@ namespace Skarp.HubSpotClient.Core.Requests
                 _logger.LogDebug("Mapping prop: '{0}' with serialization name: '{1}'", prop.Name, propSerializedName);
                 if (prop.Name.Equals("RouteBasePath") || prop.Name.Equals("IsNameValue")) { continue; }
 
+                // IF we have an complex type on the entity that we are trying to convert, let's NOT get the 
+                // string value of it, but simply pass the object along - it will be serialized later as JSON...
                 var propValue = prop.GetValue(entity);
+                var value = propValue.IsComplexType() ? propValue : propValue?.ToString();
                 var item = new HubspotDataEntityProp
                 {
                     Property = propSerializedName,
-                    Value = propValue?.ToString()
+                    Value = value
                 };
 
                 if (entity.IsNameValue)
