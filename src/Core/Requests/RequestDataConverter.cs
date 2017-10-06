@@ -143,7 +143,18 @@ namespace Skarp.HubSpotClient.Core.Requests
                     continue;
                 }
                 // we have a property which name serializes to the kvp.Key, let's set the data
-                theProp.SetValue(data, kvp.Value);
+
+                // If theProp is a complex type we cannot just use SetValue, we need a conversion
+                if (theProp.PropertyType.IsComplexType())
+                {
+                    var expandoEntry = kvp.Value as ExpandoObject;
+                    var dto = ConvertSingleEntity(expandoEntry, Activator.CreateInstance(theProp.PropertyType));
+                    theProp.SetValue(data, dto);
+                }
+                else // simple value type, assign it
+                {
+                    theProp.SetValue(data, kvp.Value);
+                }
             }
 
             return data;

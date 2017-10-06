@@ -18,7 +18,6 @@ namespace Skarp.HubSpotClient.UnitTest.Core.Requests
         private readonly ContactHubSpotEntity _contactDto;
         private readonly CustomContactHubSpotEntity _customContactDto;
         private readonly CompanyHubSpotEntity _companyDto;
-        private readonly CompanySearchByDomain _companySearch;
 
         public RequestDataConverterTest(ITestOutputHelper output) : base(output)
         {
@@ -58,8 +57,6 @@ namespace Skarp.HubSpotClient.UnitTest.Core.Requests
                 Name = "Acme Inc",
                 Description = "The world famous Acme Inc"
             };
-
-            _companySearch = new CompanySearchByDomain();
         }
 
 
@@ -114,25 +111,6 @@ namespace Skarp.HubSpotClient.UnitTest.Core.Requests
                 Assert.NotNull(prop.Name);
                 Assert.NotNull(prop.Value);
             }
-        }
-
-        [Fact]
-        public void RequestDataConverter_converts_complex_props_on_entities()
-        {
-            var converted = _converter.ToHubspotDataEntity(_companySearch);
-            Assert.NotNull(converted);
-            var allProps = converted.Properties as List<HubspotDataEntityProp>;
-            Assert.NotNull(allProps);
-            Assert.NotEmpty(allProps);
-
-            Assert.Equal("100", allProps.Single(q => (string) q.Name =="limit").Value);
-            var requetOptions =
-                allProps.Single(q => (string) q.Name == "requestOptions").Value as CompanySearchRequestOptions;
-
-            Assert.NotNull(requetOptions);
-
-            var offset = allProps.Single(q => (string) q.Name == "offset").Value as CompanySearchOffset;
-            Assert.NotNull(offset);
         }
 
         [Fact]
