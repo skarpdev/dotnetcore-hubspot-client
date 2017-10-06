@@ -88,6 +88,18 @@ namespace Skarp.HubSpotClient.Core
             if (instance == null) return false;
 
             var type = instance.GetType();
+            return type.IsComplexType();
+        }
+
+        /// <summary>
+        /// Determines whether [is complex type].
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>
+        ///   <c>true</c> if [is complex type] [the specified type]; otherwise, <c>false</c>.
+        /// </returns>
+        internal static bool IsComplexType(this Type type)
+        {
             if (type.GetTypeInfo().IsSubclassOf(typeof(ValueType)) || type == (typeof(string)))
                 return false;
 
