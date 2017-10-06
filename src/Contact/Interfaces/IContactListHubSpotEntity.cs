@@ -34,5 +34,7 @@ namespace Skarp.HubSpotClient.Contact.Interfaces
         /// The continuation offset.
         /// </value>
         long ContinuationOffset { get; set; }
+
+        string RouteBasePath { get; }
     }
 }

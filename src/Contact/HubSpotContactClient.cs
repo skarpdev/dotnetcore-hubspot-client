@@ -106,7 +106,7 @@ namespace Skarp.HubSpotClient.Contact
             {
                 opts = new ContactListRequestOptions();
             }
-            var path = PathResolver(new ContactListHubSpotEntity<ContactHubSpotEntity>(), HubSpotAction.List) +
+            var path = PathResolver(new ContactHubSpotEntity(), HubSpotAction.List) +
                        $"&count={opts.NumberOfContactsToReturn}";
             if (opts.ContactOffset.HasValue)
             {
@@ -147,7 +147,7 @@ namespace Skarp.HubSpotClient.Contact
         /// <param name="action"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public string PathResolver(IHubSpotEntity entity, HubSpotAction action)
+        public string PathResolver(IContactHubSpotEntity entity, HubSpotAction action)
         {
             switch (action)
             {

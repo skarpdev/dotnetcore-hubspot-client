@@ -12,5 +12,6 @@ namespace Skarp.HubSpotClient.Deal.Interfaces
         string CloseDate { get; set; }
         int Amount { get; set; }
         string DealType { get; set; }
+        string RouteBasePath { get; }
     }
 }

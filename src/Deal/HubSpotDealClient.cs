@@ -111,7 +111,7 @@ namespace Skarp.HubSpotClient.Deal
         /// <param name="action"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public string PathResolver(IHubSpotEntity entity, HubSpotAction action)
+        public string PathResolver(IDealHubSpotEntity entity, HubSpotAction action)
         {
             switch (action)
             {
