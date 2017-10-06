@@ -94,7 +94,7 @@ namespace Skarp.HubSpotClient.Company
 
             var path = PathResolver(new CompanyHubSpotEntity(), HubSpotAction.GetByEmail)
                 .Replace(":domain:", email.Substring(email.IndexOf("@")+1));
-            var data = await PostAsync<T>(path, opts);
+            var data = await ListAsPostAsync<T>(path, opts);
             return data;
         }
 
@@ -129,7 +129,7 @@ namespace Skarp.HubSpotClient.Company
         /// <param name="action"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public string PathResolver(IHubSpotEntity entity, HubSpotAction action)
+        public string PathResolver(ICompanyHubSpotEntity entity, HubSpotAction action)
         {
             switch (action)
             {

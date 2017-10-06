@@ -38,15 +38,22 @@ namespace Skarp.HubSpotClient.Core.Requests
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <returns>The serialized entity</returns>
-        public virtual string SerializeEntity(IHubSpotEntity entity)
+        public virtual string SerializeEntity(object obj)
         {
-            dynamic converted = _requestDataConverter.ToHubspotDataEntity(entity);
+            if (obj is IHubSpotEntity entity)
+            {
+                var converted = _requestDataConverter.ToHubspotDataEntity(entity);
 
-            entity.AcceptHubSpotDataEntity(ref converted);
+                entity.AcceptHubSpotDataEntity(ref converted);
+
+                return JsonConvert.SerializeObject(
+                    converted,
+                    _jsonSerializerSettings);
+            }
 
             return JsonConvert.SerializeObject(
-                   converted,
-                   _jsonSerializerSettings);
+                obj,
+                _jsonSerializerSettings);
         }
 
         /// <summary>

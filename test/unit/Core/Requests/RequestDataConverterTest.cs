@@ -3,6 +3,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
+using Skarp.HubSpotClient.Company;
 using Skarp.HubSpotClient.Company.Dto;
 using Skarp.HubSpotClient.Contact.Dto;
 using Skarp.HubSpotClient.Core.Requests;
@@ -16,7 +17,7 @@ namespace Skarp.HubSpotClient.UnitTest.Core.Requests
         private readonly RequestDataConverter _converter;
         private readonly ContactHubSpotEntity _contactDto;
         private readonly CustomContactHubSpotEntity _customContactDto;
-        private CompanyHubSpotEntity _companyDto;
+        private readonly CompanyHubSpotEntity _companyDto;
 
         public RequestDataConverterTest(ITestOutputHelper output) : base(output)
         {

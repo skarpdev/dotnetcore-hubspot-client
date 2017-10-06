@@ -9,5 +9,6 @@ namespace Skarp.HubSpotClient.Company.Interfaces
         string Domain { get; set; }
         string Website { get; set; }
         string Description { get; set; }
+        string RouteBasePath { get; }
     }
 }

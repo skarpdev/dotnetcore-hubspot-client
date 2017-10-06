@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Skarp.HubSpotClient.Core.Interfaces;
 
 namespace Skarp.HubSpotClient.Core.Requests
@@ -29,9 +30,8 @@ namespace Skarp.HubSpotClient.Core.Requests
             dynamic mapped = new ExpandoObject();
 
             mapped.Properties = new List<HubspotDataEntityProp>();
-
-            bool isv2Route = entity.IsNameValue;
-            _logger.LogDebug("isv2route: {0}", isv2Route);
+;
+            _logger.LogDebug("Use nameValue mapping?: {0}", entity.IsNameValue);
 
             var allProps = entity.GetType().GetProperties();
             _logger.LogDebug("Have {0} props to map", allProps.Length);
@@ -44,14 +44,17 @@ namespace Skarp.HubSpotClient.Core.Requests
                 _logger.LogDebug("Mapping prop: '{0}' with serialization name: '{1}'", prop.Name, propSerializedName);
                 if (prop.Name.Equals("RouteBasePath") || prop.Name.Equals("IsNameValue")) { continue; }
 
+                // IF we have an complex type on the entity that we are trying to convert, let's NOT get the 
+                // string value of it, but simply pass the object along - it will be serialized later as JSON...
                 var propValue = prop.GetValue(entity);
+                var value = propValue.IsComplexType() ? propValue : propValue?.ToString();
                 var item = new HubspotDataEntityProp
                 {
                     Property = propSerializedName,
-                    Value = propValue?.ToString()
+                    Value = value
                 };
 
-                if (isv2Route)
+                if (entity.IsNameValue)
                 {
                     item.Property = null;
                     item.Name = propSerializedName;
@@ -140,7 +143,18 @@ namespace Skarp.HubSpotClient.Core.Requests
                     continue;
                 }
                 // we have a property which name serializes to the kvp.Key, let's set the data
-                theProp.SetValue(data, kvp.Value);
+
+                // If theProp is a complex type we cannot just use SetValue, we need a conversion
+                if (theProp.PropertyType.IsComplexType())
+                {
+                    var expandoEntry = kvp.Value as ExpandoObject;
+                    var dto = ConvertSingleEntity(expandoEntry, Activator.CreateInstance(theProp.PropertyType));
+                    theProp.SetValue(data, dto);
+                }
+                else // simple value type, assign it
+                {
+                    theProp.SetValue(data, kvp.Value);
+                }
             }
 
             return data;

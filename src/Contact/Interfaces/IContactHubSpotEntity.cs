@@ -15,5 +15,6 @@ namespace Skarp.HubSpotClient.Contact.Interfaces
         string City { get; set; }
         string State { get; set; }
         string ZipCode { get; set; }
+        string RouteBasePath { get; }
     }
 }

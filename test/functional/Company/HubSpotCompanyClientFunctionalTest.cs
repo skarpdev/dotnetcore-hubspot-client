@@ -22,7 +22,8 @@ namespace Skarp.HubSpotClient.FunctionalTests.Company
                 .AddTestCase(new GetCompanyMockTestCase())
                 .AddTestCase(new GetCompanyByIdNotFoundMockTestCase())
                 .AddTestCase(new UpdateCompanyMockTestCase())
-                .AddTestCase(new DeleteCompanyMockTestCase());
+                .AddTestCase(new DeleteCompanyMockTestCase())
+                .AddTestCase(new SearchByDomainMockTestCase());
 
             _client = new HubSpotCompanyClient(
                 mockHttpClient,
@@ -92,6 +93,17 @@ namespace Skarp.HubSpotClient.FunctionalTests.Company
         public async Task CompanyClient_delete_Company_works()
         {
             await _client.DeleteAsync(10444744);
+        }
+
+        [Fact]
+        public async Task CompanyClient_search_by_domain_works()
+        {
+            var request = new CompanySearchByDomain();
+
+            var response = await _client.GetByEmailAsync<CompanySearchResultEntity<CompanyHubSpotEntity>>("mr@miaki.io", request);
+
+            Assert.NotNull(response);
+            Assert.NotEmpty(response.Results);
         }
     }
 }

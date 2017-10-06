@@ -22,7 +22,7 @@
         /// <value>
         /// The value.
         /// </value>
-        public string Value { get; set; }
+        public object Value { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the property that has a value.
