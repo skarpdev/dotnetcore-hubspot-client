@@ -20,9 +20,14 @@ namespace Skarp.HubSpotClient.Company.Dto
 
         public string RouteBasePath => "/companies/v2";
         public bool IsNameValue => true;
-        public virtual void AcceptHubSpotDataEntity(ref dynamic converted)
+        public virtual void ToHubSpotDataEntity(ref dynamic converted)
         {
 
+        }
+
+        public void FromHubSpotDataEntity(dynamic hubspotData)
+        {
+            
         }
     }
 }

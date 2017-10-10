@@ -1,9 +1,13 @@
-﻿namespace Skarp.HubSpotClient.Core.Interfaces
+﻿using System.Dynamic;
+
+namespace Skarp.HubSpotClient.Core.Interfaces
 {
     public interface IHubSpotEntity
     {
         bool IsNameValue { get; }
 
-        void AcceptHubSpotDataEntity(ref dynamic dataEntity);
+        void ToHubSpotDataEntity(ref dynamic dataEntity);
+
+        void FromHubSpotDataEntity(dynamic hubspotData);
     }
 }

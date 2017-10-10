@@ -46,9 +46,14 @@ namespace Skarp.HubSpotClient.Contact.Dto
         public string RouteBasePath => "/contacts/v1";
 
         public bool IsNameValue => false;
-        public virtual void AcceptHubSpotDataEntity(ref dynamic converted)
+        public virtual void ToHubSpotDataEntity(ref dynamic converted)
         {
 
+        }
+
+        public void FromHubSpotDataEntity(dynamic hubspotData)
+        {
+            
         }
     }
 }
