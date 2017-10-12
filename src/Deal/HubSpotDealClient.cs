@@ -90,7 +90,7 @@ namespace Skarp.HubSpotClient.Deal
             var path = PathResolver(entity, HubSpotAction.Update)
                 .Replace(":dealId:", entity.Id.ToString());
 
-            var data = await PostAsync<T>(path, entity);
+            var data = await PutAsync<T>(path, entity);
             return data;
         }
 
