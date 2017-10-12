@@ -1,6 +1,7 @@
 ﻿using Skarp.HubSpotClient.Deal.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 
@@ -21,6 +22,10 @@ namespace Skarp.HubSpotClient.Deal.Dto
     [DataContract]
     public class DealHubSpotEntity : IDealHubSpotEntity
     {
+        public DealHubSpotEntity()
+        {
+            Associations =  new DealHubSpotAssociations();
+        }
         /// <summary>
         /// Contacts unique Id in HubSpot
         /// </summary>
@@ -41,15 +46,22 @@ namespace Skarp.HubSpotClient.Deal.Dto
         public int Amount { get; set; }
         [DataMember(Name = "dealtype")]
         public string DealType { get; set; }
-
-
         [IgnoreDataMember]
-        public DealHubSpotAssociations Associations { get; set; }
+        public DealHubSpotAssociations Associations { get; private set; }
         public string RouteBasePath => "/deals/v1";
         public bool IsNameValue => true;
-        public virtual void AcceptHubSpotDataEntity(ref dynamic converted)
+        public virtual void ToHubSpotDataEntity(ref dynamic converted)
         {
             converted.Associations = Associations;
+        }
+
+        public virtual void FromHubSpotDataEntity(dynamic hubspotData)
+        {
+            if (hubspotData.associations != null)
+            {
+                Associations.AssociatedContacts = ((List<object>)hubspotData.associations.associatedVids).Cast<long>().ToArray();
+                Associations.AssociatedCompany = ((List<object>) hubspotData.associations.associatedCompanyIds).Cast<long>().ToArray();
+            }
         }
     }
 }

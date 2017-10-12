@@ -44,7 +44,7 @@ namespace Skarp.HubSpotClient.Core.Requests
             {
                 var converted = _requestDataConverter.ToHubspotDataEntity(entity);
 
-                entity.AcceptHubSpotDataEntity(ref converted);
+                entity.ToHubSpotDataEntity(ref converted);
 
                 return JsonConvert.SerializeObject(
                     converted,
@@ -65,6 +65,9 @@ namespace Skarp.HubSpotClient.Core.Requests
         {
             var jobj = JsonConvert.DeserializeObject<ExpandoObject>(json);
             var converted = _requestDataConverter.FromHubSpotResponse<T>(jobj);
+
+            converted.FromHubSpotDataEntity(jobj);
+
             return converted;
         }
 

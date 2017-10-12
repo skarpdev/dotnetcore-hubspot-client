@@ -21,8 +21,13 @@ namespace Skarp.HubSpotClient.Company.Dto
 
         public bool IsNameValue => false;
 
-        public void AcceptHubSpotDataEntity(ref dynamic dataEntity)
+        public void ToHubSpotDataEntity(ref dynamic dataEntity)
         {
+        }
+
+        public virtual void FromHubSpotDataEntity(dynamic hubspotData)
+        {
+            
         }
     }
 }
