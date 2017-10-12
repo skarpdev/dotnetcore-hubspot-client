@@ -6,7 +6,7 @@
     <RootNamespace>Skarp.HubSpotClient</RootNamespace>
     <Title>HubSpotClient</Title>
     <Authors>nover</Authors>
-    <Description>Provides a dotnet/dotnet core HubSpot client with support for custom properties on your models</Description>
+    <Description>A dotnet (core) HubSpot rest api client with support for custom property mapping</Description>
     <PackageTags>hubspot;hubspot client;</PackageTags>
     <PackageProjectUrl>https://github.com/skarpdev/dotnetcore-hubspot-client/</PackageProjectUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/skarpdev/dotnetcore-hubspot-client/master/LICENSE</PackageLicenseUrl>
