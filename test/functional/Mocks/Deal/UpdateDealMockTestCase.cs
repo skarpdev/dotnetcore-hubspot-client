@@ -10,7 +10,7 @@ namespace Skarp.HubSpotClient.FunctionalTests.Mocks.Deal
     {
         public bool IsMatch(HttpRequestMessage request)
         {
-            return request.RequestUri.AbsolutePath.Contains("deals/v1/deal/151088") && request.Method == HttpMethod.Post;
+            return request.RequestUri.AbsolutePath.Contains("deals/v1/deal/151088") && request.Method == HttpMethod.Put;
         }
 
         public Task<HttpResponseMessage> GetResponseAsync(HttpRequestMessage request)

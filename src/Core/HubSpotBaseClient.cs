@@ -42,14 +42,39 @@ namespace Skarp.HubSpotClient.Core
             where T : IHubSpotEntity, new()
         {
             Logger.LogDebug("Post async for uri path: '{0}' with type: '{1}'", absoluteUriPath, entity.GetType().Name);
+            var httpMethod = HttpMethod.Post;
+
+            return await PutOrPost<T>(absoluteUriPath, entity, true);
+        }
+
+        protected async Task<T> PutAsync<T>(string absoluteUriPath, IHubSpotEntity entity)
+            where T : IHubSpotEntity, new()
+        {
+            Logger.LogDebug("Post async for uri path: '{0}' with type: '{1}'", absoluteUriPath, entity.GetType().Name);
             var json = _serializer.SerializeEntity(entity);
             var httpMethod = HttpMethod.Post;
 
+            return await PutOrPost<T>(absoluteUriPath, entity, false);
+        }
+
+        /// <summary>
+        /// Internal method to allow support for PUT and POST
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="absoluteUriPath"></param>
+        /// <param name="entity"></param>
+        /// <param name="usePost"></param>
+        /// <returns></returns>
+        private async Task<T> PutOrPost<T>(string absoluteUriPath, IHubSpotEntity entity, bool usePost)
+            where T : IHubSpotEntity, new()
+        {
+            var json = _serializer.SerializeEntity(entity);
+
             var data = await SendRequestAsync<T>(
                 absoluteUriPath,
-                httpMethod,
+                usePost ? HttpMethod.Post : HttpMethod.Put,
                 json,
-                responseData => (T) _serializer.DeserializeEntity<T>(responseData));
+                responseData => (T)_serializer.DeserializeEntity<T>(responseData));
 
             return data;
         }
