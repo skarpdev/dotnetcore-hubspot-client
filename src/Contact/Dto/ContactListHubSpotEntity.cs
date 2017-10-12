@@ -51,7 +51,7 @@ namespace Skarp.HubSpotClient.Contact.Dto
 
         }
 
-        public void FromHubSpotDataEntity(dynamic hubspotData)
+        public virtual void FromHubSpotDataEntity(dynamic hubspotData)
         {
             
         }

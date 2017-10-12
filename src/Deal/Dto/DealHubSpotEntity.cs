@@ -55,7 +55,7 @@ namespace Skarp.HubSpotClient.Deal.Dto
             converted.Associations = Associations;
         }
 
-        public void FromHubSpotDataEntity(dynamic hubspotData)
+        public virtual void FromHubSpotDataEntity(dynamic hubspotData)
         {
             if (hubspotData.associations != null)
             {
