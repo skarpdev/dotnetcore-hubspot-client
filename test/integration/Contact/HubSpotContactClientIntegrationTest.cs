@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestPlatform.Utilities;
@@ -30,6 +31,31 @@ namespace integration.Contact
         {
             var contact = await _client.GetByEmailAsync<ContactHubSpotEntity>("iamnothere@skarp.dk");
             Assert.Null(contact);
+        }
+
+        [Fact]
+        public async Task Create_contact_and_get_works()
+        {
+            var contact = new ContactHubSpotEntity
+            {
+                Address = "Som street 42",
+                City = "Appleseed",
+                Company = "Damage Inc.",
+                Email = $"{Guid.NewGuid():N}@skarp.dk",
+                FirstName = "Mr",
+                Lastname = "Tester",
+                Phone = "+45 12345678",
+                State = "",
+                ZipCode = "2300"
+            };
+            var created = await _client.CreateAsync<ContactHubSpotEntity>(contact);
+            
+            Assert.NotNull(created.Id);
+
+            var retrieved = await _client.GetByIdAsync<ContactHubSpotEntity>(created.Id.Value);
+            
+            Assert.NotNull(retrieved);
+            Assert.Equal("2300", retrieved.ZipCode);
         }
     }
 }
