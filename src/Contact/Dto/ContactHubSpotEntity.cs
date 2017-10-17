@@ -30,7 +30,7 @@ namespace Skarp.HubSpotClient.Contact.Dto
         public string City { get; set; }
         [DataMember(Name = "state")]
         public string State { get; set; }
-        [DataMember(Name = "zipcode")]
+        [DataMember(Name = "zip")]
         public string ZipCode { get; set; }
 
         public string RouteBasePath => "/contacts/v1";
