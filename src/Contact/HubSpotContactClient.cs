@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Flurl;
 using Microsoft.Extensions.Logging;
 using RapidCore.Network;
 using Skarp.HubSpotClient.Contact.Dto;
@@ -106,11 +107,11 @@ namespace Skarp.HubSpotClient.Contact
             {
                 opts = new ContactListRequestOptions();
             }
-            var path = PathResolver(new ContactHubSpotEntity(), HubSpotAction.List) +
-                       $"&count={opts.NumberOfContactsToReturn}";
+            var path = PathResolver(new ContactHubSpotEntity(), HubSpotAction.List)
+                .SetQueryParam("count", opts.NumberOfContactsToReturn);
             if (opts.ContactOffset.HasValue)
             {
-                path = path + $"?vidOffset={opts.ContactOffset}";
+                path = path.SetQueryParam("vidOffset", opts.ContactOffset);
             }
 
             var data = await ListAsync<T>(path);

@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Flurl;
 using Microsoft.Extensions.Logging;
 using RapidCore.Network;
 using Skarp.HubSpotClient.Core.Interfaces;
@@ -166,7 +167,9 @@ namespace Skarp.HubSpotClient.Core
             Func<string, T> deserializeFunc)
             where T : IHubSpotEntity, new()
         {
-            var fullUrl = $"{HubSpotBaseUrl}{absoluteUriPath}?hapikey={_apiKey}";
+            var fullUrl = $"{HubSpotBaseUrl}{absoluteUriPath}"
+                .SetQueryParam("hapikey", _apiKey);
+            
             Logger.LogDebug("Full url: '{0}'", fullUrl);
 
             var request = new HttpRequestMessage
