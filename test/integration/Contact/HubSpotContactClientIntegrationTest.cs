@@ -57,5 +57,20 @@ namespace integration.Contact
             Assert.NotNull(retrieved);
             Assert.Equal("2300", retrieved.ZipCode);
         }
+
+        [Fact]
+        public async Task List_contacts_works()
+        {
+            var contacts =
+                await _client.ListAsync<ContactListHubSpotEntity<ContactHubSpotEntity>>(new ContactListRequestOptions
+                {
+                    NumberOfContactsToReturn = 5
+                });
+            
+            Assert.NotNull(contacts);
+            Assert.NotNull(contacts.Contacts);
+            Assert.NotEmpty(contacts.Contacts);
+            Assert.True(contacts.Contacts.Count == 5, "contacts.Contacts.Count == 5");
+        }
     }
 }
