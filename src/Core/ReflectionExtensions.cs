@@ -41,6 +41,7 @@ namespace Skarp.HubSpotClient.Core
         {
             if (prop == null) return null;
 
+            // GetMethod searches base types...
             var method = prop.GetMethod(name, typeArgs);
             if (method != null) return method;
 
@@ -50,16 +51,9 @@ namespace Skarp.HubSpotClient.Core
                 method = iface.FindMethodRecursively(name, typeArgs);
                 if (method != null) return method;
             }
-            // base types
-            var baseType = prop.GetTypeInfo().BaseType;
-            if (baseType != null)
-            {
-                method = baseType.FindMethodRecursively(name, typeArgs);
-                if (method != null) return method;
-            }
 
             // TODO better bailout exception?
-            throw new ArgumentException($"Unable to locate method with name: {name}");
+            throw new ArgumentException($"Unable to locate method with name: {name}", nameof(name));
         }
 
         /// <summary>
