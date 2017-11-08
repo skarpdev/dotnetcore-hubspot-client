@@ -108,7 +108,8 @@ namespace Skarp.HubSpotClient.Company
             var path = PathResolver(entity, HubSpotAction.Update)
                 .Replace(":companyId:", entity.Id.ToString());
 
-            var data = await PostAsync<T>(path, entity);
+            var data = await PutAsync<T>(path, entity);
+
             return data;
         }
 
