@@ -2,7 +2,7 @@
 
 namespace Skarp.HubSpotClient.Company.Interfaces
 {
-    public interface ICompanyHubSpotEntity : IHubSpotEntity
+    public interface ICompanyHubSpotEntity : IHubSpotEntity, IHubSpotPropertiesEntity
     {
         long? Id { get; set; }
         string Name { get; set; }

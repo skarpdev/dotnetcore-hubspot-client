@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -154,6 +155,7 @@ namespace Skarp.HubSpotClient.Core
                 null,
                 responseData => (T) _serializer.DeserializeEntity<T>(responseData));
         }
+
         /// <summary>
         /// Helper method for dispatching the requet and dealing with response errors
         /// </summary>

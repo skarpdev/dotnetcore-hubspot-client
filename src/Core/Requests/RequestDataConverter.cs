@@ -30,7 +30,7 @@ namespace Skarp.HubSpotClient.Core.Requests
             dynamic mapped = new ExpandoObject();
 
             mapped.Properties = new List<HubspotDataEntityProp>();
-;
+            ;
             _logger.LogDebug("Use nameValue mapping?: {0}", entity.IsNameValue);
 
             var allProps = entity.GetType().GetProperties();
@@ -77,6 +77,31 @@ namespace Skarp.HubSpotClient.Core.Requests
         public T FromHubSpotResponse<T>(ExpandoObject dynamicObject) where T : IHubSpotEntity, new()
         {
             var data = (T)ConvertSingleEntity(dynamicObject, new T());
+            return data;
+        }
+
+        public T FromHubSpotListResponse<T>(IEnumerable<ExpandoObject> dynamicObjectList) where T : IHubSpotEntity, new()
+        {
+            // get a handle to the underlying dictionary values of the ExpandoObject
+            //var expandoDict = (IDictionary<string, object>)dynamicObjectList;
+
+            var targetType = typeof(IHubSpotEntity);
+            var data = new T();
+            var dataProps = data.GetType().GetProperties();
+            var dataTargetProp = dataProps.SingleOrDefault(p => targetType.IsAssignableFrom(p.PropertyType.GenericTypeArguments.FirstOrDefault()));
+            var itemType = dataTargetProp.PropertyType.GetGenericArguments()[0];
+            var propertyValue = dataTargetProp.GetValue(data, null);
+
+            var mi = this.GetType().GetMethod("FromHubSpotResponse", new[] { typeof(ExpandoObject) });
+            var m = mi.MakeGenericMethod(new Type[] { itemType });
+
+            foreach (var dynamicObject in dynamicObjectList)
+            {
+                var ret = m.Invoke(this, new object[] { dynamicObject });
+                var method = dataTargetProp.PropertyType.GetMethod("Add");
+                method.Invoke(propertyValue, new[] { ret });
+            }
+
             return data;
         }
 
@@ -210,29 +235,79 @@ namespace Skarp.HubSpotClient.Core.Requests
                 companyIdProp?.SetValue(dto, companyIdData);
             }
 
-            // The Properties object in the json / response data contains all the props we wish to map - if that does not exist
-            // we cannot proceeed
-            if (!expandoDict.TryGetValue("properties", out var dynamicProperties)) return dto;
-
-            foreach (var dynamicProp in dynamicProperties as ExpandoObject)
+            if (dto is IHubSpotEntity entity && dto is IHubSpotPropertiesEntity)
             {
-                // prop.Key contains the name of the property we wish to map into the DTO
-                // prop.Value contains the data returned by HubSpot, which is also an object 
-                // in there we need to go get the "value" prop to get the actual value
-                _logger.LogDebug("Looking at dynamic prop: {0}", dynamicProp.Key);
 
-                if (!((IDictionary<string, Object>)dynamicProp.Value).TryGetValue("value", out object dynamicValue))
+                // The Properties object in the json / response data contains all the props we wish to map - if that does not exist
+                // we cannot proceeed
+                if (!expandoDict.TryGetValue("properties", out var dynamicProperties)) return dto;
+
+                foreach (var dynamicProp in dynamicProperties as ExpandoObject)
                 {
-                    continue;
+                    // prop.Key contains the name of the property we wish to map into the DTO
+                    // prop.Value contains the data returned by HubSpot, which is also an object 
+                    // in there we need to go get the "value" prop to get the actual value
+                    _logger.LogDebug("Looking at dynamic prop: {0}", dynamicProp.Key);
+
+                    if (!((IDictionary<string, Object>)dynamicProp.Value).TryGetValue("value", out object dynamicValue))
+                    {
+                        continue;
+                    }
+
+                    // TODO use properly serialized name of prop to find and set it's value
+                    var targetProp =
+                        dtoProps.SingleOrDefault(q => q.GetPropSerializedName() == dynamicProp.Key);
+                    _logger.LogDebug("Have target prop? '{0}' with name: '{1}' and actual value: '{2}'", targetProp != null,
+                        dynamicProp.Key, dynamicValue);
+
+                    targetProp?.SetValue(dto, dynamicValue.GetType() == targetProp.PropertyType ? dynamicValue : Convert.ChangeType(dynamicValue, targetProp.PropertyType));
                 }
+            }
+            else
+            {
+                foreach (var key in expandoDict.Keys)
+                {
+                    var dtoProp = dtoProps.SingleOrDefault(q => q.GetPropSerializedName() == key);
+                    if (dtoProp != null)
+                    {
+                        var itemType = dtoProp.PropertyType.GetGenericArguments().FirstOrDefault();
+                        if (typeof(IHubSpotEntity).IsAssignableFrom(dtoProp.PropertyType))
+                        {
+                            var expandoEntry = expandoDict[key] as ExpandoObject;
+                            var data = ConvertSingleEntity(expandoEntry, Activator.CreateInstance(dtoProp.PropertyType));
+                            dtoProp.SetValue(dto, data);
+                        }
+                        else if (itemType != null && typeof(IHubSpotEntity).IsAssignableFrom(itemType))
+                        {
+                            var dynamicObjectList = expandoDict[key] as List<object>;
+                            var propertyValue = dtoProp.GetValue(dto, null);
 
-                // TODO use properly serialized name of prop to find and set it's value
-                var targetProp =
-                    dtoProps.SingleOrDefault(q => q.GetPropSerializedName() == dynamicProp.Key);
-                _logger.LogDebug("Have target prop? '{0}' with name: '{1}' and actual value: '{2}'", targetProp != null,
-                    dynamicProp.Key, dynamicValue);
-
-                targetProp?.SetValue(dto, dynamicValue.GetType() == targetProp.PropertyType? dynamicValue: Convert.ChangeType(dynamicValue, targetProp.PropertyType));
+                            foreach (var obj in dynamicObjectList)
+                            {
+                                var data = ConvertSingleEntity((ExpandoObject)obj, Activator.CreateInstance(itemType));
+                                var method = dtoProp.PropertyType.GetMethod("Add");
+                                method.Invoke(propertyValue, new[] { data });
+                            }
+                        }
+                        else if (dtoProp.PropertyType == typeof(long[]))
+                        {
+                            var expandoEntry = ((List<object>)expandoDict[key]).Cast<long>().ToArray(); ;
+                            //var data = ConvertSingleEntity(expandoEntry, Activator.CreateInstance(dtoProp.PropertyType));
+                            dtoProp.SetValue(dto, expandoEntry);
+                        }
+                        else // simple value type, assign it
+                            dtoProp?.SetValue(dto, expandoDict[key]);
+                    }
+                    /*
+                    if (expandoDict[key].GetType() == typeof(System.Dynamic.ExpandoObject))
+                    {
+                        var converted = this.FromHubSpotResponse<dtoProp.PropertyType>(expandoDict[key]);
+                        dtoProp?.SetValue(dto, converted);
+                    }
+                    else
+                        dtoProp?.SetValue(dto, expandoDict[key]);
+                    */
+                }
             }
             return dto;
         }

@@ -1,4 +1,7 @@
-﻿using System.Dynamic;
+﻿using System.Collections.Generic;
+using System.Dynamic;
+using System.Linq;
+using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Skarp.HubSpotClient.Core.Interfaces;
@@ -40,7 +43,7 @@ namespace Skarp.HubSpotClient.Core.Requests
         /// <returns>The serialized entity</returns>
         public virtual string SerializeEntity(object obj)
         {
-            if (obj is IHubSpotEntity entity)
+            if (obj is IHubSpotEntity entity && obj is IHubSpotPropertiesEntity)
             {
                 var converted = _requestDataConverter.ToHubspotDataEntity(entity);
 
@@ -78,9 +81,16 @@ namespace Skarp.HubSpotClient.Core.Requests
         /// <returns></returns>
         public virtual IHubSpotEntity DeserializeListEntity<T>(string json) where T : IHubSpotEntity, new()
         {
-            var expandoObject = JsonConvert.DeserializeObject<ExpandoObject>(json);
-            var converted = _requestDataConverter.FromHubSpotListResponse<T>(expandoObject);
-            return converted;
+            if (typeof(IHubSpotReturnListEntity).IsAssignableFrom(typeof(T)))
+            {
+                var expandoObject = JsonConvert.DeserializeObject<IEnumerable<ExpandoObject>>(json);
+                return _requestDataConverter.FromHubSpotListResponse<T>(expandoObject);
+            }
+            else
+            {
+                var expandoObject = JsonConvert.DeserializeObject<ExpandoObject>(json);
+                return _requestDataConverter.FromHubSpotListResponse<T>(expandoObject);
+            }
         }
     }
 }

@@ -3,7 +3,7 @@ using Skarp.HubSpotClient.Core.Interfaces;
 
 namespace Skarp.HubSpotClient.Contact.Interfaces
 {
-    public interface IContactListHubSpotEntity<T> : IHubSpotEntity where T : IContactHubSpotEntity
+    public interface IContactListHubSpotEntity<T> : IHubSpotEntity, IHubSpotPropertiesEntity where T : IContactHubSpotEntity
     {
         /// <summary>
         /// Gets or sets the contacts.
