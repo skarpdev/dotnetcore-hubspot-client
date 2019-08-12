@@ -26,6 +26,10 @@ We use [SemVer 2.0](http://semver.org/), which means you can depend on HubSpotCl
 
 This aslo means that while we are in the `0.*` version range, **breaking** API changes can be made between minor versions - we strive to keep these at a minimum and will be explicitly stated in the release notes.
 
+## Nuget Package
+
+You can install the HubSpotClient package from [nuget](https://www.nuget.org/packages/HubSpotClient)
+
 ## Using the library
 
 The library has been split into separate clients for each "HubSpot API feature", which means that `Contacts`, `Companies` and `Deals` have separate clients for you to depend on.
