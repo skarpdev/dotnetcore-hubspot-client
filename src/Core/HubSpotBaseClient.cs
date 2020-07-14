@@ -196,7 +196,7 @@ namespace Skarp.HubSpotClient.Core
                     return default(T);
                 }
 
-                throw new HubSpotException("Error from HubSpot", responseData);
+                throw new HubSpotException("Error from HubSpot", responseData, response);
             }
             if (string.IsNullOrWhiteSpace(responseData))
             {
