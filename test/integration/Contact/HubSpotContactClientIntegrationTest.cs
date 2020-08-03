@@ -23,7 +23,8 @@ namespace integration.Contact
                 base.Logger,
                 new RequestSerializer(new RequestDataConverter(LoggerFactory.CreateLogger<RequestDataConverter>())),
                 "https://api.hubapi.com",
-                "demo");
+                Environment.GetEnvironmentVariable("HUBSPOT_API_KEY") ?? "demo"
+                );
         }
 
         [Fact]
@@ -70,7 +71,7 @@ namespace integration.Contact
             Assert.NotNull(contacts);
             Assert.NotNull(contacts.Contacts);
             Assert.NotEmpty(contacts.Contacts);
-            Assert.True(contacts.Contacts.Count == 5, "contacts.Contacts.Count == 5");
+            Assert.True(contacts.Contacts.Count > 1, "contacts.Contacts.Count > 1");
         }
     }
 }
