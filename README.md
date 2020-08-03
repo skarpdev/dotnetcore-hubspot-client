@@ -5,7 +5,7 @@
 
 This repository contains a dotnet / dotnet core compatible HubSpot client with support for custom property mapping from your DTOs to HubSpot fields.
 
-Currently working is almost complete support for `Contact`, `Company` and `Deal` in the HubSpot api.
+Currently working is (almost complete) support for `Contact`, `Company` and `Deal` in the HubSpot API.
 
 If you find something missing or broken, please [report an issue][github-issue] or even better fork the repo and submit a PR!
 
@@ -16,7 +16,7 @@ Packages for the following dotnet versions are available:
 - dotnet 4.6
 - netstandard 1.6
 
-Which means that you can use the library with `> fat-framework 4.6` or `netcoreapp 1.0 / 1.1 / 2.0`
+Which means that you can use the library with `fat-framework >= 4.6` or `netcoreapp >= 1.0`
 
 Verified working on Linux, macOS and Windows.
 
@@ -24,7 +24,7 @@ Verified working on Linux, macOS and Windows.
 
 We use [SemVer 2.0](http://semver.org/), which means you can depend on HubSpotClient version `<major>.*`.
 
-This aslo means that while we are in the `0.*` version range, **breaking** API changes can be made between minor versions - we strive to keep these at a minimum and will be explicitly stated in the release notes.
+This also means that while we are in the `0.*` version range, **breaking** API changes can be made between minor versions - we strive to keep these at a minimum and will be explicitly stated in the release notes.
 
 ## Nuget Package
 
