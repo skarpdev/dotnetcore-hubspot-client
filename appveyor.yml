@@ -21,6 +21,6 @@ deploy:
 - provider: NuGet
   name: production
   api_key:
-    secure: Qek6svTX1SpK3gObDBpSD4szPqTfWgOhDJys4ShLmK26l7MtZg8u3+FlWI5MyHKi
+    secure: 1e1pWUo3c882w+CBl/jNKZnaxgQ+RslW6SVsWIsTZ69EeugcL432TuHRqtA/ljsm
   on:
     appveyor_repo_tag: true
