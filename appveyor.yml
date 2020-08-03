@@ -1,4 +1,7 @@
 version: '{build}'
+environment:
+  HUBSPOT_API_KEY:
+    secure: nEkpqjqVe4G73k8gkmpYndR8GGQdK58k98IxzWwoZS4Rvq+bTOR9Yok2ISgjjNWr
 pull_requests:
   do_not_increment_build_number: true
 branches:
