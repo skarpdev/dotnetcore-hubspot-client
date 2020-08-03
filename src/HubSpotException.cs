@@ -8,9 +8,9 @@ namespace Skarp.HubSpotClient
     [Serializable]
     public class HubSpotException : Exception
     {
-        private HttpResponseMessage response;
+        public HttpResponseMessage Response { get; }
 
-        public string RawJsonResponse { get; set; }
+        public string RawJsonResponse { get;  }
         public HubSpotException()
         {
         }
@@ -30,7 +30,7 @@ namespace Skarp.HubSpotClient
 
         public HubSpotException(string message, string jsonResponse, HttpResponseMessage response) : this(message, jsonResponse)
         {
-            this.response = response;
+            this.Response = response;
         }
 
         public override String Message
