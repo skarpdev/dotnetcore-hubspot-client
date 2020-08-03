@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
 
 namespace Skarp.HubSpotClient
@@ -7,7 +8,9 @@ namespace Skarp.HubSpotClient
     [Serializable]
     public class HubSpotException : Exception
     {
-        public string RawJsonResponse { get; set; }
+        public HttpResponseMessage Response { get; }
+
+        public string RawJsonResponse { get;  }
         public HubSpotException()
         {
         }
@@ -23,6 +26,11 @@ namespace Skarp.HubSpotClient
 
         public HubSpotException(string message, Exception innerException) : base(message, innerException)
         {
+        }
+
+        public HubSpotException(string message, string jsonResponse, HttpResponseMessage response) : this(message, jsonResponse)
+        {
+            this.Response = response;
         }
 
         public override String Message
