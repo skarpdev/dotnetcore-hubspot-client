@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Flurl;
 using Microsoft.Extensions.Logging;
 using RapidCore.Network;
 using Skarp.HubSpotClient.Company.Dto;
@@ -98,6 +100,32 @@ namespace Skarp.HubSpotClient.Company
             return data;
         }
 
+        /// <summary>
+        /// List Companies 
+        /// </summary>
+        /// <param name="opts">Request options - use for pagination</param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public async Task<T> ListAsync<T>(CompanyListRequestOptions opts = null) where T : IHubSpotEntity, new()
+        {
+            Logger.LogDebug("Contact ListAsync");
+            if (opts == null)
+            {
+                opts = new CompanyListRequestOptions();
+            }
+            var path = PathResolver(new CompanyHubSpotEntity(), HubSpotAction.List)
+                .SetQueryParam("limit", opts.NumberOfCompaniesToReturn);
+            if (opts.CompanyOffset.HasValue)
+            {
+                path = path.SetQueryParam("offset", opts.CompanyOffset);
+            }
+            if (opts.PropertiesToInclude.Any())
+                path.SetQueryParam("properties", opts.PropertiesToInclude);
+
+            var data = await ListAsync<T>(path);
+            return data;
+        }
+
         public async Task<T> UpdateAsync<T>(ICompanyHubSpotEntity entity) where T : IHubSpotEntity, new()
         {
             Logger.LogDebug("Company update w. id: {0}", entity.Id);
@@ -140,6 +168,8 @@ namespace Skarp.HubSpotClient.Company
                     return $"{entity.RouteBasePath}/companies/:companyId:";
                 case HubSpotAction.GetByEmail:
                     return $"{entity.RouteBasePath}/domains/:domain:/companies";
+                case HubSpotAction.List:
+                    return $"{entity.RouteBasePath}/companies/paged";
                 case HubSpotAction.Update:
                     return $"{entity.RouteBasePath}/companies/:companyId:";
                 case HubSpotAction.Delete:
