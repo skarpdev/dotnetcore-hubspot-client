@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Net;
 using System.Threading.Tasks;
 using Flurl;
 using Microsoft.Extensions.Logging;
@@ -60,6 +61,21 @@ namespace Skarp.HubSpotClient.Contact
         {
             Logger.LogDebug("Contact CreateAsync");
             var path = PathResolver(entity, HubSpotAction.Create);
+            var data = await PostAsync<T>(path, entity);
+            return data;
+        }
+
+        /// <summary>
+        /// Creates or updates the contact entity asyncrhounously.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public async Task<T> CreateOrUpdateAsync<T>(IContactHubSpotEntity entity) where T : IHubSpotEntity, new()
+        {
+            Logger.LogDebug("Contact CreateOrUpdateAsync");
+            var path = PathResolver(entity, HubSpotAction.CreateOrUpdate)
+                .Replace(":contactemail:", WebUtility.UrlEncode(entity.Email));
             var data = await PostAsync<T>(path, entity);
             return data;
         }
@@ -164,6 +180,8 @@ namespace Skarp.HubSpotClient.Contact
                     return $"{entity.RouteBasePath}/contact/vid/:contactId:/profile";
                 case HubSpotAction.Delete:
                     return $"{entity.RouteBasePath}/contact/vid/:contactId:";
+                case HubSpotAction.CreateOrUpdate:
+                    return $"{entity.RouteBasePath}/contact/createOrUpdate/email/:contactemail:";
                 default:
                     throw new ArgumentOutOfRangeException(nameof(action), action, null);
             }

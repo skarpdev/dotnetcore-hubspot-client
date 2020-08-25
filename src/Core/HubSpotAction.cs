@@ -15,6 +15,12 @@
 
         Update,
 
-        Delete
+        Delete,
+
+        CreateOrUpdate,
+
+        CreateBatch,
+
+        DeleteBatch
     }
 }

@@ -71,5 +71,13 @@ namespace Skarp.HubSpotClient.UnitTest.Core.Requests
                 "{\"limit\":2,\"requestOptions\":{\"properties\":[\"domain\",\"createdate\",\"name\",\"hs_lastmodifieddate\"]},\"offset\":{\"isPrimary\":true,\"companyId\":0}}";
             Assert.Equal(expectedJson, json);
         }
+
+        [Fact]
+        public void RequestSerializer_serializes_contact_entities()
+        {
+            var json = _serializer.SerializeEntities(new List<ContactHubSpotEntity>{ _contactDto, _contactDto });
+            const string expectedJson = "[{\"properties\":[{\"property\":\"email\",\"value\":\"testingapis@hubspot.com\"},{\"property\":\"firstname\",\"value\":\"Adrian\"},{\"property\":\"lastname\",\"value\":\"Mott\"},{\"property\":\"website\",\"value\":\"http://hubspot.com\"},{\"property\":\"company\",\"value\":\"HubSpot\"},{\"property\":\"phone\",\"value\":\"555-122-2323\"},{\"property\":\"address\",\"value\":\"25 First Street\"},{\"property\":\"city\",\"value\":\"Cambridge\"},{\"property\":\"state\",\"value\":\"MA\"},{\"property\":\"zip\",\"value\":\"02139\"}]},{\"properties\":[{\"property\":\"email\",\"value\":\"testingapis@hubspot.com\"},{\"property\":\"firstname\",\"value\":\"Adrian\"},{\"property\":\"lastname\",\"value\":\"Mott\"},{\"property\":\"website\",\"value\":\"http://hubspot.com\"},{\"property\":\"company\",\"value\":\"HubSpot\"},{\"property\":\"phone\",\"value\":\"555-122-2323\"},{\"property\":\"address\",\"value\":\"25 First Street\"},{\"property\":\"city\",\"value\":\"Cambridge\"},{\"property\":\"state\",\"value\":\"MA\"},{\"property\":\"zip\",\"value\":\"02139\"}]}]";
+            Assert.Equal(expectedJson, json);
+        }
     }
 }
