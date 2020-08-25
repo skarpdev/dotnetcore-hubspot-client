@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -81,6 +82,56 @@ namespace Skarp.HubSpotClient.Core
         }
 
         /// <summary>
+        /// Internal method to allow support for PUT and POST of a batch list
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="absoluteUriPath"></param>
+        /// <param name="entity"></param>
+        /// <param name="usePost"></param>
+        /// <returns></returns>
+        public async Task<bool> PutOrPostBatch<T>(string absoluteUriPath, List<T> entities, bool usePost)
+        {
+            var json = _serializer.SerializeEntities<T>(entities);
+
+            var data = await SendRequestAsync<bool>(
+                absoluteUriPath,
+                usePost ? HttpMethod.Post : HttpMethod.Put,
+                json,
+                (_) => { return true; });
+
+            // flipping the return value because we expect status code 204 (no content) on batch updates.
+            // Because the response has no content, the default return value for bool is false, we want to report as true
+            // if it attempted to deserialize without an error, that is also a problem so we flip the true returned from the
+            // deserialize func above.
+            return !data;
+        }
+
+        /// <summary>
+        /// Internal method to allow support for PUT and POST of a generic entity
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="absoluteUriPath"></param>
+        /// <param name="entity"></param>
+        /// <param name="usePost"></param>
+        /// <returns></returns>
+        public async Task<bool> PutOrPostGeneric<T>(string absoluteUriPath, T entity, bool usePost)
+        {
+            var json = _serializer.SerializeEntity(entity);
+
+            var data = await SendRequestAsync<bool>(
+                absoluteUriPath,
+                usePost ? HttpMethod.Post : HttpMethod.Put,
+                json,
+                (_) => { return true; });
+
+            // flipping the return value because we expect status code 204 (no content) on updates.
+            // Because the response has no content, the default return value for bool is false, we want to report as true
+            // if it attempted to deserialize without an error, that is also a problem so we flip the true returned from the
+            // deserialize func above.
+            return !data;
+        }
+
+        /// <summary>
         /// Send a "list" request - GET but with special handling of the return data
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -143,6 +194,27 @@ namespace Skarp.HubSpotClient.Core
             return data;
         }
 
+        /// <summary>
+        /// Send a get request
+        /// </summary>
+        /// <param name="absoluteUriPath"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        protected async Task<T> GetGenericAsync<T>(string absoluteUriPath)
+        {
+            Logger.LogDebug("Get async for uri path: '{0}'", absoluteUriPath);
+            var httpMethod = HttpMethod.Get;
+
+            var data = await SendRequestAsync<T>(
+                absoluteUriPath,
+                httpMethod,
+                null,
+                responseData => (T)_serializer.DeserializeGenericEntity<T>(responseData)
+            );
+
+            return data;
+        }
+
         protected async Task DeleteAsync<T>(string absoluteUriPath) where T : IHubSpotEntity, new()
         {
             Logger.LogDebug("Delete async for uri path: '{0}'", absoluteUriPath);
@@ -165,7 +237,6 @@ namespace Skarp.HubSpotClient.Core
         /// <returns>A deserialized entity with data when things go well, exceptionns otherwise</returns>
         private async Task<T> SendRequestAsync<T>(string absoluteUriPath, HttpMethod httpMethod, string json,
             Func<string, T> deserializeFunc)
-            where T : IHubSpotEntity, new()
         {
             var fullUrl = $"{HubSpotBaseUrl}{absoluteUriPath}"
                 .SetQueryParam("hapikey", _apiKey);
