@@ -9,7 +9,7 @@ namespace Skarp.HubSpotClient.Associations
         private int _numberOfAssociationsToReturn = 100;
 
         /// <summary>
-        /// Gets or sets the number of contacts to return.
+        /// Gets or sets the number of associations to return.
         /// </summary>
         /// <remarks>
         /// Defaults to 20 which is also the hubspot api default. Max value is 100
@@ -25,7 +25,7 @@ namespace Skarp.HubSpotClient.Associations
                 if (value < 1 || value > 100)
                 {
                     throw new ArgumentException(
-                        $"Number of companies to return must be a positive ingeteger greater than 0 and less than 251 - you provided {value}");
+                        $"Number of associations to return must be a positive ingeteger greater than 0 and less than 101 - you provided {value}");
                 }
                 _numberOfAssociationsToReturn = value;
             }
