@@ -23,6 +23,7 @@ namespace Skarp.HubSpotClient.FunctionalTests.Company
                 .AddTestCase(new GetCompanyByIdNotFoundMockTestCase())
                 .AddTestCase(new UpdateCompanyMockTestCase())
                 .AddTestCase(new DeleteCompanyMockTestCase())
+                .AddTestCase(new ListCompanyMockTestCase())
                 .AddTestCase(new SearchByDomainMockTestCase());
 
             _client = new HubSpotCompanyClient(
@@ -61,6 +62,20 @@ namespace Skarp.HubSpotClient.FunctionalTests.Company
             Assert.Equal(companyId, data.Id);
         }
 
+        [Fact]
+        public async Task CompanyClient_can_get_list_of_Companies()
+        {
+            var data = await _client.ListAsync<CompanyListHubSpotEntity<CompanyHubSpotEntity>>(
+                new CompanyListRequestOptions
+                {
+                    NumberOfCompaniesToReturn = 1
+                });
+
+            Assert.NotNull(data);
+            Assert.True(data.MoreResultsAvailable);
+            Assert.InRange(data.ContinuationOffset, 1, long.MaxValue);
+            Assert.True(data.Companies.Count == 2, "data.Companies.Count == 2");
+        }
 
         [Fact]
         public async Task CompanyClient_returns_null_when_Company_not_found()

@@ -33,6 +33,9 @@ namespace Skarp.HubSpotClient.UnitTest.Company
             A.CallTo(() => _mockSerializer.DeserializeEntity<CompanyHubSpotEntity>(A<string>.Ignored))
                 .Returns(new CompanyHubSpotEntity());
 
+            A.CallTo(() => _mockSerializer.DeserializeListEntity<CompanyListHubSpotEntity<CompanyHubSpotEntity>>(A<string>.Ignored))
+                .Returns(new CompanyListHubSpotEntity<CompanyHubSpotEntity>());
+
             _client = new HubSpotCompanyClient(
                 _mockHttpClient,
                 Logger,
@@ -56,6 +59,7 @@ namespace Skarp.HubSpotClient.UnitTest.Company
         [InlineData(HubSpotAction.Get, "/companies/v2/companies/:companyId:")]
         [InlineData(HubSpotAction.Update, "/companies/v2/companies/:companyId:")]
         [InlineData(HubSpotAction.Delete, "/companies/v2/companies/:companyId:")]
+        [InlineData(HubSpotAction.List, "/companies/v2/companies/paged")]
         public void CompanyClient_path_resolver_works(HubSpotAction action, string expetedPath)
         {
             var resvoledPath = _client.PathResolver(new CompanyHubSpotEntity(), action);
@@ -76,5 +80,14 @@ namespace Skarp.HubSpotClient.UnitTest.Company
             A.CallTo(() => _mockSerializer.DeserializeEntity<CompanyHubSpotEntity>("{}")).MustHaveHappened();
         }
 
+        [Fact]
+        public async Task CompanyClient_list_companies_work()
+        {
+            var response = await _client.ListAsync<CompanyListHubSpotEntity<CompanyHubSpotEntity>>();
+
+            A.CallTo(() => _mockHttpClient.SendAsync(A<HttpRequestMessage>.Ignored)).MustHaveHappened();
+            //A.CallTo(() => _mockSerializer.SerializeEntity(A<IHubSpotEntity>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _mockSerializer.DeserializeListEntity<CompanyListHubSpotEntity<CompanyHubSpotEntity>>("{}")).MustHaveHappened();
+        }
     }
 }
