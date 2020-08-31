@@ -1,12 +1,12 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Skarp.HubSpotClient.Contact
+namespace Skarp.HubSpotClient.ListOfContacts
 {
-    public class ContactListRequestOptions
+    public class ListOfContactsRequestOptions
     {
-        private int _numberOfContactsToReturn = 20;
+        private int _numberOfContactsToReturn = 100;
 
         /// <summary>
         /// Gets or sets the number of contacts to return.
@@ -22,10 +22,10 @@ namespace Skarp.HubSpotClient.Contact
             get => _numberOfContactsToReturn;
             set
             {
-                if (value < 1 || value > 100)
+                if (value < 1 || value > 250)
                 {
                     throw new ArgumentException(
-                        $"Number of contacts to return must be a positive ingeteger greater than 0 - you provided {value}");
+                        $"Number of contacts to return must be a positive ingeteger greater than 0 and less than 251 - you provided {value}");
                 }
                 _numberOfContactsToReturn = value;
             }
@@ -39,6 +39,5 @@ namespace Skarp.HubSpotClient.Contact
         /// to continue the listing process
         /// </remarks>
         public long? ContactOffset { get; set; } = null;
-        public List<string> PropertiesToInclude { get; set; } = new List<string>();
     }
 }
