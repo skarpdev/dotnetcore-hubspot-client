@@ -1,4 +1,5 @@
-﻿using System.Dynamic;
+﻿using System.Collections.Generic;
+using System.Dynamic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Skarp.HubSpotClient.Core.Interfaces;
@@ -54,6 +55,53 @@ namespace Skarp.HubSpotClient.Core.Requests
             return JsonConvert.SerializeObject(
                 obj,
                 _jsonSerializerSettings);
+        }
+
+        /// <summary>
+        /// Serializes entity list to JSON.
+        /// </summary>
+        /// <param name="entities">The list of entities.</param>
+        /// <returns>The serialized list of entities</returns>
+        public virtual string SerializeEntities<T>(List<T> objs)
+        {
+            var result = "[";
+            for (int i = 0; i < objs.Count; i++)
+            {
+                var obj = objs[i];
+                if (obj is IHubSpotEntity entity)
+                {
+                    var converted = _requestDataConverter.ToHubspotDataEntity(entity);
+
+                    entity.ToHubSpotDataEntity(ref converted);
+
+                    result += JsonConvert.SerializeObject(
+                        converted,
+                        _jsonSerializerSettings);
+                }
+                else
+                {
+                    result += JsonConvert.SerializeObject(
+                    obj,
+                    _jsonSerializerSettings);
+                }
+                if ((i + 1) < objs.Count)
+                {
+                    result += ",";
+                }
+            }
+            return result += "]";
+        }
+
+        /// <summary>
+        /// Deserialize the given JSON
+        /// </summary>
+        /// <param name="json">The json data returned by HubSpot that should be converted</param>
+        /// <returns>The deserialized entity</returns>
+        public virtual T DeserializeGenericEntity<T>(string json)
+        {
+            var jobj = JsonConvert.DeserializeObject<T>(json);
+
+            return jobj;
         }
 
         /// <summary>
