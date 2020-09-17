@@ -49,13 +49,13 @@ namespace Skarp.HubSpotClient.Company
         private int _numberOfCompaniesToReturn = 100;
 
         /// <summary>
-        /// Gets or sets the number of contacts to return.
+        /// Gets or sets the number of companies to return.
         /// </summary>
         /// <remarks>
         /// Defaults to 20 which is also the hubspot api default. Max value is 100
         /// </remarks>
         /// <value>
-        /// The number of contacts to return.
+        /// The number of companies to return.
         /// </value>
         public int NumberOfCompaniesToReturn
         {
@@ -72,7 +72,7 @@ namespace Skarp.HubSpotClient.Company
         }
 
         /// <summary>
-        /// Get or set the continuation offset when calling list many times to enumerate all your contacts
+        /// Get or set the continuation offset when calling list many times to enumerate all your companies
         /// </summary>
         /// <remarks>
         /// The return DTO from List contains the current "offset" that you can inject into your next list call 

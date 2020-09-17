@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Linq;
 using System.Net.Http;
 using System.Net;
 using System.Threading.Tasks;
@@ -128,6 +129,14 @@ namespace Skarp.HubSpotClient.Contact
             if (opts.ContactOffset.HasValue)
             {
                 path = path.SetQueryParam("vidOffset", opts.ContactOffset);
+            }
+
+            if (opts.PropertiesToInclude.Any())
+            {
+                opts.PropertiesToInclude.ForEach(prop =>
+                {
+                    path.QueryParams.Add("property", prop);
+                });
             }
 
             var data = await ListAsync<T>(path);
