@@ -6,53 +6,83 @@ namespace Skarp.HubSpotClient.Core
 {
     public enum HubSpotAssociationDefinitions
     {
-        CompanyToCompany = 1,
 
-        CompanyToContact,
+        ContactToCompany = 1,
 
-        DealToContact,
+        CompanyToContact = 2,
 
-        ContactToDeal,
+        DealToContact = 3,
 
-        DealToCompany,
+        ContactToDeal = 4,
 
-        CompanyToDeal,
+        DealToCompany = 5,
 
-        CompanyToEngagement,
+        CompanyToDeal = 6,
 
-        EngagementToCompany,
+        CompanyToEngagement = 7,
 
-        ContactToEngagement,
+        EngagementToCompany = 8,
 
-        EngagementToContact,
+        ContactToEngagement = 9,
 
-        DealToEngagement,
+        EngagementToContact = 10,
 
-        EngagementToDeal,
+        DealToEngagement = 11,
 
+        EngagementToDeal = 12,
 
-        ParentCompanyToChildCompany,
+        ParentCompanyToChildCompany = 13,
 
-        ChildCompanyToParentCompany,
+        ChildCompanyToParentCompany = 14,
 
-        ContactToTicket,
+        ContactToTicket = 15,
 
-        TicketToContact,
-        
-        TicketToEngagement,
+        TicketToContact = 16,
 
-        EngagementToTicket,
+        TicketToEngagement = 17,
 
-        DealToLineItem,
+        EngagementToTicket = 18,
 
-        LineItemToDeal,
+        DealToLineItem = 19,
+
+        LineItemToDeal = 20,
 
         CompanyToTicket = 25,
 
-        TicketToCompany,
+        TicketToCompany = 26,
 
-        DealToTicket,
-        
-        TicketToDeal
+        DealToTicket = 27,
+
+        TicketToDeal = 28,
+
+        // special contact associations
+
+        AdvisorToCompany = 33,
+
+        CompanyToAdvisor = 34,
+
+        BoardMemberToCompany = 35,
+
+        CompanyToBoardMember = 36,
+
+        ContractorToCompany = 37,
+
+        CompanyToContractor = 38,
+
+        ManagerToCompany = 39,
+
+        CompanyToManager = 40,
+
+        BusinessOwnerToCompany = 41,
+
+        CompanyToBusinessOwner = 42,
+
+        PartnerToCompany = 43,
+
+        CompanyToPartner = 44,
+
+        ResellerToCompany = 45,
+
+        CompanyToReseller = 46
     }
 }
