@@ -1,5 +1,4 @@
-﻿using Skarp.HubSpotClient.Core;
-using Skarp.HubSpotClient.Core.Interfaces;
+﻿using Skarp.HubSpotClient.Core.Interfaces;
 using System.Threading.Tasks;
 
 namespace Skarp.HubSpotClient.Company.Interfaces
@@ -47,13 +46,5 @@ namespace Skarp.HubSpotClient.Company.Interfaces
         /// <param name="entity"></param>
         /// <returns></returns>
         Task<T> UpdateAsync<T>(ICompanyHubSpotEntity entity) where T : IHubSpotEntity, new();
-        /// <summary>
-        /// Resolve a hubspot API path based off the entity and operation that is about to happen
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="action"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
-        string PathResolver(ICompanyHubSpotEntity entity, HubSpotAction action);
     }
 }

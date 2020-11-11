@@ -1,5 +1,4 @@
-﻿using Skarp.HubSpotClient.Core;
-using Skarp.HubSpotClient.Core.Interfaces;
+﻿using Skarp.HubSpotClient.Core.Interfaces;
 using System.Threading.Tasks;
 
 namespace Skarp.HubSpotClient.Contact.Interfaces
@@ -47,14 +46,6 @@ namespace Skarp.HubSpotClient.Contact.Interfaces
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         Task<T> ListAsync<T>(ContactListRequestOptions opts = null) where T : IHubSpotEntity, new();
-        /// <summary>
-        /// Resolve a hubspot API path based off the entity and operation that is about to happen
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="action"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
-        string PathResolver(IContactHubSpotEntity entity, HubSpotAction action);
         /// <summary>
         /// Update an existing contact in hubspot
         /// </summary>

@@ -1,5 +1,4 @@
-﻿using Skarp.HubSpotClient.Associations.Interfaces;
-using Skarp.HubSpotClient.Core;
+﻿using Skarp.HubSpotClient.Core;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -37,13 +36,5 @@ namespace Skarp.HubSpotClient.Associations
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         Task<T> GetListByIdAsync<T>(long FromObjectId, HubSpotAssociationDefinitions definitionId, AssociationListRequestOptions opts = null);
-        /// <summary>
-        /// Resolve a hubspot API path based off the entity and operation that is about to happen
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="action"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
-        string PathResolver(IAssociationHubSpotEntity entity, HubSpotAction action);
     }
 }
