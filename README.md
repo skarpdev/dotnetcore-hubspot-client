@@ -5,7 +5,7 @@
 
 This repository contains a dotnet / dotnet core compatible HubSpot client with support for custom property mapping from your DTOs to HubSpot fields.
 
-Currently working is (almost complete) support for `Contact`, `Company` and `Deal` in the HubSpot API.
+Currently working is (almost complete) support for `Contact`, `Company`, `Deal` and `Owner` in the HubSpot API.
 
 If you find something missing or broken, please [report an issue][github-issue] or even better fork the repo and submit a PR!
 
@@ -104,6 +104,28 @@ To create custom DTOs follow the guidelines given for Contacts above.
 
 **TODO**
 
+### Owner
+
+To consume the HubSpot owner api you should use the `HubSpotOwnerClient` - as with the others there is a simple constructor taking in just the `apiKey` and an eager constructor taking in all dependencies.
+
+Getting started looks something like...
+
+```csharp
+using Skarp.HubSpotClient.Owner;
+using Xunit;
+using Xunit.Abstractions;
+
+public class OwnerTest
+{
+  [Fact]
+  public async Task Getting_owner_works()
+  {
+    var client = new HubSpotOwnerClient("my-awesome-api-key");
+    var owner = await client.GetByIdAsync<OwnerHubSpotEntity>(42L);
+    Assert.NotNull(owner); // victory!
+  }
+}
+```
 
 [nuget-image]: https://img.shields.io/nuget/v/HubSpotClient.svg
 [nuget-url]: https://www.nuget.org/packages/HubSpotClient

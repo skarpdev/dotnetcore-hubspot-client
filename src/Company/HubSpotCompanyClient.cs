@@ -52,7 +52,7 @@ namespace Skarp.HubSpotClient.Company
         { }
 
         /// <summary>
-        /// Creates the Company entity asyncrhounously.
+        /// Creates the Company entity asynchronously.
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <returns></returns>

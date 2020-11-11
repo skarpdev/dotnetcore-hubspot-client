@@ -14,7 +14,7 @@ namespace Skarp.HubSpotClient.Company.Dto
             /// Gets or sets the companies.
             /// </summary>
             /// <value>
-            /// The contacts.
+            /// The companies.
             /// </value>
             [DataMember(Name = "companies")]
             public IList<T> Companies { get; set; } = new List<T>();

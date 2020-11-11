@@ -52,7 +52,7 @@ namespace Skarp.HubSpotClient.Deal
         { }
 
         /// <summary>
-        /// Creates the deal entity asyncrhounously.
+        /// Creates the deal entity asynchronously.
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <returns></returns>
