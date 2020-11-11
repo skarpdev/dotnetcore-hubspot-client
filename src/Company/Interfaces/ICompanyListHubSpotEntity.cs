@@ -8,10 +8,10 @@ namespace Skarp.HubSpotClient.Company.Interfaces
     public interface ICompanyListHubSpotEntity<T> : IHubSpotEntity where T : ICompanyHubSpotEntity
     {
         /// <summary>
-        /// Gets or sets the contacts.
+        /// Gets or sets the companies.
         /// </summary>
         /// <value>
-        /// The contacts.
+        /// The companies.
         /// </value>
         IList<T> Companies { get; set; }
 

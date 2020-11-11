@@ -53,7 +53,7 @@ namespace Skarp.HubSpotClient.Contact
         { }
 
         /// <summary>
-        /// Creates the contact entity asyncrhounously.
+        /// Creates the contact entity asynchronously.
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <returns></returns>
@@ -67,7 +67,7 @@ namespace Skarp.HubSpotClient.Contact
         }
 
         /// <summary>
-        /// Creates or updates the contact entity asyncrhounously.
+        /// Creates or updates the contact entity asynchronously.
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <returns></returns>
