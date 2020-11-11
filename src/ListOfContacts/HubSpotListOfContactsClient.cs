@@ -1,23 +1,18 @@
 using System;
-using System.Linq;
 using System.Net.Http;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Flurl;
 using Microsoft.Extensions.Logging;
 using RapidCore.Network;
-using Skarp.HubSpotClient.Company.Dto;
-using Skarp.HubSpotClient.Company.Interfaces;
 using Skarp.HubSpotClient.Contact.Dto;
 using Skarp.HubSpotClient.Core;
-using Skarp.HubSpotClient.Core.Interfaces;
 using Skarp.HubSpotClient.Core.Requests;
 using Skarp.HubSpotClient.ListOfContacts.Dto;
 using Skarp.HubSpotClient.ListOfContacts.Interfaces;
 
 namespace Skarp.HubSpotClient.ListOfContacts
 {
-    public class HubSpotListOfContactsClient : HubSpotBaseClient
+    public class HubSpotListOfContactsClient : HubSpotBaseClient, IHubSpotListOfContactsClient
     {
         /// <summary>
         /// Mockable and container ready constructor
@@ -109,7 +104,7 @@ namespace Skarp.HubSpotClient.ListOfContacts
         }
 
         /// <summary>
-        /// Resolve a hubspot API path based off the entity and opreation that is about to happen
+        /// Resolve a hubspot API path based off the entity and operation that is about to happen
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="action"></param>

@@ -13,7 +13,7 @@ using Skarp.HubSpotClient.Core.Requests;
 
 namespace Skarp.HubSpotClient.Company
 {
-    public class HubSpotCompanyClient : HubSpotBaseClient
+    public class HubSpotCompanyClient : HubSpotBaseClient, IHubSpotCompanyClient
     {
         /// <summary>
         /// Mockable and container ready constructor
@@ -44,10 +44,10 @@ namespace Skarp.HubSpotClient.Company
         /// <param name="apiKey">Your API key</param>
         public HubSpotCompanyClient(string apiKey)
         : base(
-              new RealRapidHttpClient(new HttpClient()), 
-              NoopLoggerFactory.Get(), 
+              new RealRapidHttpClient(new HttpClient()),
+              NoopLoggerFactory.Get(),
               new RequestSerializer(new RequestDataConverter(NoopLoggerFactory.Get<RequestDataConverter>())),
-              "https://api.hubapi.com", 
+              "https://api.hubapi.com",
               apiKey)
         { }
 
@@ -95,7 +95,7 @@ namespace Skarp.HubSpotClient.Company
             }
 
             var path = PathResolver(new CompanyHubSpotEntity(), HubSpotAction.GetByEmail)
-                .Replace(":domain:", email.Substring(email.IndexOf("@")+1));
+                .Replace(":domain:", email.Substring(email.IndexOf("@") + 1));
             var data = await ListAsPostAsync<T>(path, opts);
             return data;
         }
@@ -152,7 +152,7 @@ namespace Skarp.HubSpotClient.Company
         }
 
         /// <summary>
-        /// Resolve a hubspot API path based off the entity and opreation that is about to happen
+        /// Resolve a hubspot API path based off the entity and operation that is about to happen
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="action"></param>

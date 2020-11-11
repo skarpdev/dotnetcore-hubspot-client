@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Skarp.HubSpotClient.Deal
 {
-    public class HubSpotDealClient : HubSpotBaseClient
+    public class HubSpotDealClient : HubSpotBaseClient, IHubSpotDealClient
     {
         /// <summary>
         /// Mockable and container ready constructor
@@ -105,7 +105,7 @@ namespace Skarp.HubSpotClient.Deal
         }
 
         /// <summary>
-        /// Resolve a hubspot API path based off the entity and opreation that is about to happen
+        /// Resolve a hubspot API path based off the entity and operation that is about to happen
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="action"></param>

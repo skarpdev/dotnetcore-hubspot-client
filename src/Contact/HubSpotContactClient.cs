@@ -14,7 +14,7 @@ using Skarp.HubSpotClient.Core.Requests;
 
 namespace Skarp.HubSpotClient.Contact
 {
-    public class HubSpotContactClient : HubSpotBaseClient
+    public class HubSpotContactClient : HubSpotBaseClient, IHubSpotContactClient
     {
         /// <summary>
         /// Mockable and container ready constructor
@@ -45,10 +45,10 @@ namespace Skarp.HubSpotClient.Contact
         /// <param name="apiKey">Your API key</param>
         public HubSpotContactClient(string apiKey)
         : base(
-              new RealRapidHttpClient(new HttpClient()), 
-              NoopLoggerFactory.Get(), 
+              new RealRapidHttpClient(new HttpClient()),
+              NoopLoggerFactory.Get(),
               new RequestSerializer(new RequestDataConverter(NoopLoggerFactory.Get<RequestDataConverter>())),
-              "https://api.hubapi.com", 
+              "https://api.hubapi.com",
               apiKey)
         { }
 
@@ -167,7 +167,7 @@ namespace Skarp.HubSpotClient.Contact
         }
 
         /// <summary>
-        /// Resolve a hubspot API path based off the entity and opreation that is about to happen
+        /// Resolve a hubspot API path based off the entity and operation that is about to happen
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="action"></param>
