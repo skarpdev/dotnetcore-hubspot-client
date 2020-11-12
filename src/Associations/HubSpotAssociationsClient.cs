@@ -4,17 +4,15 @@ using RapidCore.Network;
 using Skarp.HubSpotClient.Associations.Dto;
 using Skarp.HubSpotClient.Associations.Interfaces;
 using Skarp.HubSpotClient.Core;
-using Skarp.HubSpotClient.Core.Interfaces;
 using Skarp.HubSpotClient.Core.Requests;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Skarp.HubSpotClient.Associations
 {
-    public class HubSpotAssociationsClient : HubSpotBaseClient
+    public class HubSpotAssociationsClient : HubSpotBaseClient, IHubSpotAssociationsClient
     {
         /// <summary>
         /// Mockable and container ready constructor
@@ -25,11 +23,11 @@ namespace Skarp.HubSpotClient.Associations
         /// <param name="hubSpotBaseUrl"></param>
         /// <param name="apiKey"></param>
         public HubSpotAssociationsClient(
-            IRapidHttpClient httpClient, 
-            ILogger logger, 
-            RequestSerializer serializer, 
-            string hubSpotBaseUrl, 
-            string apiKey) 
+            IRapidHttpClient httpClient,
+            ILogger logger,
+            RequestSerializer serializer,
+            string hubSpotBaseUrl,
+            string apiKey)
              : base(httpClient, logger, serializer, hubSpotBaseUrl, apiKey)
         {
         }
@@ -133,7 +131,7 @@ namespace Skarp.HubSpotClient.Associations
         }
 
         /// <summary>
-        /// Resolve a hubspot API path based off the entity and opreation that is about to happen
+        /// Resolve a hubspot API path based off the entity and operation that is about to happen
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="action"></param>

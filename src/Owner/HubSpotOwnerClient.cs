@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Skarp.HubSpotClient.Owner
 {
-    public class HubSpotOwnerClient : HubSpotBaseClient
+    public class HubSpotOwnerClient : HubSpotBaseClient, IHubSpotOwnerClient
     {
         /// <summary>
         /// Mockable and container ready constructor
@@ -101,7 +101,7 @@ namespace Skarp.HubSpotClient.Owner
         }
 
         /// <summary>
-        /// Resolve a hubspot API path based off the entity and opreation that is about to happen
+        /// Resolve a hubspot API path based off the entity and operation that is about to happen
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="action"></param>
