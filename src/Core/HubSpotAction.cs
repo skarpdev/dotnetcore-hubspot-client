@@ -21,6 +21,8 @@
 
         CreateBatch,
 
-        DeleteBatch
+        DeleteBatch,
+
+        UpdateBatch
     }
 }

@@ -9,7 +9,7 @@
         /// Gets or sets the property that has a value.
         /// </summary>
         /// <remarks>
-        /// Data will only be set here if the converetd DTO returns a v1 route!
+        /// Data will only be set here if the converted DTO returns a v1 route!
         /// </remarks>
         /// <value>
         /// The property value

@@ -15,8 +15,9 @@ namespace Skarp.HubSpotClient.Core
     {
         protected readonly IRapidHttpClient HttpClient;
         protected readonly ILogger Logger;
-        private readonly RequestSerializer _serializer;
+        protected readonly RequestSerializer _serializer;
         protected readonly string HubSpotBaseUrl;
+        
         private readonly string _apiKey;
 
         protected HubSpotBaseClient(
@@ -227,7 +228,7 @@ namespace Skarp.HubSpotClient.Core
                 responseData => (T) _serializer.DeserializeEntity<T>(responseData));
         }
         /// <summary>
-        /// Helper method for dispatching the requet and dealing with response errors
+        /// Helper method for dispatching the request and dealing with response errors
         /// </summary>
         /// <typeparam name="T">The type to deserialize as</typeparam>
         /// <param name="absoluteUriPath">The absolute path and query params to include in the request</param>
@@ -235,7 +236,7 @@ namespace Skarp.HubSpotClient.Core
         /// <param name="json">Optional json to send with the request</param>
         /// <param name="deserializeFunc">Func to handle deserialization of data when the request goes well</param>
         /// <returns>A deserialized entity with data when things go well, exceptionns otherwise</returns>
-        private async Task<T> SendRequestAsync<T>(string absoluteUriPath, HttpMethod httpMethod, string json,
+        protected async Task<T> SendRequestAsync<T>(string absoluteUriPath, HttpMethod httpMethod, string json,
             Func<string, T> deserializeFunc)
         {
             var fullUrl = $"{HubSpotBaseUrl}{absoluteUriPath}"

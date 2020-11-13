@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Dynamic;
+using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Skarp.HubSpotClient.Core.Interfaces;
@@ -64,7 +65,8 @@ namespace Skarp.HubSpotClient.Core.Requests
         /// <returns>The serialized list of entities</returns>
         public virtual string SerializeEntities<T>(List<T> objs)
         {
-            var result = "[";
+            var result = new StringBuilder("[");
+
             for (int i = 0; i < objs.Count; i++)
             {
                 var obj = objs[i];
@@ -74,22 +76,66 @@ namespace Skarp.HubSpotClient.Core.Requests
 
                     entity.ToHubSpotDataEntity(ref converted);
 
-                    result += JsonConvert.SerializeObject(
+                    result.Append(JsonConvert.SerializeObject(
                         converted,
-                        _jsonSerializerSettings);
+                        _jsonSerializerSettings));
                 }
                 else
                 {
-                    result += JsonConvert.SerializeObject(
+                    result.Append(JsonConvert.SerializeObject(
                     obj,
-                    _jsonSerializerSettings);
+                    _jsonSerializerSettings));
                 }
                 if ((i + 1) < objs.Count)
                 {
-                    result += ",";
+                    result.Append(",");
                 }
             }
-            return result += "]";
+
+            result.Append("]");
+            return result.ToString();
+        }
+
+        /// <summary>
+        /// Serializes entity list to name/value JSON.
+        /// </summary>
+        /// <param name="entities">The list of entities.</param>
+        /// <returns>The serialized list of entities</returns>
+        public virtual string SerializeEntitiesToNameValueList<T>(IList<T> objs)
+        {
+            var result = new StringBuilder("[");
+
+            for (int i = 0; i < objs.Count; i++)
+            {
+                var obj = objs[i];
+
+                var converted = _requestDataConverter.ToNameValueList(obj);
+
+                result.Append(JsonConvert.SerializeObject(
+                    converted,
+                    _jsonSerializerSettings));
+
+                if ((i + 1) < objs.Count)
+                {
+                    result.Append(",");
+                }
+            }
+            result.Append("]");
+            return result.ToString();
+        }
+
+        /// <summary>
+        /// Serializes the entity as a name/value list to JSON.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <returns>The serialized entity</returns>
+        public virtual string SerializeEntityToNameValueList<T>(T entity)
+        {
+            var converted = _requestDataConverter.ToNameValueList(entity);
+
+            return JsonConvert.SerializeObject(
+                converted,
+                _jsonSerializerSettings);
         }
 
         /// <summary>
@@ -109,7 +155,7 @@ namespace Skarp.HubSpotClient.Core.Requests
         /// </summary>
         /// <param name="json">The json data returned by HubSpot that should be converted</param>
         /// <returns>The deserialized entity</returns>
-        public virtual IHubSpotEntity DeserializeEntity<T>(string json) where T : IHubSpotEntity, new()
+        public virtual T DeserializeEntity<T>(string json) where T : IHubSpotEntity, new()
         {
             var jobj = JsonConvert.DeserializeObject<ExpandoObject>(json);
             var converted = _requestDataConverter.FromHubSpotResponse<T>(jobj);
@@ -120,7 +166,7 @@ namespace Skarp.HubSpotClient.Core.Requests
         }
 
         /// <summary>
-        /// Deserialize the given JSON from a List requet into a <see cref="IHubSpotEntity"/>
+        /// Deserialize the given JSON from a List request into a <see cref="IHubSpotEntity"/>
         /// </summary>
         /// <param name="json">The JSON data returned from a List request to HubSpot</param>
         /// <returns></returns>
@@ -129,6 +175,23 @@ namespace Skarp.HubSpotClient.Core.Requests
             var expandoObject = JsonConvert.DeserializeObject<ExpandoObject>(json);
             var converted = _requestDataConverter.FromHubSpotListResponse<T>(expandoObject);
             return converted;
+        }
+
+        /// <summary>
+        /// Deserialize the given JSON into a list of <see cref="IHubSpotEntity"/>
+        /// </summary>
+        /// <param name="json">The JSON data returned from a HubSpot operation</param>
+        /// <returns></returns>
+        public virtual IEnumerable<T> DeserializeEntities<T>(string json) where T : IHubSpotEntity, new()
+        {
+            var listOfExpandoObjects = JsonConvert.DeserializeObject<IEnumerable<ExpandoObject>>(json);
+
+            var convertedList = new List<T>();
+            foreach (var expandoObject in listOfExpandoObjects)
+            {
+                convertedList.Add(_requestDataConverter.FromHubSpotResponse<T>(expandoObject));
+            }
+            return convertedList;
         }
     }
 }
