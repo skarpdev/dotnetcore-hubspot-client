@@ -4,7 +4,6 @@ using System.Dynamic;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Skarp.HubSpotClient.Core.Interfaces;
 
 namespace Skarp.HubSpotClient.Core.Requests
@@ -67,6 +66,49 @@ namespace Skarp.HubSpotClient.Core.Requests
             _logger.LogDebug("Mapping complete, returning data");
 
             return mapped;
+        }
+
+        /// <summary>
+        /// Converts the given <paramref name="entity"/> to a simple list of name/values.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <returns></returns>
+        public IEnumerable<HubspotDataEntityProp> ToNameValueList(object entity)
+        {
+            _logger.LogDebug("Convert ToNameValueList");
+
+            var properties = new List<HubspotDataEntityProp>();
+
+            var allProps = entity.GetType().GetProperties();
+            _logger.LogDebug("Have {0} props to map", allProps.Length);
+
+            foreach (var prop in allProps)
+            {
+                if (prop.HasIgnoreDataMemberAttribute()) { continue; }
+
+                var propSerializedName = prop.GetPropSerializedName();
+                _logger.LogDebug("Mapping prop: '{0}' with serialization name: '{1}'", prop.Name, propSerializedName);
+                if (prop.Name.Equals("RouteBasePath") || prop.Name.Equals("IsNameValue")) { continue; }
+
+                // IF we have an complex type on the entity that we are trying to convert, let's NOT get the 
+                // string value of it, but simply pass the object along - it will be serialized later as JSON...
+                var propValue = prop.GetValue(entity);
+                var value = propValue.IsComplexType() ? propValue : propValue?.ToString();
+                var item = new HubspotDataEntityProp
+                {
+                    Property = null,
+                    Name = propSerializedName,
+                    Value = value
+                };
+
+                if (item.Value == null) { continue; }
+
+                properties.Add(item);
+            }
+
+            _logger.LogDebug("Mapping complete, returning data");
+
+            return properties;
         }
 
         /// <summary>
@@ -179,7 +221,7 @@ namespace Skarp.HubSpotClient.Core.Requests
         /// as vid and other root level objects stored in the HubSpot JSON response
         /// </remarks>
         /// <param name="dynamicObject">An <see cref="ExpandoObject"/> instance that contains a single HubSpot entity to deserialize</param>
-        /// <param name="dto">An instantiated DTO that shall recieve data</param>
+        /// <param name="dto">An instantiated DTO that shall receive data</param>
         /// <returns>The populated DTO</returns>
         internal object ConvertSingleEntity(ExpandoObject dynamicObject, object dto)
         {
@@ -208,6 +250,14 @@ namespace Skarp.HubSpotClient.Core.Requests
                 // TODO use properly serialized name of prop to find it
                 var companyIdProp = dtoProps.SingleOrDefault(q => q.GetPropSerializedName() == "companyId");
                 companyIdProp?.SetValue(dto, companyIdData);
+            }
+
+            // The objectId is the "id" of CRM objects
+            if (expandoDict.TryGetValue("objectId", out var objectIdData))
+            {
+                // TODO use properly serialized name of prop to find it
+                var objectIdProp = dtoProps.SingleOrDefault(q => q.GetPropSerializedName() == "objectId");
+                objectIdProp?.SetValue(dto, objectIdData);
             }
 
             // The Properties object in the json / response data contains all the props we wish to map - if that does not exist

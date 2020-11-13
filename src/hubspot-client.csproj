@@ -23,4 +23,12 @@
     <PackageReference Include="RapidCore" Version="0.21.0" />
     <PackageReference Include="System.Reflection.TypeExtensions" Version="4.7.0" />
   </ItemGroup>
+
+  <ItemGroup>
+    <!-- make internals visible to the L0 test project so internals can be referenced and tested in L0 tests. -->
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>$(AssemblyName).UnitTest</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
 </Project>
