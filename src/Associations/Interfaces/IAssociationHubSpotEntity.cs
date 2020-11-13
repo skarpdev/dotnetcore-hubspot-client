@@ -1,7 +1,4 @@
-﻿using Skarp.HubSpotClient.Core.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Skarp.HubSpotClient.Core;
 
 namespace Skarp.HubSpotClient.Associations.Interfaces
 {
