@@ -85,13 +85,17 @@ namespace Skarp.HubSpotClient.Contact
         /// Return a single contact by id from hubspot
         /// </summary>
         /// <param name="contactId"></param>
+        /// <param name="opts">Options for enabling/disabling history and specifying properties</param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public async Task<T> GetByIdAsync<T>(long contactId) where T : IHubSpotEntity, new()
+        public async Task<T> GetByIdAsync<T>(long contactId, ContactGetRequestOptions opts = null) where T : IHubSpotEntity, new()
         {
             Logger.LogDebug("Contact Get by id ");
             var path = PathResolver(new ContactHubSpotEntity(), HubSpotAction.Get)
                 .Replace(":contactId:", contactId.ToString());
+
+            path = AddGetRequestOptions(path, opts);
+
             var data = await GetAsync<T>(path);
             return data;
         }
@@ -100,15 +104,38 @@ namespace Skarp.HubSpotClient.Contact
         /// Get a contact by email address
         /// </summary>
         /// <param name="email"></param>
+        /// <param name="opts">Options for enabling/disabling history and specifying properties</param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public async Task<T> GetByEmailAsync<T>(string email) where T : IHubSpotEntity, new()
+        public async Task<T> GetByEmailAsync<T>(string email, ContactGetRequestOptions opts = null) where T : IHubSpotEntity, new()
         {
             Logger.LogDebug("Contact get by email");
             var path = PathResolver(new ContactHubSpotEntity(), HubSpotAction.GetByEmail)
                 .Replace(":contactEmail:", email);
+
+            path = AddGetRequestOptions(path, opts);
+
             var data = await GetAsync<T>(path);
             return data;
+        }
+
+        private string AddGetRequestOptions(string path, ContactGetRequestOptions opts = null)
+        {
+            var newPath = path;
+
+            opts ??= new ContactGetRequestOptions();
+            if (opts.PropertiesToInclude.Any())
+            {
+                newPath = newPath.SetQueryParam("property", opts.PropertiesToInclude);
+            }
+            if (!opts.IncludeHistory)
+            {
+                newPath = newPath.SetQueryParam("propertyMode", "value_only");
+            }
+            newPath = newPath.SetQueryParam("formSubmissionMode", opts.FormSubmissionMode.ToString().ToLowerInvariant());
+            newPath = newPath.SetQueryParam("showListMemberships", opts.IncludeListMemberships.ToString().ToLowerInvariant());
+
+            return newPath;
         }
 
         /// <summary>

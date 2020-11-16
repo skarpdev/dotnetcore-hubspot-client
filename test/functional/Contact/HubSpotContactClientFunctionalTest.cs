@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using RapidCore.Network;
 using Skarp.HubSpotClient.Contact;
 using Skarp.HubSpotClient.Contact.Dto;
 using Skarp.HubSpotClient.Core.Requests;
-using Skarp.HubSpotClient.FunctionalTests.Mocks;
 using Xunit;
 using Xunit.Abstractions;
 using Skarp.HubSpotClient.FunctionalTests.Mocks.Contact;
+using System.Collections.Generic;
 
 namespace Skarp.HubSpotClient.FunctionalTests.Contact
 {
@@ -99,7 +96,14 @@ namespace Skarp.HubSpotClient.FunctionalTests.Contact
         public async Task ContactClient_can_get_contact()
         {
             const int contactId = 3234574;
-            var data = await _client.GetByIdAsync<ContactHubSpotEntity>(contactId);
+            var options = new ContactGetRequestOptions
+            {
+                PropertiesToInclude = new List<string> { "my_custom_property" },
+                FormSubmissionMode = ContactFormSubmissionMode.Newest,
+                IncludeHistory = false,
+                IncludeListMemberships = false
+            };
+            var data = await _client.GetByIdAsync<ContactHubSpotEntity>(contactId, options);
 
             Assert.NotNull(data);
             Assert.Equal("Codey", data.FirstName);
@@ -111,7 +115,14 @@ namespace Skarp.HubSpotClient.FunctionalTests.Contact
         public async Task ContactClient_can_get_contact_by_email()
         {
             const string email = "testingapis@hubspot.com";
-            var data = await _client.GetByEmailAsync<ContactHubSpotEntity>(email);
+            var options = new ContactGetRequestOptions
+            {
+                PropertiesToInclude = new List<string> { "my_custom_property", "hs_object_id" },
+                FormSubmissionMode = ContactFormSubmissionMode.Newest,
+                IncludeHistory = false,
+                IncludeListMemberships = false
+            };
+            var data = await _client.GetByEmailAsync<ContactHubSpotEntity>(email, options);
 
             Assert.NotNull(data);
             Assert.Equal("Codey", data.FirstName);
