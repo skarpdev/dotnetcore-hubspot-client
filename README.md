@@ -13,10 +13,10 @@ If you find something missing or broken, please [report an issue][github-issue] 
 
 Packages for the following dotnet versions are available:
 
-- dotnet 4.6
-- netstandard 1.6
+- dotnet 4.6.1
+- netstandard 2.0
 
-Which means that you can use the library with `fat-framework >= 4.6` or `netcoreapp >= 1.0`
+Which means that you can use the library with `fat-framework >= 4.6.1` or `netcoreapp >= 2.0`
 
 Verified working on Linux, macOS and Windows.
 
