@@ -1,7 +1,4 @@
-﻿using Skarp.HubSpotClient.Core.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Skarp.HubSpotClient.Associations.Interfaces
 {
@@ -36,6 +33,5 @@ namespace Skarp.HubSpotClient.Associations.Interfaces
         /// The continuation offset.
         /// </value>
         long ContinuationOffset { get; set; }
-
     }
 }

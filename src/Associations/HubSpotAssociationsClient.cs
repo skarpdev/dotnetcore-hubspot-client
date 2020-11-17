@@ -53,9 +53,11 @@ namespace Skarp.HubSpotClient.Associations
         /// <summary>
         /// Return a list of associations for a CRM object by id from hubspot based on the association definition id
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <param name="fromObjectId">Object ID for which to list its associations</param>
+        /// <param name="definitionId">The definition ID of the associations to list</param>
+        /// <param name="opts">Additional request options, use for limiting and pagination</param>
         /// <returns></returns>
-        public async Task<T> GetListByIdAsync<T>(long FromObjectId, HubSpotAssociationDefinitions definitionId, AssociationListRequestOptions opts = null)
+        public async Task<IAssociationListHubSpotEntity<long>> GetListByIdAsync(long FromObjectId, HubSpotAssociationDefinitions definitionId, AssociationListRequestOptions opts = null)
         {
             Logger.LogDebug("Get associations for object with definition");
             if (opts == null)
@@ -70,7 +72,7 @@ namespace Skarp.HubSpotClient.Associations
             {
                 path = path.SetQueryParam("offset", opts.AssociationOffset);
             }
-            var data = await GetGenericAsync<T>(path);
+            var data = await GetGenericAsync<AssociationListHubSpotEntity<long>>(path);
             return data;
         }
 
@@ -79,9 +81,9 @@ namespace Skarp.HubSpotClient.Associations
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public async Task<bool> Create<T>(T entity, HubSpotAssociationDefinitions definitionId)
+        public async Task<bool> Create<T>(T entity)
         {
-            Logger.LogDebug("Create batch associations with definition");
+            Logger.LogDebug("Create association with definition");
 
             var path = PathResolver(new AssociationHubSpotEntity(), HubSpotAction.Create);
             var data = await PutOrPostGeneric(path, entity, false);
@@ -93,7 +95,7 @@ namespace Skarp.HubSpotClient.Associations
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public async Task<bool> CreateBatch<T>(List<T> entities, HubSpotAssociationDefinitions definitionId)
+        public async Task<bool> CreateBatch<T>(List<T> entities)
         {
             Logger.LogDebug("Create batch associations with definition");
 
@@ -107,7 +109,7 @@ namespace Skarp.HubSpotClient.Associations
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public async Task<bool> Delete<T>(T entity, HubSpotAssociationDefinitions definitionId)
+        public async Task<bool> Delete<T>(T entity)
         {
             Logger.LogDebug("Create batch associations with definition");
 
@@ -121,7 +123,7 @@ namespace Skarp.HubSpotClient.Associations
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public async Task<bool> DeleteBatch<T>(List<T> entities, HubSpotAssociationDefinitions definitionId)
+        public async Task<bool> DeleteBatch<T>(List<T> entities)
         {
             Logger.LogDebug("Delete batch associations with definition");
 

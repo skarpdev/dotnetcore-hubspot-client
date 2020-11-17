@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using FakeItEasy;
 using RapidCore.Network;
 using Skarp.HubSpotClient.Core;
-using Skarp.HubSpotClient.Core.Interfaces;
 using Skarp.HubSpotClient.Core.Requests;
 using Xunit;
 using Xunit.Abstractions;
@@ -78,7 +77,7 @@ namespace Skarp.HubSpotClient.UnitTest.Association
                 FromObjectId = 10444744,
                 ToObjectId = 259674,
                 DefinitionId = (int)HubSpotAssociationDefinitions.CompanyToContact
-            }, HubSpotAssociationDefinitions.CompanyToContact);
+            });
 
             A.CallTo(() => _mockHttpClient.SendAsync(A<HttpRequestMessage>.Ignored)).MustHaveHappened();
             A.CallTo(() => _mockSerializer.SerializeEntity(A<AssociationHubSpotEntity>.Ignored)).MustHaveHappened();
@@ -102,7 +101,7 @@ namespace Skarp.HubSpotClient.UnitTest.Association
                 DefinitionId = (int)HubSpotAssociationDefinitions.CompanyToContact
             }
             };
-            var result = await _client.CreateBatch(entities, HubSpotAssociationDefinitions.CompanyToContact);
+            var result = await _client.CreateBatch(entities);
 
             A.CallTo(() => _mockHttpClient.SendAsync(A<HttpRequestMessage>.Ignored)).MustHaveHappened();
             A.CallTo(() => _mockSerializer.SerializeEntities(A<List<AssociationHubSpotEntity>>.Ignored)).MustHaveHappened();
@@ -116,7 +115,7 @@ namespace Skarp.HubSpotClient.UnitTest.Association
                 FromObjectId = 10444744,
                 ToObjectId = 259674,
                 DefinitionId = (int)HubSpotAssociationDefinitions.CompanyToContact
-            }, HubSpotAssociationDefinitions.CompanyToContact);
+            });
 
             A.CallTo(() => _mockHttpClient.SendAsync(A<HttpRequestMessage>.Ignored)).MustHaveHappened();
             A.CallTo(() => _mockSerializer.SerializeEntity(A<AssociationHubSpotEntity>.Ignored)).MustHaveHappened();
@@ -140,7 +139,7 @@ namespace Skarp.HubSpotClient.UnitTest.Association
                 DefinitionId = (int)HubSpotAssociationDefinitions.CompanyToContact
             }
             };
-            var result = await _client.DeleteBatch(entities, HubSpotAssociationDefinitions.CompanyToContact);
+            var result = await _client.DeleteBatch(entities);
 
             A.CallTo(() => _mockHttpClient.SendAsync(A<HttpRequestMessage>.Ignored)).MustHaveHappened();
             A.CallTo(() => _mockSerializer.SerializeEntities(A<List<AssociationHubSpotEntity>>.Ignored)).MustHaveHappened();
@@ -149,7 +148,7 @@ namespace Skarp.HubSpotClient.UnitTest.Association
         [Fact]
         public async Task AssociationClient_list_companies_work()
         {
-            var response = await _client.GetListByIdAsync<AssociationListHubSpotEntity<long>>(
+            var response = await _client.GetListByIdAsync(
                 10444744,
                 HubSpotAssociationDefinitions.CompanyToContact,
                 new AssociationListRequestOptions

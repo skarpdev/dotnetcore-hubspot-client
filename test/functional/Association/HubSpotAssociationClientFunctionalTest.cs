@@ -2,9 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Skarp.HubSpotClient.Associations;
 using Skarp.HubSpotClient.Core.Requests;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using Xunit.Abstractions;
 using Xunit;
 using System.Threading.Tasks;
@@ -40,7 +38,7 @@ namespace Skarp.HubSpotClient.FunctionalTests.Association
         [Fact]
         public async Task CompanyClient_can_get_list_of_Associations()
         {
-            var data = await _client.GetListByIdAsync<AssociationListHubSpotEntity<long>>(
+            var data = await _client.GetListByIdAsync(
                 10444744,
                 Core.HubSpotAssociationDefinitions.CompanyToContact,
                 new AssociationListRequestOptions
@@ -62,7 +60,7 @@ namespace Skarp.HubSpotClient.FunctionalTests.Association
                 FromObjectId = 10444744,
                 ToObjectId = 259674,
                 DefinitionId = (int)HubSpotAssociationDefinitions.CompanyToContact
-            }, HubSpotAssociationDefinitions.CompanyToContact);
+            });
 
             Assert.True(result);
         }
@@ -85,7 +83,7 @@ namespace Skarp.HubSpotClient.FunctionalTests.Association
                 DefinitionId = (int)HubSpotAssociationDefinitions.CompanyToContact
             }
             };
-            var result = await _client.CreateBatch(entities, HubSpotAssociationDefinitions.CompanyToContact);
+            var result = await _client.CreateBatch(entities);
 
             Assert.True(result);
         }
@@ -121,7 +119,7 @@ namespace Skarp.HubSpotClient.FunctionalTests.Association
                 DefinitionId = (int)HubSpotAssociationDefinitions.CompanyToContact
             }
              };
-                 _ = await localClient.CreateBatch(entities, HubSpotAssociationDefinitions.CompanyToContact);
+                 _ = await localClient.CreateBatch(entities);
              });
 
         }
@@ -134,7 +132,7 @@ namespace Skarp.HubSpotClient.FunctionalTests.Association
                 FromObjectId = 10444744,
                 ToObjectId = 259674,
                 DefinitionId = (int)HubSpotAssociationDefinitions.CompanyToContact
-            }, HubSpotAssociationDefinitions.CompanyToContact);
+            });
 
             Assert.True(result);
         }
@@ -157,7 +155,7 @@ namespace Skarp.HubSpotClient.FunctionalTests.Association
                 DefinitionId = (int)HubSpotAssociationDefinitions.CompanyToContact
             }
             };
-            var result = await _client.DeleteBatch(entities, HubSpotAssociationDefinitions.CompanyToContact);
+            var result = await _client.DeleteBatch(entities);
 
             Assert.True(result);
         }

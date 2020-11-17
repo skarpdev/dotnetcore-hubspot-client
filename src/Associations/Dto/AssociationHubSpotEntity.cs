@@ -1,8 +1,6 @@
-﻿using Skarp.HubSpotClient.Associations.Interfaces;
-using System;
-using System.Collections.Generic;
+using Skarp.HubSpotClient.Associations.Interfaces;
+using Skarp.HubSpotClient.Core;
 using System.Runtime.Serialization;
-using System.Text;
 
 namespace Skarp.HubSpotClient.Associations.Dto
 {
