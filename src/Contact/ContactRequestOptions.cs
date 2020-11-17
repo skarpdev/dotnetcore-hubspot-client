@@ -1,9 +1,24 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Skarp.HubSpotClient.Contact
 {
+    public enum ContactFormSubmissionMode
+    {
+        All,
+        None,
+        Newest,
+        Oldest
+    }
+
+    public class ContactGetRequestOptions
+    {
+        public List<string> PropertiesToInclude { get; set; } = new List<string>();
+        public bool IncludeHistory { get; set; } = true; // this is the default in HubSpot
+        public ContactFormSubmissionMode FormSubmissionMode { get; set; } = ContactFormSubmissionMode.All; // this is the default in HubSpot
+        public bool IncludeListMemberships { get; set; } = true; // this is the default in HubSpot
+    }
+
     public class ContactListRequestOptions
     {
         private int _numberOfContactsToReturn = 20;

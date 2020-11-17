@@ -10,7 +10,13 @@ namespace Skarp.HubSpotClient.FunctionalTests.Mocks.Contact
     {
         public bool IsMatch(HttpRequestMessage request)
         {
-            return request.RequestUri.AbsolutePath.Contains("/contacts/v1/contact/email/testingapis@hubspot.com") && request.Method == HttpMethod.Get;
+            return request.RequestUri.AbsolutePath.Contains("/contacts/v1/contact/email/testingapis@hubspot.com") 
+                && request.RequestUri.Query.Contains("property=my_custom_property")
+                && request.RequestUri.Query.Contains("property=hs_object_id")
+                && request.RequestUri.Query.Contains("propertyMode=value_only")
+                && request.RequestUri.Query.Contains("formSubmissionMode=newest")
+                && request.RequestUri.Query.Contains("showListMemberships=false")
+                && request.Method == HttpMethod.Get;
         }
 
         public Task<HttpResponseMessage> GetResponseAsync(HttpRequestMessage request)

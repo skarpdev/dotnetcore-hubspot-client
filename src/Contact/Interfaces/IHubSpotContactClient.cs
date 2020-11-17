@@ -1,4 +1,4 @@
-﻿using Skarp.HubSpotClient.Core.Interfaces;
+using Skarp.HubSpotClient.Core.Interfaces;
 using System.Threading.Tasks;
 
 namespace Skarp.HubSpotClient.Contact.Interfaces
@@ -29,16 +29,18 @@ namespace Skarp.HubSpotClient.Contact.Interfaces
         /// Get a contact by email address
         /// </summary>
         /// <param name="email"></param>
+        /// <param name="opts">Options for enabling/disabling history and specifying properties</param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        Task<T> GetByEmailAsync<T>(string email) where T : IHubSpotEntity, new();
+        Task<T> GetByEmailAsync<T>(string email, ContactGetRequestOptions opts = null) where T : IHubSpotEntity, new();
         /// <summary>
         /// Return a single contact by id from hubspot
         /// </summary>
         /// <param name="contactId"></param>
+        /// <param name="opts">Options for enabling/disabling history and specifying properties</param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        Task<T> GetByIdAsync<T>(long contactId) where T : IHubSpotEntity, new();
+        Task<T> GetByIdAsync<T>(long contactId, ContactGetRequestOptions opts = null) where T : IHubSpotEntity, new();
         /// <summary>
         /// List contacts 
         /// </summary>
