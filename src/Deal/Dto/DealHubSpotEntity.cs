@@ -8,18 +8,6 @@ using System.Text;
 namespace Skarp.HubSpotClient.Deal.Dto
 {
     [DataContract]
-    public class DealHubSpotAssociations
-    {
-
-        [DataMember(Name = "associatedCompanyIds")]
-        public long[] AssociatedCompany { get; set; }
-
-        [DataMember(Name = "associatedVids")]
-        public long[] AssociatedContacts { get; set; }
-    }
-
-
-    [DataContract]
     public class DealHubSpotEntity : IDealHubSpotEntity
     {
         public DealHubSpotEntity()
