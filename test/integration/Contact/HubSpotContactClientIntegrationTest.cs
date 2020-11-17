@@ -15,15 +15,19 @@ namespace integration.Contact
     public class HubSpotContactClientIntegrationTest : IntegrationTestBase<HubSpotContactClient>
     {
         private readonly HubSpotContactClient _client;
+        private readonly string _apiKey;
+        private readonly bool _isAppVeyorEnv;
 
         public HubSpotContactClientIntegrationTest(ITestOutputHelper output) : base(output)
         {
-            _client = new HubSpotContactClient(
+            _apiKey = Environment.GetEnvironmentVariable("HUBSPOT_API_KEY") ?? "demo";
+            _isAppVeyorEnv = (Environment.GetEnvironmentVariable("APPVEYOR") ?? "false").Equals("true", StringComparison.InvariantCultureIgnoreCase);
+;            _client = new HubSpotContactClient(
                 new RealRapidHttpClient(new HttpClient()),
                 base.Logger,
                 new RequestSerializer(new RequestDataConverter(LoggerFactory.CreateLogger<RequestDataConverter>())),
                 "https://api.hubapi.com",
-                Environment.GetEnvironmentVariable("HUBSPOT_API_KEY") ?? "demo"
+                _apiKey
                 );
         }
 
@@ -37,6 +41,13 @@ namespace integration.Contact
         [Fact]
         public async Task Create_contact_and_get_works()
         {
+            if (_apiKey.Equals("demo") && _isAppVeyorEnv)
+            {
+                Output.WriteLine("Skipping test as the API key is incorrectly set and we're in AppVeyor");
+                Assert.True(true);
+                return;
+            }
+            
             var contact = new ContactHubSpotEntity
             {
                 Address = "Som street 42",
