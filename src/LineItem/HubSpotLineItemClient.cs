@@ -1,4 +1,4 @@
-﻿using Flurl;
+using Flurl;
 using Microsoft.Extensions.Logging;
 using RapidCore.Network;
 using Skarp.HubSpotClient.Core;
@@ -111,16 +111,7 @@ namespace Skarp.HubSpotClient.LineItem
             var path = PathResolver(new LineItemHubSpotEntity(), HubSpotAction.Get)
                 .Replace(":lineItemId:", lineItemId.ToString());
 
-            opts ??= new LineItemGetRequestOptions();
-
-            if (opts.PropertiesToInclude.Any())
-            {
-                path = path.SetQueryParam("properties", opts.PropertiesToInclude);
-            }
-            if (opts.IncludeDeletes)
-            {
-                path = path.SetQueryParam("includeDeletes", "true");
-            }
+            path = ApplyGetRequestOptions(path, opts);
 
             return GetAsync<T>(path);
         }
@@ -142,6 +133,25 @@ namespace Skarp.HubSpotClient.LineItem
             }
 
             return ListAsync<T>(path);
+        }
+
+        public async Task<IDictionary<long, T>> ReadBatchAsync<T>(ListOfLineItemIds lineItemIds, LineItemGetRequestOptions opts = null) where T : IHubSpotEntity, new()
+        {
+            Logger.LogDebug("Line Item Batch Read");
+            var path = PathResolver(new LineItemHubSpotEntity(), HubSpotAction.ReadBatch);
+
+            path = ApplyGetRequestOptions(path, opts);
+
+            var request = _serializer.SerializeEntity(lineItemIds);
+
+            IDictionary<long, T> result = null;
+            var success = await SendRequestAsync(path, HttpMethod.Post, request, response => 
+            {
+                result = _serializer.DeserializeDictionaryOfEntities<long, T>(response);
+                return true;
+            });
+
+            return success ? result : new Dictionary<long, T>();
         }
 
         public Task<T> UpdateAsync<T>(ILineItemHubSpotEntity entity) where T : IHubSpotEntity, new()
@@ -205,9 +215,31 @@ namespace Skarp.HubSpotClient.LineItem
                     return $"{entity.RouteBasePath}/line_items/batch-delete";
                 case HubSpotAction.UpdateBatch:
                     return $"{entity.RouteBasePath}/line_items/batch-update";
+                case HubSpotAction.ReadBatch:
+                    return $"{entity.RouteBasePath}/line_items/batch-read";
                 default:
                     throw new ArgumentOutOfRangeException(nameof(action), action, null);
             }
+        }
+
+        private string ApplyGetRequestOptions(string path, LineItemGetRequestOptions opts = null)
+        {
+            opts ??= new LineItemGetRequestOptions();
+
+            if (opts.PropertiesToInclude.Any())
+            {
+                path = path.SetQueryParam("properties", opts.PropertiesToInclude);
+            }
+            if (opts.PropertiesWithHistoryToInclude.Any())
+            {
+                path = path.SetQueryParam("propertiesWithHistory", opts.PropertiesWithHistoryToInclude);
+            }
+            if (opts.IncludeDeletes)
+            {
+                path = path.SetQueryParam("includeDeletes", "true");
+            }
+
+            return path;
         }
     }
 }

@@ -178,6 +178,24 @@ namespace Skarp.HubSpotClient.Core.Requests
         }
 
         /// <summary>
+        /// Deserialize the given JSON into a dictionary.
+        /// </summary>
+        /// <param name="json">The JSON data returned from a batch read request to HubSpot</param>
+        /// <returns></returns>
+        public virtual IDictionary<TKey, TEntity> DeserializeDictionaryOfEntities<TKey, TEntity>(string json) where TEntity : IHubSpotEntity, new()
+        {
+            var untypedDictionary = JsonConvert.DeserializeObject<IDictionary<TKey, ExpandoObject>>(json);
+
+            var convertedDictionary = new Dictionary<TKey, TEntity>();
+            foreach (var pair in untypedDictionary)
+            {
+                convertedDictionary.Add(pair.Key, _requestDataConverter.FromHubSpotResponse<TEntity>(pair.Value));
+            }
+
+            return convertedDictionary;
+        }
+
+        /// <summary>
         /// Deserialize the given JSON into a list of <see cref="IHubSpotEntity"/>
         /// </summary>
         /// <param name="json">The JSON data returned from a HubSpot operation</param>

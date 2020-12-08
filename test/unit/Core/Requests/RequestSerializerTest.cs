@@ -94,6 +94,16 @@ namespace Skarp.HubSpotClient.UnitTest.Core.Requests
         }
 
         [Fact]
+        public void RequestSerializer_deserializes_dictionary_of_entities()
+        {
+            var json = "{'9845651':{'objectType':'LINE_ITEM','portalId':62515,'objectId':9845651,'properties':{'hs_product_id':{'versions':[{'name':'hs_product_id','value':'1645342','sourceVid':[]}],'value':'1645342','timestamp':0,'source':null,'sourceId':null}},'version':1,'isDeleted':false},'9867373':{'objectType':'LINE_ITEM','portalId':62515,'objectId':9867373,'properties':{'hs_product_id':{'versions':[{'name':'hs_product_id','value':'1645187','sourceVid':[]}],'value':'1645187','timestamp':0,'source':null,'sourceId':null}},'version':1,'isDeleted':false}}";
+            var result = _serializer.DeserializeDictionaryOfEntities<long, LineItemHubSpotEntity>(json);
+
+            Assert.Equal(2, result.Count());
+            Assert.Equal("1645342", result[9845651].ProductId);
+        }
+
+        [Fact]
         public void RequestSerializer_serializes_entity_to_namevaluelist()
         {
             var json = _serializer.SerializeEntityToNameValueList(_contactDto);
