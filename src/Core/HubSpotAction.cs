@@ -23,6 +23,8 @@
 
         DeleteBatch,
 
-        UpdateBatch
+        UpdateBatch,
+
+        ReadBatch
     }
 }

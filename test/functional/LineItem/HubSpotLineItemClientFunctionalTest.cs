@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using RapidCore.Network;
 using Skarp.HubSpotClient.Core.Requests;
@@ -28,7 +28,8 @@ namespace Skarp.HubSpotClient.FunctionalTests.LineItem
                 .AddTestCase(new UpdateLineItemMockTestCase())
                 .AddTestCase(new UpdateBatchLineItemMockTestCase())
                 .AddTestCase(new DeleteLineItemMockTestCase())
-                .AddTestCase(new DeleteBatchLineItemMockTestCase());
+                .AddTestCase(new DeleteBatchLineItemMockTestCase())
+                .AddTestCase(new ReadBatchLineItemMockTestCase());
 
             _client = new HubSpotLineItemClient(
                 mockHttpClient,
@@ -174,6 +175,20 @@ namespace Skarp.HubSpotClient.FunctionalTests.LineItem
             request.Ids.Add(9867221);
 
             await _client.DeleteBatchAsync(request);
+        }
+
+        [Fact]
+        public async Task LineItemClient_batch_read_LineItem_works()
+        {
+            var request = new ListOfLineItemIds();
+
+            request.Ids.Add(9867220);
+            request.Ids.Add(9867221);
+
+            var response = await _client.ReadBatchAsync<LineItemHubSpotEntity>(request);
+
+            Assert.Equal(2, response.Count());
+            Assert.Equal("1645342", response[9845651].ProductId);
         }
 
         [Fact]

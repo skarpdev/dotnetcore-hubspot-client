@@ -1,4 +1,4 @@
-﻿using FakeItEasy;
+using FakeItEasy;
 using RapidCore.Network;
 using Skarp.HubSpotClient.Core;
 using Skarp.HubSpotClient.Core.Requests;
@@ -63,6 +63,7 @@ namespace Skarp.HubSpotClient.UnitTest.LineItem
         [InlineData(HubSpotAction.UpdateBatch, "/crm-objects/v1/objects/line_items/batch-update")]
         [InlineData(HubSpotAction.Delete, "/crm-objects/v1/objects/line_items/:lineItemId:")]
         [InlineData(HubSpotAction.DeleteBatch, "/crm-objects/v1/objects/line_items/batch-delete")]
+        [InlineData(HubSpotAction.ReadBatch, "/crm-objects/v1/objects/line_items/batch-read")]
         public void LineItemClient_path_resolver_works(HubSpotAction action, string expectedPath)
         {
             var resvoledPath = _client.PathResolver(new LineItemHubSpotEntity(), action);

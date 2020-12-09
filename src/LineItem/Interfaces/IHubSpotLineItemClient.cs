@@ -47,6 +47,13 @@ namespace Skarp.HubSpotClient.LineItem.Interfaces
         /// <returns></returns>
         Task<T> ListAsync<T>(LineItemListRequestOptions opts = null) where T : IHubSpotEntity, new();
         /// <summary>
+        /// Read a batch of line items from hubspot
+        /// </summary>
+        /// <param name="lineItemIds"></param>
+        /// <param name="opts"></param>
+        /// <returns></returns>
+        Task<IDictionary<long, T>> ReadBatchAsync<T>(ListOfLineItemIds lineItemIds, LineItemGetRequestOptions opts = null) where T : IHubSpotEntity, new();
+        /// <summary>
         /// Update an existing line item in hubspot
         /// </summary>
         /// <typeparam name="T"></typeparam>
