@@ -9,7 +9,7 @@ namespace Skarp.HubSpotClient.ListOfContacts.Dto
 {
     public class ListOfContactListsHubSpotEntity: IHubSpotEntity
     {
-        [DataContract(Name="MetaData"]
+        [DataContract(Name="MetaData")]
         public class ContactListsMetaData
         {
             [DataMember(Name="processing")]
@@ -51,7 +51,7 @@ namespace Skarp.HubSpotClient.ListOfContacts.Dto
             public bool Deleteable { get; set; }
         }
 
-        [DataContract(Name="filter"]
+        [DataContract(Name="filter")]
         public class ContactListsFilter
          {
             [DataMember(Name="filterFamily")] 
