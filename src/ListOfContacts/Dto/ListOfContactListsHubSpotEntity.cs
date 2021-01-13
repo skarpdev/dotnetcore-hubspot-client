@@ -9,48 +9,69 @@ namespace Skarp.HubSpotClient.ListOfContacts.Dto
 {
     public class ListOfContactListsHubSpotEntity: IHubSpotEntity
     {
-        [DataContract]
-        public class MetaData
+        [DataContract(Name="MetaData"]
+        public class ContactListsMetaData
         {
-            public string processing { get; set; }
-            public int size { get; set; }
-            public string error { get; set; }
-            public DateTime lastProcessingStateChangeAt { get; set; }
-            public DateTime lastSizeChangeAt { get; set; }
+            [DataMember(Name="processing")]
+            public string Processing { get; set; }
+            [DataMember(Name="size")]
+            public int Size { get; set; }
+            [DataMember(Name="error")]
+            public string Error { get; set; }
+            [DataMember(Name="lastProcessingStateChangeAt")]
+            public DateTime LastProcessingStateChangeAt { get; set; }
+            [DataMember(Name="lastSizeChangeAt")]
+            public DateTime LastSizeChangeAt { get; set; }
         }
 
-        [DataContract]
-        public class List
+        [DataContract(Name="List")]
+        public class ContactListsItem
         {
-            public bool dynamic { get; set; }
-            public MetaData metaData { get; set; }
-            public string name { get; set; }
-            public List<List<filter>> filters { get; set; }
-            public int portalId { get; set; }
-            public DateTime createdAt { get; set; }
-            public int listId { get; set; }
-            public DateTime updatedAt { get; set; }
-            public string listType { get; set; }
-            public int internalListId { get; set; }
-            public bool deleteable { get; set; }
+            [DataMember(Name="dynamic")]
+            public bool Dynamic { get; set; }
+            [DataMember(Name="metaData")]  
+            public ContactListsMetaData MetaData { get; set; }
+            [DataMember(Name="name")]  
+            public string Name { get; set; }
+            [DataMember(Name="filters")] 
+            public List<List<ContactListsFilter>> Filters { get; set; }
+            [DataMember(Name="portalId")] 
+            public int PortalId { get; set; }
+            [DataMember(Name="createdAt")] 
+            public DateTime CreatedAt { get; set; }
+            [DataMember(Name="listId")] 
+            public int ListId { get; set; }
+            [DataMember(Name="updatedAt")] 
+            public DateTime UpdatedAt { get; set; }
+            [DataMember(Name="listType")] 
+            public string ListType { get; set; }
+            [DataMember(Name="internalListId")] 
+            public int InternalListId { get; set; }
+            [DataMember(Name="deleteable")] 
+            public bool Deleteable { get; set; }
         }
 
-        [DataContract]
-        public class filter
+        [DataContract(Name="filter"]
+        public class ContactListsFilter
          {
-            public string filterFamily { get; set; }
-            public string withinTimeMode { get; set; }
-            public bool checkPastVersions { get; set; }
-            public string type { get; set; }
-            public string property { get; set; }
-            public string value { get; set; }
-
+            [DataMember(Name="filterFamily")] 
+            public string FilterFamily { get; set; }
+            [DataMember(Name="withinTimeMode")] 
+            public string WithinTimeMode { get; set; }
+            [DataMember(Name="checkPastVersions")] 
+            public bool CheckPastVersions { get; set; }
+            [DataMember(Name="type")] 
+            public string Type { get; set; }
+            [DataMember(Name="property")] 
+            public string Property { get; set; }
+            [DataMember(Name="value")] 
+            public string Value { get; set; }
             [DataMember(Name = "operator")]
             public string op { get; set; }
         }
 
 
-        public List<List> lists { get; set; }
+        public List<ContactListsItem> lists { get; set; }
         public int offset { get; set; }
 
         [DataMember(Name = "has-more")]
