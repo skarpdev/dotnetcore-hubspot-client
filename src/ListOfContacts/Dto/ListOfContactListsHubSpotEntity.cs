@@ -19,9 +19,9 @@ namespace Skarp.HubSpotClient.ListOfContacts.Dto
             [DataMember(Name="error")]
             public string Error { get; set; }
             [DataMember(Name="lastProcessingStateChangeAt")]
-            public string LastProcessingStateChangeAt { get; set; }
+            public long LastProcessingStateChangeAtTimeStamp { get; set; }
             [DataMember(Name="lastSizeChangeAt")]
-            public string LastSizeChangeAt { get; set; }
+            public long LastSizeChangeAtTimeStamp { get; set; }
         }
 
         [DataContract(Name="List")]
@@ -38,11 +38,11 @@ namespace Skarp.HubSpotClient.ListOfContacts.Dto
             [DataMember(Name="portalId")] 
             public int PortalId { get; set; }
             [DataMember(Name="createdAt")] 
-            public string CreatedAt { get; set; }
+            public long CreatedAtTimeStamp { get; set; }
             [DataMember(Name="listId")] 
             public int ListId { get; set; }
             [DataMember(Name="updatedAt")] 
-            public string UpdatedAt { get; set; }
+            public long UpdatedAtTimeStamp { get; set; }
             [DataMember(Name="listType")] 
             public string ListType { get; set; }
             [DataMember(Name="internalListId")] 
