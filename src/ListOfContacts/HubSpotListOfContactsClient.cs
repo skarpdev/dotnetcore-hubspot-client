@@ -74,6 +74,28 @@ namespace Skarp.HubSpotClient.ListOfContacts
         }
 
         /// <summary>
+        /// Return a list of contact lists from hubspot
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public async Task<T> GetListAsync<T>(ListOfContactListsRequestOptions opts = null)
+        {
+            Logger.LogDebug("Get list of contact lists");
+            if (opts == null)
+            {
+                opts = new ListOfContactListsRequestOptions();
+            }
+            var path = PathResolver(new ContactHubSpotEntity(), HubSpotAction.Lists)
+                .SetQueryParam("count", opts.NumberOfContactListsToReturn);
+            if (opts.ContactListOffset.HasValue)
+            {
+                path = path.SetQueryParam("vidOffset", opts.ContactListOffset);
+            }
+            var data = await GetGenericAsync<T>(path);
+            return data;
+        }
+
+        /// <summary>
         /// Add list of contacts based on list id
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -116,6 +138,8 @@ namespace Skarp.HubSpotClient.ListOfContacts
             {
                 case HubSpotAction.Get:
                     return $"{entity.RouteBasePath}/lists/:listId:/contacts/all";
+                case HubSpotAction.Lists:
+                    return $"{entity.RouteBasePath}/lists";
                 case HubSpotAction.CreateBatch:
                     return $"{entity.RouteBasePath}/lists/:listId:/add";
                 case HubSpotAction.DeleteBatch:

@@ -1,4 +1,4 @@
-﻿namespace Skarp.HubSpotClient.Core
+namespace Skarp.HubSpotClient.Core
 {
     /// <summary>
     /// Enumerates the possible actions against the hubspot api
@@ -25,6 +25,8 @@
 
         UpdateBatch,
 
-        ReadBatch
+        ReadBatch,
+
+        Lists
     }
 }
