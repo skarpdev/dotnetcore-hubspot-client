@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using RapidCore.Network;
 using Skarp.HubSpotClient.Contact.Dto;
 using Skarp.HubSpotClient.Core;
+using Skarp.HubSpotClient.Core.Interfaces;
 using Skarp.HubSpotClient.Core.Requests;
 using Skarp.HubSpotClient.ListOfContacts.Dto;
 using Skarp.HubSpotClient.ListOfContacts.Interfaces;
@@ -49,6 +50,45 @@ namespace Skarp.HubSpotClient.ListOfContacts
               "https://api.hubapi.com",
               apiKey)
         { }
+
+
+        /// <summary>
+        /// Creates the a new contact list entity asynchronously.
+        /// https://legacydocs.hubspot.com/docs/methods/lists/create_list
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public async Task<T> CreateAsync<T>(CreateContactListRequestHubSpotEntity payload) where T : IHubSpotEntity, new()
+            //where T : IHubSpotEntity, new()
+        {
+            Logger.LogDebug("ContactList CreateAsync");
+            var path = PathResolver(new ContactHubSpotEntity(), HubSpotAction.Lists);
+            var data = await PutOrPostGeneric<T>(path, payload, true, false);
+            return data;
+        }
+
+        private async Task<T> PutOrPostGeneric<T>(string absoluteUriPath, ICreateContactListRequestHubSpotEntity entity, bool usePost, bool convertEntity) where T : IHubSpotEntity, new()
+        {
+            string json = null;
+            try
+            {
+                json = _serializer.SerializeEntity(entity, convertEntity);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogDebug("PutOrPostGeneric failed with exception: " + ex.ToString());
+                throw;
+            }
+
+            return await SendRequestAsync<T>(
+                absoluteUriPath,
+                usePost ? HttpMethod.Post : HttpMethod.Put,
+                json,
+                responseData => (T)_serializer.DeserializeGenericEntity<T>(responseData));
+
+        }
+
 
         /// <summary>
         /// Return a list of contacts for a contact list by id from hubspot

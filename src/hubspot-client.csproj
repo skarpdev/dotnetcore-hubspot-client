@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
     <Version>0.16.0</Version>
@@ -16,6 +16,14 @@
     <PackageId>HubSpotClient</PackageId>
     <Company>SKARP ApS</Company>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+    <OutputPath></OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="ListOfContacts\Dto\ContactListHubSpotEntity.cs" />
+    <Compile Remove="ListOfContacts\Interfaces\ContactListFilter.cs" />
+    <Compile Remove="ListOfContacts\Interfaces\ContactListMetaData.cs" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="flurl" Version="3.0.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
