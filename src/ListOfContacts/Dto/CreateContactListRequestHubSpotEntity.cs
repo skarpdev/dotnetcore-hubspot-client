@@ -8,6 +8,7 @@ using System.Text;
 
 namespace Skarp.HubSpotClient.ListOfContacts.Dto
 {
+    [DataContract]
     public class CreateContactListRequestHubSpotEntity : ICreateContactListRequestHubSpotEntity
     {
         [DataMember(Name = "name")]

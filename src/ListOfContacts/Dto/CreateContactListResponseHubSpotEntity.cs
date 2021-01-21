@@ -8,6 +8,7 @@ using System.Text;
 
 namespace Skarp.HubSpotClient.ListOfContacts.Dto
 {
+    [DataContract]
     public class CreateContactListResponseHubSpotEntity: IHubSpotEntity
     {
         [DataMember(Name = "name")]
@@ -23,13 +24,17 @@ namespace Skarp.HubSpotClient.ListOfContacts.Dto
         [DataMember(Name = "portalId")]
         public int PortalId { get; set; }
         [DataMember(Name = "createdAt")]
-        public long CreatedAtTimeStamp { get; set; }
+        public string CreatedAtTimeStamp { get; set; }
         [DataMember(Name = "updatedAt")]
-        public long UpdatedAtTimeStamp { get; set; }
+        public string UpdatedAtTimeStamp { get; set; }
         [DataMember(Name = "metaData")]
         public ContactListMetaData MetaData { get; set; }
         [DataMember(Name = "filters")]
         public List<List<ContactListFilter>> Filters { get; set; }
+        [DataMember(Name = "listType")]
+        public string ListType { get; set; }
+        [DataMember(Name = "archived")]
+        public bool Archived { get; set; }
 
         public int offset { get; set; }
 
