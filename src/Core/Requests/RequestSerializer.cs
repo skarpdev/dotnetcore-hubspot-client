@@ -42,9 +42,20 @@ namespace Skarp.HubSpotClient.Core.Requests
         /// <returns>The serialized entity</returns>
         public virtual string SerializeEntity(object obj)
         {
+            return SerializeEntity(obj, true);
+        }
+
+        /// <summary>
+        /// Serializes the entity to JSON.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="preformConversion">This by defines whether or not a data conversion is performed on the object so that the HubSpot "property-value" syntax will be used for serialization. If this parameter is set to false no data conversion is performed and a standard object serialization is performed. </param>
+        /// <returns>The serialized entity</returns>
+        public virtual string SerializeEntity(object obj, bool performConversion)
+        {
             if (obj is IHubSpotEntity entity)
             {
-                var converted = _requestDataConverter.ToHubspotDataEntity(entity);
+                var converted = _requestDataConverter.ToHubspotDataEntity(entity, performConversion);
 
                 entity.ToHubSpotDataEntity(ref converted);
 
