@@ -91,6 +91,24 @@ namespace Skarp.HubSpotClient.ListOfContacts
 
 
         /// <summary>
+        /// Delete a list of contact by contact list id from hubspot
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public Task DeleteAsync(long listId)
+        {
+            if (listId < 1)
+            {
+                throw new ArgumentException("listId must be set!");
+            }
+            var path = PathResolver(new ContactHubSpotEntity(), HubSpotAction.Delete)
+                .Replace(":listId:", listId.ToString());
+
+            return DeleteAsync<ContactHubSpotEntity>(path); 
+        }
+
+
+        /// <summary>
         /// Return a list of contacts for a contact list by id from hubspot
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -182,6 +200,8 @@ namespace Skarp.HubSpotClient.ListOfContacts
                     return $"{entity.RouteBasePath}/lists";
                 case HubSpotAction.CreateBatch:
                     return $"{entity.RouteBasePath}/lists/:listId:/add";
+                case HubSpotAction.Delete:
+                    return $"{entity.RouteBasePath}/lists/:listId:";
                 case HubSpotAction.DeleteBatch:
                     return $"{entity.RouteBasePath}/lists/:listId:/remove";
                 default:
