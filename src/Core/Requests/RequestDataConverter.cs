@@ -26,12 +26,10 @@ namespace Skarp.HubSpotClient.Core.Requests
         /// <returns></returns>
         public dynamic ToHubspotDataEntity(IHubSpotEntity entity, bool preformConversion = true)
         {
-            dynamic mapped;
+            _logger.LogDebug("Convert ToHubspotDataEntity");
+            dynamic mapped = new ExpandoObject();
             if (preformConversion)
             {
-                _logger.LogDebug("Convert ToHubspotDataEntity");
-                mapped = new ExpandoObject();
-
                 mapped.Properties = new List<HubspotDataEntityProp>();
 
                 _logger.LogDebug("Use nameValue mapping?: {0}", entity.IsNameValue);
@@ -291,7 +289,7 @@ namespace Skarp.HubSpotClient.Core.Requests
                 _logger.LogDebug("Have target prop? '{0}' with name: '{1}' and actual value: '{2}'", targetProp != null,
                     dynamicProp.Key, dynamicValue);
 
-                targetProp?.SetValue(dto, dynamicValue.GetType() == targetProp.PropertyType? dynamicValue: Convert.ChangeType(dynamicValue, targetProp.PropertyType));
+                targetProp?.SetValue(dto, dynamicValue.GetType() == targetProp.PropertyType ? dynamicValue : Convert.ChangeType(dynamicValue, targetProp.PropertyType));
             }
             return dto;
         }

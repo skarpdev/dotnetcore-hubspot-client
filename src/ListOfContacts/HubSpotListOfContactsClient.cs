@@ -60,7 +60,6 @@ namespace Skarp.HubSpotClient.ListOfContacts
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
         public async Task<T> CreateAsync<T>(CreateContactListRequestHubSpotEntity payload) where T : IHubSpotEntity, new()
-            //where T : IHubSpotEntity, new()
         {
             Logger.LogDebug("ContactList CreateAsync");
             var path = PathResolver(new ContactHubSpotEntity(), HubSpotAction.Lists);
