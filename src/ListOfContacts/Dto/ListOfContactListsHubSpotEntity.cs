@@ -9,7 +9,7 @@ namespace Skarp.HubSpotClient.ListOfContacts.Dto
 {
     public class ListOfContactListsHubSpotEntity: IHubSpotEntity
     {
-        [DataContract(Name = "MetaData")]
+        [DataContract(Name="MetaData")]
         public class ContactListsMetaData
         {
             [DataMember(Name = "processing")]
