@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Skarp.HubSpotClient.Core.Interfaces;
-using Skarp.HubSpotClient.ListOfContacts.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -10,6 +9,20 @@ namespace Skarp.HubSpotClient.ListOfContacts.Dto
 {
     public class ListOfContactListsHubSpotEntity: IHubSpotEntity
     {
+        [DataContract(Name = "MetaData")]
+        public class ContactListsMetaData
+        {
+            [DataMember(Name = "processing")]
+            public string Processing { get; set; }
+            [DataMember(Name = "size")]
+            public int Size { get; set; }
+            [DataMember(Name = "error")]
+            public string Error { get; set; }
+            [DataMember(Name = "lastProcessingStateChangeAt")]
+            public long LastProcessingStateChangeAtTimeStamp { get; set; }
+            [DataMember(Name = "lastSizeChangeAt")]
+            public long LastSizeChangeAtTimeStamp { get; set; }
+        }
 
         [DataContract(Name="List")]
         public class ContactListsItem
@@ -17,7 +30,7 @@ namespace Skarp.HubSpotClient.ListOfContacts.Dto
             [DataMember(Name="dynamic")]
             public bool Dynamic { get; set; }
             [DataMember(Name="metaData")]  
-            public ContactListMetaData MetaData { get; set; }
+            public ContactListsMetaData MetaData { get; set; }
             [DataMember(Name="name")]  
             public string Name { get; set; }
             [DataMember(Name="filters")] 
@@ -39,7 +52,7 @@ namespace Skarp.HubSpotClient.ListOfContacts.Dto
         }
 
         [DataContract(Name="filter")]
-        public class ContactListsFilter: IContactListFilter
+        public class ContactListsFilter
          {
             [DataMember(Name="filterFamily")] 
             public string FilterFamily { get; set; }
