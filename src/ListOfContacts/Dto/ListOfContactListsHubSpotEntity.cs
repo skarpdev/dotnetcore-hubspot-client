@@ -12,15 +12,15 @@ namespace Skarp.HubSpotClient.ListOfContacts.Dto
         [DataContract(Name="MetaData")]
         public class ContactListsMetaData
         {
-            [DataMember(Name = "processing")]
+            [DataMember(Name="processing")]
             public string Processing { get; set; }
-            [DataMember(Name = "size")]
+            [DataMember(Name="size")]
             public int Size { get; set; }
-            [DataMember(Name = "error")]
+            [DataMember(Name="error")]
             public string Error { get; set; }
-            [DataMember(Name = "lastProcessingStateChangeAt")]
+            [DataMember(Name="lastProcessingStateChangeAt")]
             public long LastProcessingStateChangeAtTimeStamp { get; set; }
-            [DataMember(Name = "lastSizeChangeAt")]
+            [DataMember(Name="lastSizeChangeAt")]
             public long LastSizeChangeAtTimeStamp { get; set; }
         }
 
