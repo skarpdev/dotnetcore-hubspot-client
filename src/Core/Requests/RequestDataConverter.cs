@@ -22,48 +22,55 @@ namespace Skarp.HubSpotClient.Core.Requests
         /// Converts the given <paramref name="entity"/> to a hubspot data entity.
         /// </summary>
         /// <param name="entity">The entity.</param>
+        /// <param name="preformConversion">This by default performs a data conversion so that the HubSpot "property-value" syntax will be used for serialization. If this parameter is set to false no data conversion is performed (such that a standard object serialization can be performed). </param>
         /// <returns></returns>
-        public dynamic ToHubspotDataEntity(IHubSpotEntity entity)
+        public dynamic ToHubspotDataEntity(IHubSpotEntity entity, bool preformConversion = true)
         {
             _logger.LogDebug("Convert ToHubspotDataEntity");
             dynamic mapped = new ExpandoObject();
-
-            mapped.Properties = new List<HubspotDataEntityProp>();
-
-            _logger.LogDebug("Use nameValue mapping?: {0}", entity.IsNameValue);
-
-            var allProps = entity.GetType().GetProperties();
-            _logger.LogDebug("Have {0} props to map", allProps.Length);
-
-            foreach (var prop in allProps)
+            if (preformConversion)
             {
-                if (prop.HasIgnoreDataMemberAttribute()) { continue; }
+                mapped.Properties = new List<HubspotDataEntityProp>();
 
-                var propSerializedName = prop.GetPropSerializedName();
-                _logger.LogDebug("Mapping prop: '{0}' with serialization name: '{1}'", prop.Name, propSerializedName);
-                if (prop.Name.Equals("RouteBasePath") || prop.Name.Equals("IsNameValue")) { continue; }
+                _logger.LogDebug("Use nameValue mapping?: {0}", entity.IsNameValue);
 
-                // IF we have an complex type on the entity that we are trying to convert, let's NOT get the 
-                // string value of it, but simply pass the object along - it will be serialized later as JSON...
-                var propValue = prop.GetValue(entity);
-                var value = propValue.IsComplexType() ? propValue : propValue?.ToString();
-                var item = new HubspotDataEntityProp
+                var allProps = entity.GetType().GetProperties();
+                _logger.LogDebug("Have {0} props to map", allProps.Length);
+
+                foreach (var prop in allProps)
                 {
-                    Property = propSerializedName,
-                    Value = value
-                };
+                    if (prop.HasIgnoreDataMemberAttribute()) { continue; }
 
-                if (entity.IsNameValue)
-                {
-                    item.Property = null;
-                    item.Name = propSerializedName;
+                    var propSerializedName = prop.GetPropSerializedName();
+                    _logger.LogDebug("Mapping prop: '{0}' with serialization name: '{1}'", prop.Name, propSerializedName);
+                    if (prop.Name.Equals("RouteBasePath") || prop.Name.Equals("IsNameValue")) { continue; }
+
+                    // IF we have an complex type on the entity that we are trying to convert, let's NOT get the 
+                    // string value of it, but simply pass the object along - it will be serialized later as JSON...
+                    var propValue = prop.GetValue(entity);
+                    var value = propValue.IsComplexType() ? propValue : propValue?.ToString();
+                    var item = new HubspotDataEntityProp
+                    {
+                        Property = propSerializedName,
+                        Value = value
+                    };
+
+                    if (entity.IsNameValue)
+                    {
+                        item.Property = null;
+                        item.Name = propSerializedName;
+                    }
+                    if (item.Value == null) { continue; }
+
+                    mapped.Properties.Add(item);
                 }
-                if (item.Value == null) { continue; }
 
-                mapped.Properties.Add(item);
+                _logger.LogDebug("Mapping complete, returning data");
             }
-
-            _logger.LogDebug("Mapping complete, returning data");
+            else
+            {
+                mapped = entity;
+            }
 
             return mapped;
         }
@@ -282,7 +289,7 @@ namespace Skarp.HubSpotClient.Core.Requests
                 _logger.LogDebug("Have target prop? '{0}' with name: '{1}' and actual value: '{2}'", targetProp != null,
                     dynamicProp.Key, dynamicValue);
 
-                targetProp?.SetValue(dto, dynamicValue.GetType() == targetProp.PropertyType? dynamicValue: Convert.ChangeType(dynamicValue, targetProp.PropertyType));
+                targetProp?.SetValue(dto, dynamicValue.GetType() == targetProp.PropertyType ? dynamicValue : Convert.ChangeType(dynamicValue, targetProp.PropertyType));
             }
             return dto;
         }
