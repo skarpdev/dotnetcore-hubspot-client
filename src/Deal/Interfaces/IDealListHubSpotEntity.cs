@@ -9,7 +9,7 @@ namespace Skarp.HubSpotClient.Deal.Interfaces
         /// Gets or sets the deals.
         /// </summary>
         /// <value>
-        /// The companies.
+        /// The deals.
         /// </value>
         IList<T> Deals { get; set; }
 
