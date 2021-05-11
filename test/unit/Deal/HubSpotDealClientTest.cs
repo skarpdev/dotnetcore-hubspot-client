@@ -6,12 +6,12 @@ using RapidCore.Network;
 using Skarp.HubSpotClient.Core;
 using Skarp.HubSpotClient.Core.Interfaces;
 using Skarp.HubSpotClient.Core.Requests;
-using Xunit;
-using Xunit.Abstractions;
 using Skarp.HubSpotClient.Deal;
 using Skarp.HubSpotClient.Deal.Dto;
+using Xunit;
+using Xunit.Abstractions;
 
-namespace Skarp.HubSpotClient.UnitTest.Contact
+namespace Skarp.HubSpotClient.UnitTest.Deal
 {
     public class HubSpotDealClientTest : UnitTestBase<HubSpotDealClient>
     {
@@ -32,6 +32,9 @@ namespace Skarp.HubSpotClient.UnitTest.Contact
 
             A.CallTo(() => _mockSerializer.DeserializeEntity<DealHubSpotEntity>(A<string>.Ignored))
                 .Returns(new DealHubSpotEntity());
+
+            A.CallTo(() => _mockSerializer.DeserializeListEntity<DealListHubSpotEntity<DealHubSpotEntity>>(A<string>.Ignored))
+                .Returns(new DealListHubSpotEntity<DealHubSpotEntity>());
 
             _client = new HubSpotDealClient(
                 _mockHttpClient,
@@ -56,6 +59,7 @@ namespace Skarp.HubSpotClient.UnitTest.Contact
         [InlineData(HubSpotAction.Get, "/deals/v1/deal/:dealId:")]
         [InlineData(HubSpotAction.Update, "/deals/v1/deal/:dealId:")]
         [InlineData(HubSpotAction.Delete, "/deals/v1/deal/:dealId:")]
+        [InlineData(HubSpotAction.List, "/deals/v1/deal/paged")]
         public void DealClient_path_resolver_works(HubSpotAction action, string expetedPath)
         {
             var resvoledPath = _client.PathResolver(new DealHubSpotEntity(), action);
@@ -78,5 +82,14 @@ namespace Skarp.HubSpotClient.UnitTest.Contact
             A.CallTo(() => _mockSerializer.DeserializeEntity<DealHubSpotEntity>("{}")).MustHaveHappened();
         }
 
+        [Fact]
+        public async Task DealClient_list_work()
+        {
+            var response = await _client.ListAsync<DealListHubSpotEntity<DealHubSpotEntity>>();
+
+            A.CallTo(() => _mockHttpClient.SendAsync(A<HttpRequestMessage>.Ignored)).MustHaveHappened();
+            //A.CallTo(() => _mockSerializer.SerializeEntity(A<IHubSpotEntity>.Ignored)).MustHaveHappened();
+            A.CallTo(() => _mockSerializer.DeserializeListEntity<DealListHubSpotEntity<DealHubSpotEntity>>("{}")).MustHaveHappened();
+        }
     }
 }
