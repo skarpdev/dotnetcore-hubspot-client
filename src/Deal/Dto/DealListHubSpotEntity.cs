@@ -38,7 +38,7 @@ namespace Skarp.HubSpotClient.Deal.Dto
         /// The continuation offset.
         /// </value>
         /// <remarks>
-        /// This is a mapping of the "offset" prop in the JSON reeturn data from HubSpot
+        /// This is a mapping of the "offset" prop in the JSON return data from HubSpot
         /// </remarks>
         [DataMember(Name = "offset")]
         public long ContinuationOffset { get; set; }

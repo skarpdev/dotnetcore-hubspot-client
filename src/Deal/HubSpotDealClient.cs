@@ -94,10 +94,10 @@ namespace Skarp.HubSpotClient.Deal
                 opts = new DealListRequestOptions();
             }
             var path = PathResolver(new DealHubSpotEntity(), HubSpotAction.List)
-                .SetQueryParam("limit", opts.NumberOfCompaniesToReturn);
-            if (opts.CompanyOffset.HasValue)
+                .SetQueryParam("limit", opts.NumberOfDealsToReturn);
+            if (opts.DealOffset.HasValue)
             {
-                path = path.SetQueryParam("offset", opts.CompanyOffset);
+                path = path.SetQueryParam("offset", opts.DealOffset);
             }
             if (opts.PropertiesToInclude.Any())
                 path.SetQueryParam("properties", opts.PropertiesToInclude);

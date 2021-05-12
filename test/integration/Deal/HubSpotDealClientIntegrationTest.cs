@@ -38,7 +38,7 @@ namespace integration.Deal
                 await _client.ListAsync<DealListHubSpotEntity<DealHubSpotEntity>>(new DealListRequestOptions
                 {
                     PropertiesToInclude = new List<string> { "dealname", "amount" },
-                    NumberOfCompaniesToReturn = 2
+                    NumberOfDealsToReturn = 2
                 });
             
             Assert.NotNull(deals);
