@@ -31,7 +31,7 @@ namespace Skarp.HubSpotClient.Deal.Dto
         [DataMember(Name = "closedate")]
         public string CloseDate { get; set; }
         [DataMember(Name = "amount")]
-        public int Amount { get; set; }
+        public decimal Amount { get; set; }
         [DataMember(Name = "dealtype")]
         public string DealType { get; set; }
         [IgnoreDataMember]

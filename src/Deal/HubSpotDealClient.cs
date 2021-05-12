@@ -6,10 +6,10 @@ using Skarp.HubSpotClient.Core.Requests;
 using Skarp.HubSpotClient.Deal.Dto;
 using Skarp.HubSpotClient.Deal.Interfaces;
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
+using Flurl;
 
 namespace Skarp.HubSpotClient.Deal
 {
@@ -80,6 +80,32 @@ namespace Skarp.HubSpotClient.Deal
             return data;
         }
 
+        /// <summary>
+        /// List Deals 
+        /// </summary>
+        /// <param name="opts">Request options - use for pagination</param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public async Task<T> ListAsync<T>(DealListRequestOptions opts = null) where T : IHubSpotEntity, new()
+        {
+            Logger.LogDebug("Deal ListAsync");
+            if (opts == null)
+            {
+                opts = new DealListRequestOptions();
+            }
+            var path = PathResolver(new DealHubSpotEntity(), HubSpotAction.List)
+                .SetQueryParam("limit", opts.NumberOfDealsToReturn);
+            if (opts.DealOffset.HasValue)
+            {
+                path = path.SetQueryParam("offset", opts.DealOffset);
+            }
+            if (opts.PropertiesToInclude.Any())
+                path.SetQueryParam("properties", opts.PropertiesToInclude);
+
+            var data = await ListAsync<T>(path);
+            return data;
+        }
+
         public async Task<T> UpdateAsync<T>(IDealHubSpotEntity entity) where T : IHubSpotEntity, new()
         {
             Logger.LogDebug("Deal update w. id: {0}", entity.Id);
@@ -119,6 +145,8 @@ namespace Skarp.HubSpotClient.Deal
                     return $"{entity.RouteBasePath}/deal";
                 case HubSpotAction.Get:
                     return $"{entity.RouteBasePath}/deal/:dealId:";
+                case HubSpotAction.List:
+                    return $"{entity.RouteBasePath}/deal/paged";
                 case HubSpotAction.Update:
                     return $"{entity.RouteBasePath}/deal/:dealId:";
                 case HubSpotAction.Delete:

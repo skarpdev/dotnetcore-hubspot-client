@@ -2,7 +2,6 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualStudio.TestPlatform.Utilities;
 using RapidCore.Network;
 using Skarp.HubSpotClient.Contact;
 using Skarp.HubSpotClient.Contact.Dto;

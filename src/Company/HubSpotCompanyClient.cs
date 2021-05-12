@@ -108,7 +108,7 @@ namespace Skarp.HubSpotClient.Company
         /// <returns></returns>
         public async Task<T> ListAsync<T>(CompanyListRequestOptions opts = null) where T : IHubSpotEntity, new()
         {
-            Logger.LogDebug("Contact ListAsync");
+            Logger.LogDebug("Company ListAsync");
             if (opts == null)
             {
                 opts = new CompanyListRequestOptions();

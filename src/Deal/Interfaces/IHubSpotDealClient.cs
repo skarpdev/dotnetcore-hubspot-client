@@ -27,6 +27,13 @@ namespace Skarp.HubSpotClient.Deal.Interfaces
         /// <returns></returns>
         Task<T> GetByIdAsync<T>(long dealId) where T : IHubSpotEntity, new();
         /// <summary>
+        /// List Deals 
+        /// </summary>
+        /// <param name="opts">Request options - use for pagination</param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        Task<T> ListAsync<T>(DealListRequestOptions opts = null) where T : IHubSpotEntity, new();
+        /// <summary>
         /// Update an existing deal in hubspot
         /// </summary>
         /// <typeparam name="T"></typeparam>
