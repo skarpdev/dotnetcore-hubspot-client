@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Flurl;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using RapidCore.Network;
 using Skarp.HubSpotClient.Core.Interfaces;
 using Skarp.HubSpotClient.Core.Requests;
@@ -227,6 +228,22 @@ namespace Skarp.HubSpotClient.Core
                 null,
                 responseData => (T) _serializer.DeserializeEntity<T>(responseData));
         }
+
+        protected async Task<T> ListPropertiesAsync<T>(string absoluteUriPath) where T : IHubSpotEntity, new()
+        {
+            Logger.LogDebug("Get property list async for uri path: '{0}'", absoluteUriPath);
+            var httpMethod = HttpMethod.Get;
+
+            var data = await SendRequestAsync<T>(
+                absoluteUriPath,
+                httpMethod,
+                null,
+                JsonConvert.DeserializeObject<T>
+            );
+
+            return data;
+        }
+
         /// <summary>
         /// Helper method for dispatching the request and dealing with response errors
         /// </summary>

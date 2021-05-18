@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Flurl;
 using Microsoft.Extensions.Logging;
 using RapidCore.Network;
+using Skarp.HubSpotClient.Common.Dto.Properties;
+using Skarp.HubSpotClient.Common.Interfaces;
 using Skarp.HubSpotClient.Company.Dto;
 using Skarp.HubSpotClient.Company.Interfaces;
 using Skarp.HubSpotClient.Core;
@@ -151,6 +153,17 @@ namespace Skarp.HubSpotClient.Company
             await DeleteAsync<CompanyHubSpotEntity>(path);
         }
 
+        public async Task<T> GetPropertiesAsync<T>() where T : IHubSpotEntity, new()
+        {
+            Logger.LogDebug("Company GetPropertiesAsync");
+
+            var path = PathResolver(new CompanyPropertyHubSpotEntity(), HubSpotAction.List);
+
+            var data = await ListPropertiesAsync<T>(path);
+
+            return data;
+        }
+
         /// <summary>
         /// Resolve a hubspot API path based off the entity and operation that is about to happen
         /// </summary>
@@ -174,6 +187,24 @@ namespace Skarp.HubSpotClient.Company
                     return $"{entity.RouteBasePath}/companies/:companyId:";
                 case HubSpotAction.Delete:
                     return $"{entity.RouteBasePath}/companies/:companyId:";
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(action), action, null);
+            }
+        }
+
+        /// <summary>
+        /// Resolve a hubspot API path based off the entity and operation that is about to happen
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public string PathResolver(ICompanyPropertyHubSpotEntity entity, HubSpotAction action)
+        {
+            switch (action)
+            {
+                case HubSpotAction.List:
+                    return $"{entity.RouteBasePath}/companies/properties";
                 default:
                     throw new ArgumentOutOfRangeException(nameof(action), action, null);
             }

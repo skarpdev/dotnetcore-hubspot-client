@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using RapidCore.Network;
+using Skarp.HubSpotClient.Common.Dto.Properties;
 using Skarp.HubSpotClient.Core.Requests;
 using Skarp.HubSpotClient.Deal;
 using Skarp.HubSpotClient.Deal.Dto;
@@ -32,6 +33,31 @@ namespace integration.Deal
         }
 
         [Fact]
+        public async Task Create_deal_no_associations()
+        {
+            if (_apiKey.Equals("demo") && _isAppVeyorEnv)
+            {
+                Output.WriteLine("Skipping test as the API key is incorrectly set and we're in AppVeyor");
+                Assert.True(true);
+                return;
+            }
+
+            var deal = new DealHubSpotEntity
+            {
+                Name = "Skarp Demo Deal Create",
+                Amount = 1250
+            };
+            var created = await _client.CreateAsync<DealHubSpotEntity>(deal);
+
+            Assert.NotNull(created.Id);
+
+            var retrieved = await _client.GetByIdAsync<DealHubSpotEntity>(created.Id.Value);
+
+            Assert.NotNull(retrieved);
+            Assert.Equal(1250, retrieved.Amount);
+        }
+
+        [Fact]
         public async Task List()
         {
             if (_isAppVeyorEnv)
@@ -52,6 +78,24 @@ namespace integration.Deal
             Assert.NotNull(deals.Deals);
             Assert.NotEmpty(deals.Deals);
             Assert.True(deals.Deals.Count > 1, "contacts.Deals.Count > 1");
+        }
+
+
+        [Fact]
+        public async Task GetProperties()
+        {
+            if (_isAppVeyorEnv)
+            {
+                Output.WriteLine("Skipping test as we're in AppVeyor, demo account does return 117 results");
+                Assert.True(true);
+                return;
+            }
+
+            var properties = await _client.GetPropertiesAsync<PropertyListHubSpotEntity<DealPropertyHubSpotEntity>>();
+
+            Assert.NotNull(properties);
+            Assert.NotEmpty(properties);
+            Assert.True(properties.Count > 1, "properties.Count > 1");
         }
     }
 }

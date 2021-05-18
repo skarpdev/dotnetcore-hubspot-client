@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Flurl;
+using Skarp.HubSpotClient.Common.Interfaces;
 
 namespace Skarp.HubSpotClient.Deal
 {
@@ -130,6 +131,17 @@ namespace Skarp.HubSpotClient.Deal
             await DeleteAsync<DealHubSpotEntity>(path);
         }
 
+        public async Task<T> GetPropertiesAsync<T>() where T : IHubSpotEntity, new()
+        {
+            Logger.LogDebug("Deal GetPropertiesAsync");
+
+            var path = PathResolver(new DealPropertyHubSpotEntity(), HubSpotAction.List);
+
+            var data = await ListPropertiesAsync<T>(path);
+
+            return data;
+        }
+
         /// <summary>
         /// Resolve a hubspot API path based off the entity and operation that is about to happen
         /// </summary>
@@ -151,6 +163,24 @@ namespace Skarp.HubSpotClient.Deal
                     return $"{entity.RouteBasePath}/deal/:dealId:";
                 case HubSpotAction.Delete:
                     return $"{entity.RouteBasePath}/deal/:dealId:";
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(action), action, null);
+            }
+        }
+
+        /// <summary>
+        /// Resolve a hubspot API path based off the entity and operation that is about to happen
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public string PathResolver(IDealPropertyHubSpotEntity entity, HubSpotAction action)
+        {
+            switch (action)
+            {
+                case HubSpotAction.List:
+                    return $"{entity.RouteBasePath}/deals/properties";
                 default:
                     throw new ArgumentOutOfRangeException(nameof(action), action, null);
             }
