@@ -32,12 +32,12 @@ namespace Skarp.HubSpotClient.Common.Dto.Properties
 
         public string RouteBasePath => "/properties/v1";
 
-        public void ToHubSpotDataEntity(ref dynamic dataEntity)
+        public virtual void ToHubSpotDataEntity(ref dynamic dataEntity)
         {
             
         }
 
-        public void FromHubSpotDataEntity(dynamic hubspotData)
+        public virtual void FromHubSpotDataEntity(dynamic hubspotData)
         {
         }
     }
