@@ -289,8 +289,11 @@ namespace Skarp.HubSpotClient.Core.Requests
                 _logger.LogDebug("Have target prop? '{0}' with name: '{1}' and actual value: '{2}'", targetProp != null,
                     dynamicProp.Key, dynamicValue);
 
-                targetProp?.SetValue(dto, dynamicValue.GetType() == targetProp.PropertyType ? dynamicValue : Convert.ChangeType(dynamicValue, targetProp.PropertyType));
+                targetProp?.SetValue(dto, dynamicValue.GetType() == targetProp.PropertyType 
+                    ? dynamicValue 
+                    : Convert.ChangeType(dynamicValue, Nullable.GetUnderlyingType(targetProp.PropertyType) ?? targetProp.PropertyType));
             }
+
             return dto;
         }
     }

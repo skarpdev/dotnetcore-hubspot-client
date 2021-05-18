@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -29,6 +30,32 @@ namespace integration.Company
                 "https://api.hubapi.com",
                 _apiKey
                 );
+        }
+
+        [Fact]
+        public async Task List()
+        {
+            if (_isAppVeyorEnv)
+            {
+                Output.WriteLine("Skipping test as we're in AppVeyor, demo account does return 3 results");
+                Assert.True(true);
+                return;
+            }
+
+            var companies =
+                await _client.ListAsync<CompanyListHubSpotEntity<CompanyHubSpotEntity>>(new CompanyListRequestOptions
+                {
+                    PropertiesToInclude = new List<string>
+                    {
+                        "name",
+                        "hubspot_owner_id"
+                    },
+                });
+
+            Assert.NotNull(companies);
+            Assert.NotNull(companies.Companies);
+            Assert.NotEmpty(companies.Companies);
+            Assert.True(companies.Companies.Count > 1, "companies.Companies.Count > 1");
         }
 
         [Fact]
