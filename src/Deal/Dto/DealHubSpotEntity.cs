@@ -27,7 +27,7 @@ namespace Skarp.HubSpotClient.Deal.Dto
         [DataMember(Name = "pipeline")]
         public string Pipeline { get; set; }
         [DataMember(Name = "hubspot_owner_id")]
-        public string OwnerId { get; set; }
+        public long? OwnerId { get; set; }
         [DataMember(Name = "closedate")]
         public string CloseDate { get; set; }
         [DataMember(Name = "amount")]
