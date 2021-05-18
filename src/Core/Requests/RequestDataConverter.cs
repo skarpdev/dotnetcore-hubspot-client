@@ -289,6 +289,10 @@ namespace Skarp.HubSpotClient.Core.Requests
                 _logger.LogDebug("Have target prop? '{0}' with name: '{1}' and actual value: '{2}'", targetProp != null,
                     dynamicProp.Key, dynamicValue);
 
+                // skip any nullable properties with a empty value
+                if (Nullable.GetUnderlyingType(targetProp.PropertyType) != null && string.IsNullOrEmpty(dynamicValue.ToString()))
+                    continue;
+
                 targetProp?.SetValue(dto, dynamicValue.GetType() == targetProp.PropertyType 
                     ? dynamicValue 
                     : Convert.ChangeType(dynamicValue, Nullable.GetUnderlyingType(targetProp.PropertyType) ?? targetProp.PropertyType));

@@ -70,14 +70,58 @@ namespace integration.Deal
             var deals =
                 await _client.ListAsync<DealListHubSpotEntity<DealHubSpotEntity>>(new DealListRequestOptions
                 {
-                    PropertiesToInclude = new List<string> { "dealname", "amount" },
+                    PropertiesToInclude = new List<string> { "dealname", "amount", "hubspot_owner_id" },
                     NumberOfDealsToReturn = 2
                 });
             
             Assert.NotNull(deals);
             Assert.NotNull(deals.Deals);
             Assert.NotEmpty(deals.Deals);
-            Assert.True(deals.Deals.Count > 1, "contacts.Deals.Count > 1");
+            Assert.True(deals.Deals.Count > 1, "deals.Deals.Count > 1");
+        }
+
+        [Fact]
+        public async Task ListAll()
+        {
+            if (_isAppVeyorEnv)
+            {
+                Output.WriteLine("Skipping test as we're in AppVeyor, demo account does return 3 results");
+                Assert.True(true);
+                return;
+            }
+
+            var deals = new List<DealHubSpotEntity>();
+            var moreResults = true;
+            long offset = 0;
+
+            while (moreResults)
+            {
+                var pagedDeals = await _client.ListAsync<DealListHubSpotEntity<DealHubSpotEntity>>(new DealListRequestOptions
+                {
+                    PropertiesToInclude = new List<string>
+                    {
+                        "dealname",
+                        "dealstage",
+                        "pipeline",
+                        "hubspot_owner_id",
+                        "closedate",
+                        "amount",
+                        "dealtype"
+                    },
+                    NumberOfDealsToReturn = 150,
+                    DealOffset = offset
+                });
+
+                deals.AddRange(pagedDeals.Deals);
+
+                moreResults = pagedDeals.MoreResultsAvailable;
+                if (moreResults)
+                    offset = pagedDeals.ContinuationOffset;
+            }
+
+            Assert.NotNull(deals);
+            Assert.NotEmpty(deals);
+            Assert.True(deals.Count > 1, "deals.Count > 1");
         }
 
 
