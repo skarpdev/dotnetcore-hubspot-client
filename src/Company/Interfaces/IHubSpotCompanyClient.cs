@@ -47,7 +47,7 @@ namespace Skarp.HubSpotClient.Company.Interfaces
         /// <returns></returns>
         Task<T> UpdateAsync<T>(ICompanyHubSpotEntity entity) where T : IHubSpotEntity, new();
         /// <summary>
-        /// List of company properties
+        /// List company properties
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>

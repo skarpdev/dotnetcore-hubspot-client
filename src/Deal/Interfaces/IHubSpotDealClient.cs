@@ -40,5 +40,11 @@ namespace Skarp.HubSpotClient.Deal.Interfaces
         /// <param name="entity"></param>
         /// <returns></returns>
         Task<T> UpdateAsync<T>(IDealHubSpotEntity entity) where T : IHubSpotEntity, new();
+        /// <summary>
+        /// List deal properties
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        Task<T> GetPropertiesAsync<T>() where T : IHubSpotEntity, new();
     }
 }

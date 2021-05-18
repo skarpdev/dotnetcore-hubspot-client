@@ -1,18 +1,25 @@
 ﻿using System.Collections.Generic;
-using Skarp.HubSpotClient.Company.Dto.Properties;
+using Skarp.HubSpotClient.Common.Dto.Properties;
 using Skarp.HubSpotClient.Core.Interfaces;
 
-namespace Skarp.HubSpotClient.Company.Interfaces.Properties
+namespace Skarp.HubSpotClient.Common.Interfaces
 {
-    public interface ICompanyPropertyHubSpotEntity : IHubSpotEntity
+    public interface IPropertyHubSpotEntity : IHubSpotEntity
     {
         string Name { get; set; }
+
         string Label { get; set; }
+
         string Description { get; set; }
+
         string GroupName { get; set; }
+
         string Type { get; set; }
+
         string FieldType { get; set; }
-        List<CompanyPropertyOptionHubSpotEntity> Options { get; set; }
+
         string RouteBasePath { get; }
+
+        List<PropertyOptionHubSpotEntity> Options { get; set; }
     }
 }

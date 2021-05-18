@@ -1,14 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Skarp.HubSpotClient.Company.Interfaces.Properties;
+using Skarp.HubSpotClient.Common.Interfaces;
 using Skarp.HubSpotClient.Core.Interfaces;
 
-namespace Skarp.HubSpotClient.Company.Dto.Properties
+namespace Skarp.HubSpotClient.Common.Dto.Properties
 {
     [DataContract]
-    public class CompanyPropertyListHubSpotEntity<T> : IHubSpotEntity, ICollection<T>
-        where T : ICompanyPropertyHubSpotEntity
+    public class PropertyListHubSpotEntity<T> : IHubSpotEntity, ICollection<T>
+        where T : IPropertyHubSpotEntity
     {
         private List<T> Properties { get; } = new();
 

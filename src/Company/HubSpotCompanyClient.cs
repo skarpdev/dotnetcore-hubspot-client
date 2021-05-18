@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Flurl;
 using Microsoft.Extensions.Logging;
 using RapidCore.Network;
+using Skarp.HubSpotClient.Common.Dto.Properties;
+using Skarp.HubSpotClient.Common.Interfaces;
 using Skarp.HubSpotClient.Company.Dto;
-using Skarp.HubSpotClient.Company.Dto.Properties;
 using Skarp.HubSpotClient.Company.Interfaces;
-using Skarp.HubSpotClient.Company.Interfaces.Properties;
 using Skarp.HubSpotClient.Core;
 using Skarp.HubSpotClient.Core.Interfaces;
 using Skarp.HubSpotClient.Core.Requests;

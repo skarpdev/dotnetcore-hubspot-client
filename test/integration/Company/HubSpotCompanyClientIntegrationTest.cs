@@ -3,8 +3,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using RapidCore.Network;
+using Skarp.HubSpotClient.Common.Dto.Properties;
 using Skarp.HubSpotClient.Company;
-using Skarp.HubSpotClient.Company.Dto.Properties;
+using Skarp.HubSpotClient.Company.Dto;
 using Skarp.HubSpotClient.Core.Requests;
 using Xunit;
 using Xunit.Abstractions;
@@ -40,7 +41,7 @@ namespace integration.Company
                 return;
             }
 
-            var properties = await _client.GetPropertiesAsync<CompanyPropertyListHubSpotEntity<CompanyPropertyHubSpotEntity>>();
+            var properties = await _client.GetPropertiesAsync<PropertyListHubSpotEntity<CompanyPropertyHubSpotEntity>>();
             
             Assert.NotNull(properties);
             Assert.NotEmpty(properties);

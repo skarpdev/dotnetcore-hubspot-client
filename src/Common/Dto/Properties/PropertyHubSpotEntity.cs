@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Skarp.HubSpotClient.Company.Interfaces.Properties;
+using Skarp.HubSpotClient.Common.Interfaces;
 
-namespace Skarp.HubSpotClient.Company.Dto.Properties
+namespace Skarp.HubSpotClient.Common.Dto.Properties
 {
     [DataContract]
-    public class CompanyPropertyHubSpotEntity : ICompanyPropertyHubSpotEntity
+    public class PropertyHubSpotEntity : IPropertyHubSpotEntity
     {
         [DataMember(Name = "name")]
         public string Name { get; set; }
@@ -26,7 +26,7 @@ namespace Skarp.HubSpotClient.Company.Dto.Properties
         public string FieldType { get; set; }
 
         [DataMember(Name = "options")]
-        public List<CompanyPropertyOptionHubSpotEntity> Options { get; set; }
+        public List<PropertyOptionHubSpotEntity> Options { get; set; }
 
         public bool IsNameValue => false;
 
