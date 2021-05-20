@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Dynamic;
 using System.Linq;
 using System.Reflection;
@@ -289,9 +290,24 @@ namespace Skarp.HubSpotClient.Core.Requests
                 _logger.LogDebug("Have target prop? '{0}' with name: '{1}' and actual value: '{2}'", targetProp != null,
                     dynamicProp.Key, dynamicValue);
 
-                // skip any nullable properties with a empty value
-                if (targetProp != null && Nullable.GetUnderlyingType(targetProp.PropertyType) != null && string.IsNullOrEmpty(dynamicValue.ToString()))
-                    continue;
+                if (targetProp != null)
+                {
+                    // property type
+                    var pt = targetProp.PropertyType;
+                    var val = dynamicValue.ToString();
+
+                    // skip any nullable properties with a empty value
+                    if (Nullable.GetUnderlyingType(pt) != null && string.IsNullOrEmpty(val))
+                        continue;
+
+                    // convert to DateTime/DateTime?
+                    if ((pt == typeof(DateTime) || pt == typeof(DateTime?)) && long.TryParse(val, out var milliseconds))
+                        dynamicValue = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(milliseconds);
+
+                    // convert to DateTimeOffset/DateTimeOffset?
+                    if ((pt == typeof(DateTimeOffset) || pt == typeof(DateTimeOffset?)) && long.TryParse(val, out milliseconds))
+                        dynamicValue = DateTimeOffset.FromUnixTimeMilliseconds(milliseconds);
+                }
 
                 targetProp?.SetValue(dto, dynamicValue.GetType() == targetProp.PropertyType 
                     ? dynamicValue 

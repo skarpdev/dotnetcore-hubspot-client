@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
+using integration.Contact.Dto;
 using Microsoft.Extensions.Logging;
 using RapidCore.Network;
 using Skarp.HubSpotClient.Contact;
@@ -73,9 +76,10 @@ namespace integration.Contact
         public async Task List_contacts_works()
         {
             var contacts =
-                await _client.ListAsync<ContactListHubSpotEntity<ContactHubSpotEntity>>(new ContactListRequestOptions
+                await _client.ListAsync<ContactListHubSpotEntity<ContactHubSpotEntityExtended>>(new ContactListRequestOptions
                 {
-                    NumberOfContactsToReturn = 5
+                    NumberOfContactsToReturn = 5,
+                    PropertiesToInclude = new List<string> { "lastmodifieddate" }
                 });
             
             Assert.NotNull(contacts);
