@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Dynamic;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.Logging;
 using Skarp.HubSpotClient.Core.Interfaces;
+using Skarp.HubSpotClient.CustomObjects.Interfaces;
 
 namespace Skarp.HubSpotClient.Core.Requests
 {
@@ -50,6 +50,7 @@ namespace Skarp.HubSpotClient.Core.Requests
                     // string value of it, but simply pass the object along - it will be serialized later as JSON...
                     var propValue = prop.GetValue(entity);
                     var value = propValue.IsComplexType() ? propValue : propValue?.ToString();
+
                     var item = new HubspotDataEntityProp
                     {
                         Property = propSerializedName,
@@ -72,6 +73,44 @@ namespace Skarp.HubSpotClient.Core.Requests
             {
                 mapped = entity;
             }
+
+            return mapped;
+        }
+
+        /// <summary>
+        /// Converts the given <paramref name="entity"/> to a hubspot data entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <returns></returns>
+        public dynamic ToHubspotDataCustomEntity(IHubSpotEntity entity)
+        {
+            _logger.LogDebug("Convert ToHubspotDataCustomEntity");
+            dynamic mapped = new ExpandoObject();
+            var propDictionary = new Dictionary<string, object>();
+            mapped.Properties = propDictionary;
+
+            _logger.LogDebug("Use nameValue mapping?: {0}", entity.IsNameValue);
+
+            var allProps = entity.GetType().GetProperties();
+            _logger.LogDebug("Have {0} props to map", allProps.Length);
+
+            foreach (var prop in allProps)
+            {
+                if (prop.HasIgnoreDataMemberAttribute()) { continue; }
+
+                var propSerializedName = prop.GetPropSerializedName();
+                _logger.LogDebug("Mapping prop: '{0}' with serialization name: '{1}'", prop.Name, propSerializedName);
+                if (prop.Name.Equals("RouteBasePath") || prop.Name.Equals("IsNameValue") || prop.Name.Equals("ObjectTypeId")) { continue; }
+
+                // IF we have an complex type on the entity that we are trying to convert, let's NOT get the 
+                // string value of it, but simply pass the object along - it will be serialized later as JSON...
+                var propValue = prop.GetValue(entity);
+                var value = propValue.IsComplexType() ? propValue : propValue?.ToString();
+
+                propDictionary.Add(propSerializedName, value);
+            }
+
+            _logger.LogDebug("Mapping complete, returning data");
 
             return mapped;
         }
@@ -120,11 +159,12 @@ namespace Skarp.HubSpotClient.Core.Requests
         }
 
         /// <summary>
-        /// Convert from the dynamicly typed <see cref="ExpandoObject"/> into a strongly typed <see cref="IHubSpotEntity"/>
+        /// Convert from the dynamically typed <see cref="ExpandoObject"/> into a strongly typed <see cref="IHubSpotEntity"/>
         /// </summary>
         /// <param name="dynamicObject">The <see cref="ExpandoObject"/> representation of the returned json</param>
+        /// <param name="isCustomObject"></param>
         /// <returns></returns>
-        public T FromHubSpotResponse<T>(ExpandoObject dynamicObject) where T : IHubSpotEntity, new()
+        public T FromHubSpotResponse<T>(ExpandoObject dynamicObject, bool isCustomObject = false) where T : IHubSpotEntity, new()
         {
             var data = (T)ConvertSingleEntity(dynamicObject, new T());
             return data;
@@ -169,7 +209,7 @@ namespace Skarp.HubSpotClient.Core.Requests
 
             // Convert all the entities
             var jsonEntities = expandoDict[propSerializedName];
-            foreach (var entry in jsonEntities as List<object>)
+            foreach (var entry in (List<object>) jsonEntities)
             {
                 // convert single entity
                 var expandoEntry = entry as ExpandoObject;
@@ -236,6 +276,14 @@ namespace Skarp.HubSpotClient.Core.Requests
             var expandoDict = (IDictionary<string, object>)dynamicObject;
             var dtoProps = dto.GetType().GetProperties();
 
+            // custom objects are returned with "Id"
+            if (expandoDict.TryGetValue("id", out var cId))
+            {
+                // TODO use properly serialized name of prop to find it
+                var vidProp = dtoProps.SingleOrDefault(q => q.GetPropSerializedName() == "Id");
+                vidProp?.SetValue(dto, Convert.ToInt64(cId));
+            }
+
             // The vid is the "id" of the entity
             if (expandoDict.TryGetValue("vid", out var vidData))
             {
@@ -269,32 +317,29 @@ namespace Skarp.HubSpotClient.Core.Requests
             }
 
             // The Properties object in the json / response data contains all the props we wish to map - if that does not exist
-            // we cannot proceeed
+            // we cannot proceed
             if (!expandoDict.TryGetValue("properties", out var dynamicProperties)) return dto;
 
-            foreach (var dynamicProp in dynamicProperties as ExpandoObject)
+            foreach (var dynamicProp in (ExpandoObject) dynamicProperties)
             {
                 // prop.Key contains the name of the property we wish to map into the DTO
                 // prop.Value contains the data returned by HubSpot, which is also an object 
                 // in there we need to go get the "value" prop to get the actual value
                 _logger.LogDebug("Looking at dynamic prop: {0}", dynamicProp.Key);
 
-                if (!((IDictionary<string, Object>)dynamicProp.Value).TryGetValue("value", out object dynamicValue))
-                {
-                    continue;
-                }
+                object dynamicValue = null;
+
+                dynamicValue = dynamicProp.Value is IDictionary<string, object> objects ? objects.TryGetValue("value", out dynamicValue) : dynamicProp.Value;
 
                 // TODO use properly serialized name of prop to find and set it's value
-                var targetProp =
-                    dtoProps.SingleOrDefault(q => q.GetPropSerializedName() == dynamicProp.Key);
-                _logger.LogDebug("Have target prop? '{0}' with name: '{1}' and actual value: '{2}'", targetProp != null,
-                    dynamicProp.Key, dynamicValue);
+                var targetProp = dtoProps.SingleOrDefault(q => q.GetPropSerializedName() == dynamicProp.Key);
+                _logger.LogDebug("Have target prop? '{0}' with name: '{1}' and actual value: '{2}'", targetProp != null, dynamicProp.Key, dynamicValue);
 
                 if (targetProp != null)
                 {
                     // property type
                     var pt = targetProp.PropertyType;
-                    var val = dynamicValue.ToString();
+                    var val = dynamicValue?.ToString();
 
                     // skip any nullable properties with a empty value
                     if (Nullable.GetUnderlyingType(pt) != null && string.IsNullOrEmpty(val))
