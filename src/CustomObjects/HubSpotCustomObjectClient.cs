@@ -73,12 +73,12 @@ public class HubSpotCustomObjectClient : HubSpotBaseClient , IHubSpotCustomObjec
         return await PatchAsync<T>(path, entity);
     }
 
-    public async Task DeleteAsync(long contactId)
+    public async Task DeleteAsync(ICustomObjectHubSpotEntity entity)
     {
-        Logger.LogDebug("Custom object delete w. id: {0}", contactId);
+        Logger.LogDebug("Custom object delete w. id: {0}", entity.Id);
 
-        var path = PathResolver(new CustomObjectHubSpotEntity(), HubSpotAction.Delete)
-            .Replace(":contactId:", contactId.ToString());
+        var path = PathResolver(entity, HubSpotAction.Delete)
+            .Replace(":customObjectId:", entity.Id.ToString());
 
         await DeleteAsync<CustomObjectHubSpotEntity>(path);
     }
@@ -117,7 +117,7 @@ public class HubSpotCustomObjectClient : HubSpotBaseClient , IHubSpotCustomObjec
             HubSpotAction.Get => $"{entity.RouteBasePath}/{entity.ObjectTypeId}/:customObjectId:",
             HubSpotAction.List => $"{entity.RouteBasePath}/{entity.ObjectTypeId}",
             HubSpotAction.Update => $"{entity.RouteBasePath}/{entity.ObjectTypeId}/:customObjectId:",
-            HubSpotAction.Delete => $"{entity.RouteBasePath}/contact/vid/:contactId:",
+            HubSpotAction.Delete => $"{entity.RouteBasePath}/{entity.ObjectTypeId}/:customObjectId:",
             _ => throw new ArgumentOutOfRangeException(nameof(action), action, null)
         };
     }

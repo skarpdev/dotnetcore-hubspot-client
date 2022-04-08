@@ -121,4 +121,29 @@ public class HubSpotCustomObjectClientIntegrationTest : IntegrationTestBase<HubS
         var updated = await _client.UpdateAsync<CustomObjectHubSpotEntityExtended>(created);
         Assert.True(updated.my_object_property == newValue);
     }
+
+    [Fact]
+    public async Task Create_custom_object_and_delete_it()
+    {
+        if (_apiKey.Equals("demo") && _isAppVeyorEnv)
+        {
+            Output.WriteLine("Skipping test as the API key is incorrectly set and we're in AppVeyor");
+            Assert.True(true);
+            return;
+        }
+
+        var customObject = new CustomObjectHubSpotEntityExtended()
+        {
+            my_object_property = "Test 5"
+        };
+        var created = await _client.CreateAsync<CustomObjectHubSpotEntityExtended>(customObject);
+
+        Assert.True(created?.Id > 0);
+
+        await _client.DeleteAsync(created);
+
+        var deleted = await _client.GetByIdAsync<CustomObjectHubSpotEntityExtended>(created.Id.Value);
+
+        Assert.Null(deleted);
+    }
 }

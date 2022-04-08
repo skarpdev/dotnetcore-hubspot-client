@@ -22,9 +22,9 @@ public interface IHubSpotCustomObjectClient
     /// <summary>
     /// Delete an existing custom object in hubspot by id
     /// </summary>
-    /// <param name="customObjectId"></param>
+    /// <param name="entity"></param>
     /// <returns></returns>
-    Task DeleteAsync(long customObjectId);
+    Task DeleteAsync(ICustomObjectHubSpotEntity entity);
     /// <summary>
     /// Return a single custom object by id from hubspot
     /// </summary>
