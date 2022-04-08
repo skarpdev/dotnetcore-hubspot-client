@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 using integration.CustomObject.Dto;
 using Microsoft.Extensions.Logging;
 using RapidCore.Network;
-using Skarp.HubSpotClient.Contact;
-using Skarp.HubSpotClient.Contact.Dto;
 using Skarp.HubSpotClient.Core.Requests;
 using Skarp.HubSpotClient.CustomObjects;
 using Xunit;
@@ -24,14 +22,14 @@ public class HubSpotCustomObjectClientIntegrationTest : IntegrationTestBase<HubS
     {
         _apiKey = Environment.GetEnvironmentVariable("HUBSPOT_API_KEY") ?? "demo";
         _isAppVeyorEnv = (Environment.GetEnvironmentVariable("APPVEYOR") ?? "false").Equals("true", StringComparison.InvariantCultureIgnoreCase);
-        _client = new HubSpotCustomObjectClient(new RealRapidHttpClient(new HttpClient()),base.Logger,
+        _client = new HubSpotCustomObjectClient(new RealRapidHttpClient(new HttpClient()), Logger,
                                                 new RequestSerializer(new RequestDataConverter(LoggerFactory.CreateLogger<RequestDataConverter>())),
                                                 "https://api.hubapi.com",
                                                 _apiKey);
     }
 
     [Fact]
-    public async Task Create_custom_object_and_get_works()
+    public async Task Create_custom_object()
     {
         if (_apiKey.Equals("demo") && _isAppVeyorEnv)
         {
@@ -46,7 +44,49 @@ public class HubSpotCustomObjectClientIntegrationTest : IntegrationTestBase<HubS
         };
         var created = await _client.CreateAsync<CustomObjectHubSpotEntityExtended>(customObject);
 
-        Assert.NotNull(created.my_object_property);
+        Assert.True(created?.Id > 0);
+    }
+
+    [Fact]
+    public async Task Create_custom_object_and_retrieve_it_using_id()
+    {
+        if (_apiKey.Equals("demo") && _isAppVeyorEnv)
+        {
+            Output.WriteLine("Skipping test as the API key is incorrectly set and we're in AppVeyor");
+            Assert.True(true);
+            return;
+        }
+
+        var customObject = new CustomObjectHubSpotEntityExtended()
+        {
+            my_object_property = "Test 5"
+        };
+        var created = await _client.CreateAsync<CustomObjectHubSpotEntityExtended>(customObject);
+
+        Assert.True(created?.Id > 0);
+
+        var retrieved = await _client.GetByIdAsync<CustomObjectHubSpotEntityExtended>(created.Id.Value);
+
+        Assert.NotNull(retrieved);
+    }
+
+    [Fact]
+    public async Task Create_custom_object_and_retrieve_with_custom_properties()
+    {
+        if (_apiKey.Equals("demo") && _isAppVeyorEnv)
+        {
+            Output.WriteLine("Skipping test as the API key is incorrectly set and we're in AppVeyor");
+            Assert.True(true);
+            return;
+        }
+
+        var customObject = new CustomObjectHubSpotEntityExtended()
+        {
+            my_object_property = "Test 5"
+        };
+        var created = await _client.CreateAsync<CustomObjectHubSpotEntityExtended>(customObject);
+
+        Assert.True(created?.Id > 0);
 
         var retrieved = await _client.GetByIdAsync<CustomObjectHubSpotEntityExtended>(created.Id.Value, new CustomObjectRequestOptions()
         {
@@ -56,7 +96,29 @@ public class HubSpotCustomObjectClientIntegrationTest : IntegrationTestBase<HubS
             }
         });
 
-        Assert.NotNull(retrieved);
-        //Assert.Equal("2300", retrieved.ZipCode);
+        Assert.True(retrieved.my_object_property == customObject.my_object_property);
+    }
+
+    [Fact]
+    public async Task Create_custom_object_and_update_property()
+    {
+        if (_apiKey.Equals("demo") && _isAppVeyorEnv)
+        {
+            Output.WriteLine("Skipping test as the API key is incorrectly set and we're in AppVeyor");
+            Assert.True(true);
+            return;
+        }
+
+        var customObject = new CustomObjectHubSpotEntityExtended()
+        {
+            my_object_property = "Test 5"
+        };
+        var created = await _client.CreateAsync<CustomObjectHubSpotEntityExtended>(customObject);
+
+        Assert.True(created?.Id > 0);
+        var newValue = Guid.NewGuid().ToString();
+        created.my_object_property = newValue;
+        var updated = await _client.UpdateAsync<CustomObjectHubSpotEntityExtended>(created);
+        Assert.True(updated.my_object_property == newValue);
     }
 }

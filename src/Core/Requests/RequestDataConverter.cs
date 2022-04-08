@@ -96,7 +96,7 @@ namespace Skarp.HubSpotClient.Core.Requests
 
             foreach (var prop in allProps)
             {
-                if (prop.HasIgnoreDataMemberAttribute()) { continue; }
+                if (prop.HasIgnoreDataMemberAttribute() || prop.Name.Equals("id", StringComparison.CurrentCultureIgnoreCase)) { continue; }
 
                 var propSerializedName = prop.GetPropSerializedName();
                 _logger.LogDebug("Mapping prop: '{0}' with serialization name: '{1}'", prop.Name, propSerializedName);

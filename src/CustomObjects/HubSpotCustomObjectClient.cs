@@ -9,7 +9,8 @@ using System.Net.Http;
 using System;
 using System.Linq;
 using Flurl;
-using Skarp.HubSpotClient.Contact;
+using Skarp.HubSpotClient.Contact.Dto;
+using Skarp.HubSpotClient.CustomObjects.Dto;
 
 namespace Skarp.HubSpotClient.CustomObjects;
 
@@ -59,14 +60,27 @@ public class HubSpotCustomObjectClient : HubSpotBaseClient , IHubSpotCustomObjec
         return data;
     }
 
-    public Task<T> CreateOrUpdateAsync<T>(ICustomObjectHubSpotEntity entity) where T : ICustomObjectHubSpotEntity, IHubSpotEntity, new()
+    public async Task<T> UpdateAsync<T>(ICustomObjectHubSpotEntity entity) where T : ICustomObjectHubSpotEntity, IHubSpotEntity, new()
     {
-        throw new System.NotImplementedException();
+        Logger.LogDebug("Custom object update w. id: {0}", entity.Id);
+        if (entity.Id < 1)
+        {
+            throw new ArgumentException("Custom object entity must have an id set!");
+        }
+        var path = PathResolver(entity, HubSpotAction.Update)
+            .Replace(":customObjectId:", entity.Id.ToString());
+
+        return await PatchAsync<T>(path, entity);
     }
 
-    public Task DeleteAsync(long contactId)
+    public async Task DeleteAsync(long contactId)
     {
-        throw new System.NotImplementedException();
+        Logger.LogDebug("Custom object delete w. id: {0}", contactId);
+
+        var path = PathResolver(new CustomObjectHubSpotEntity(), HubSpotAction.Delete)
+            .Replace(":contactId:", contactId.ToString());
+
+        await DeleteAsync<CustomObjectHubSpotEntity>(path);
     }
 
     public async Task<T> GetByIdAsync<T>(long customObjectId, CustomObjectRequestOptions opts = null) where T : ICustomObjectHubSpotEntity, IHubSpotEntity, new()
@@ -81,11 +95,6 @@ public class HubSpotCustomObjectClient : HubSpotBaseClient , IHubSpotCustomObjec
     }
 
     public Task<T> ListAsync<T>(CustomObjectRequestOptions opts = null) where T : ICustomObjectHubSpotEntity, IHubSpotEntity, new()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public Task UpdateAsync<T>(ICustomObjectHubSpotEntity customObject)
     {
         throw new System.NotImplementedException();
     }
@@ -107,9 +116,8 @@ public class HubSpotCustomObjectClient : HubSpotBaseClient , IHubSpotCustomObjec
             HubSpotAction.Create => $"{entity.RouteBasePath}/{entity.ObjectTypeId}",
             HubSpotAction.Get => $"{entity.RouteBasePath}/{entity.ObjectTypeId}/:customObjectId:",
             HubSpotAction.List => $"{entity.RouteBasePath}/{entity.ObjectTypeId}",
-            HubSpotAction.Update => $"{entity.RouteBasePath}/{entity.ObjectTypeId}/:contactId:/profile",
+            HubSpotAction.Update => $"{entity.RouteBasePath}/{entity.ObjectTypeId}/:customObjectId:",
             HubSpotAction.Delete => $"{entity.RouteBasePath}/contact/vid/:contactId:",
-            HubSpotAction.CreateOrUpdate => $"{entity.RouteBasePath}/contact/createOrUpdate/email/:contactemail:",
             _ => throw new ArgumentOutOfRangeException(nameof(action), action, null)
         };
     }

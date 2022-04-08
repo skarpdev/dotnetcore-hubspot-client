@@ -14,12 +14,11 @@ public interface IHubSpotCustomObjectClient
     /// <exception cref="NotImplementedException"></exception>
     Task<T> CreateAsync<T>(ICustomObjectHubSpotEntity entity) where T : ICustomObjectHubSpotEntity, IHubSpotEntity, new();
     /// <summary>
-    /// Creates or updates the custom object entity asynchronously.
+    /// Update an existing custom object in hubspot
     /// </summary>
-    /// <param name="entity">The entity.</param>
+    /// <param name="entity"></param>
     /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
-    Task<T> CreateOrUpdateAsync<T>(ICustomObjectHubSpotEntity entity) where T : ICustomObjectHubSpotEntity, IHubSpotEntity, new();
+    Task<T> UpdateAsync<T>(ICustomObjectHubSpotEntity entity) where T : ICustomObjectHubSpotEntity, IHubSpotEntity, new();
     /// <summary>
     /// Delete an existing custom object in hubspot by id
     /// </summary>
@@ -41,10 +40,5 @@ public interface IHubSpotCustomObjectClient
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
     Task<T> ListAsync<T>(CustomObjectRequestOptions opts = null) where T : ICustomObjectHubSpotEntity, IHubSpotEntity, new();
-    /// <summary>
-    /// Update an existing custom object in hubspot
-    /// </summary>
-    /// <param name="customObject"></param>
-    /// <returns></returns>
-    Task UpdateAsync<T>(ICustomObjectHubSpotEntity customObject);
+    
 }
