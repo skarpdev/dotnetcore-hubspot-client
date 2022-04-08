@@ -33,12 +33,5 @@ public interface IHubSpotCustomObjectClient
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
     Task<T> GetByIdAsync<T>(long customObjectId, CustomObjectRequestOptions opts = null) where T : ICustomObjectHubSpotEntity, IHubSpotEntity, new();
-    /// <summary>
-    /// Lists custom objects
-    /// </summary>
-    /// <param name="opts">Request options - use for pagination</param>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    Task<T> ListAsync<T>(CustomObjectRequestOptions opts = null) where T : ICustomObjectHubSpotEntity, IHubSpotEntity, new();
     
 }

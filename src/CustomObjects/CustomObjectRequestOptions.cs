@@ -16,7 +16,7 @@ namespace Skarp.HubSpotClient.CustomObjects
         /// <value>
         /// The number of custom objects to return.
         /// </value>
-        public int NumberOfCustomObjectsToReturn
+        public int NumberOfObjectsToReturn
         {
             get => _numberOfItemsToReturn;
             set

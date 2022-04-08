@@ -9,6 +9,7 @@ using System.Net.Http;
 using System;
 using System.Linq;
 using Flurl;
+using Skarp.HubSpotClient.Contact;
 using Skarp.HubSpotClient.Contact.Dto;
 using Skarp.HubSpotClient.CustomObjects.Dto;
 
@@ -92,11 +93,6 @@ public class HubSpotCustomObjectClient : HubSpotBaseClient , IHubSpotCustomObjec
         path = AddGetRequestOptions(path, opts);
         var data = await GetAsync<T>(path);
         return data;
-    }
-
-    public Task<T> ListAsync<T>(CustomObjectRequestOptions opts = null) where T : ICustomObjectHubSpotEntity, IHubSpotEntity, new()
-    {
-        throw new System.NotImplementedException();
     }
 
     /// <summary>
