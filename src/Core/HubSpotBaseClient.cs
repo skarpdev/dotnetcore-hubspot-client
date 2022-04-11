@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ using RapidCore.Network;
 using Skarp.HubSpotClient.Core.Interfaces;
 using Skarp.HubSpotClient.Core.Requests;
 using Skarp.HubSpotClient.CustomObjects.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace Skarp.HubSpotClient.Core
 {
@@ -296,6 +298,21 @@ namespace Skarp.HubSpotClient.Core
             }
 
             return deserializeFunc(responseData);
+        }
+
+        public string GetCustomIdPropertyUrlAttribute(object data)
+        {
+            var dataProps = data.GetType().GetProperties();
+            foreach (var dataProp in dataProps)
+            {
+                if (dataProp.HasKeyAttribute())
+                {
+                    var serializedName = dataProp.GetPropSerializedName();
+                    return $"idProperty={serializedName ?? dataProp.Name.ToLower()}";
+                }
+                    
+            }
+            return null;
         }
     }
 }

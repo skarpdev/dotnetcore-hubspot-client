@@ -107,10 +107,12 @@ public class HubSpotCustomObjectClient : HubSpotBaseClient , IHubSpotCustomObjec
         if (string.IsNullOrEmpty(entity.ObjectTypeId))
             throw new ArgumentException($"Property {nameof(entity.ObjectTypeId)} must have a valid value");
 
+        var suffix = $"?{GetCustomIdPropertyUrlAttribute(entity)}";
+
         return action switch
         {
             HubSpotAction.Create => $"{entity.RouteBasePath}/{entity.ObjectTypeId}",
-            HubSpotAction.Get => $"{entity.RouteBasePath}/{entity.ObjectTypeId}/:customObjectId:",
+            HubSpotAction.Get => $"{entity.RouteBasePath}/{entity.ObjectTypeId}/:customObjectId:{suffix}",
             HubSpotAction.List => $"{entity.RouteBasePath}/{entity.ObjectTypeId}",
             HubSpotAction.Update => $"{entity.RouteBasePath}/{entity.ObjectTypeId}/:customObjectId:",
             HubSpotAction.Delete => $"{entity.RouteBasePath}/{entity.ObjectTypeId}/:customObjectId:",
