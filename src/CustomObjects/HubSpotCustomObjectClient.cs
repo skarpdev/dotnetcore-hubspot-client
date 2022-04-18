@@ -114,7 +114,7 @@ public class HubSpotCustomObjectClient : HubSpotBaseClient , IHubSpotCustomObjec
             HubSpotAction.Create => $"{entity.RouteBasePath}/{entity.ObjectTypeId}",
             HubSpotAction.Get => $"{entity.RouteBasePath}/{entity.ObjectTypeId}/:customObjectId:{suffix}",
             HubSpotAction.List => $"{entity.RouteBasePath}/{entity.ObjectTypeId}",
-            HubSpotAction.Update => $"{entity.RouteBasePath}/{entity.ObjectTypeId}/:customObjectId:",
+            HubSpotAction.Update => $"{entity.RouteBasePath}/{entity.ObjectTypeId}/:customObjectId:{suffix}",
             HubSpotAction.Delete => $"{entity.RouteBasePath}/{entity.ObjectTypeId}/:customObjectId:",
             _ => throw new ArgumentOutOfRangeException(nameof(action), action, null)
         };

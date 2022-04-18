@@ -104,10 +104,21 @@ namespace Skarp.HubSpotClient.Core.Requests
 
                 // IF we have an complex type on the entity that we are trying to convert, let's NOT get the 
                 // string value of it, but simply pass the object along - it will be serialized later as JSON...
+                var isDate = prop.PropertyType == typeof(DateTime) || prop.PropertyType == typeof(DateTime?);
                 var propValue = prop.GetValue(entity);
-                var value = propValue.IsComplexType() ? propValue : propValue?.ToString();
 
-                propDictionary.Add(propSerializedName, value);
+                if (isDate && propValue != null)
+                {
+                    var value = Convert.ToDateTime(propValue).ToString("yyyy-MM-ddTHH:mm:sssZ");
+                    propDictionary.Add(propSerializedName, value);
+                }
+                else
+                {
+                    var value = propValue.IsComplexType() ? propValue : propValue?.ToString();
+                    propDictionary.Add(propSerializedName, value);
+                }
+                
+                
             }
 
             _logger.LogDebug("Mapping complete, returning data");
