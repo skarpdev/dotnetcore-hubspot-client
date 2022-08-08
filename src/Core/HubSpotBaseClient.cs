@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Flurl;
 using Microsoft.Extensions.Logging;
@@ -19,20 +20,20 @@ namespace Skarp.HubSpotClient.Core
         protected readonly RequestSerializer _serializer;
         protected readonly string HubSpotBaseUrl;
         
-        private readonly string _apiKey;
+        private readonly string _apiToken;
 
         protected HubSpotBaseClient(
             IRapidHttpClient httpClient,
             ILogger logger,
             RequestSerializer serializer,
             string hubSpotBaseUrl,
-            string apiKey)
+            string apiToken)
         {
             HttpClient = httpClient;
             Logger = logger;
             _serializer = serializer;
             HubSpotBaseUrl = hubSpotBaseUrl.TrimEnd('/');
-            _apiKey = apiKey;
+            _apiToken = apiToken;
         }
 
         /// <summary>
@@ -252,13 +253,12 @@ namespace Skarp.HubSpotClient.Core
         /// <param name="httpMethod">HTTP method to use for the request</param>
         /// <param name="json">Optional json to send with the request</param>
         /// <param name="deserializeFunc">Func to handle deserialization of data when the request goes well</param>
-        /// <returns>A deserialized entity with data when things go well, exceptionns otherwise</returns>
+        /// <returns>A deserialized entity with data when things go well, exceptions otherwise</returns>
         protected async Task<T> SendRequestAsync<T>(string absoluteUriPath, HttpMethod httpMethod, string json,
             Func<string, T> deserializeFunc)
         {
-            var fullUrl = $"{HubSpotBaseUrl}{absoluteUriPath}"
-                .SetQueryParam("hapikey", _apiKey);
-            
+            var fullUrl = $"{HubSpotBaseUrl}{absoluteUriPath}";
+
             Logger.LogDebug("Full url: '{0}'", fullUrl);
 
             var request = new HttpRequestMessage
@@ -266,6 +266,9 @@ namespace Skarp.HubSpotClient.Core
                 Method = httpMethod,
                 RequestUri = new Uri(fullUrl)
             };
+
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _apiToken);
+            
             if (!string.IsNullOrWhiteSpace(json))
             {
                 request.Content = new JsonContent(json);

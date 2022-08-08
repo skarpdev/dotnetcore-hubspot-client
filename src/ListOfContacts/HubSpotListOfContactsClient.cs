@@ -22,14 +22,14 @@ namespace Skarp.HubSpotClient.ListOfContacts
         /// <param name="logger"></param>
         /// <param name="serializer"></param>
         /// <param name="hubSpotBaseUrl"></param>
-        /// <param name="apiKey"></param>
+        /// <param name="apiKeyOrToken"></param>
         public HubSpotListOfContactsClient(
             IRapidHttpClient httpClient,
             ILogger<HubSpotListOfContactsClient> logger,
             RequestSerializer serializer,
             string hubSpotBaseUrl,
-            string apiKey)
-            : base(httpClient, logger, serializer, hubSpotBaseUrl, apiKey)
+            string apiKeyOrToken
+        ) : base(httpClient, logger, serializer, hubSpotBaseUrl, apiKeyOrToken)
         {
         }
 
@@ -41,14 +41,14 @@ namespace Skarp.HubSpotClient.ListOfContacts
         /// via the network - if you wish to have support for functional tests and mocking use the "eager" constructor
         /// that takes in all underlying dependecies
         /// </remarks>
-        /// <param name="apiKey">Your API key</param>
-        public HubSpotListOfContactsClient(string apiKey)
+        /// <param name="apiKeyOrToken">Your API token</param>
+        public HubSpotListOfContactsClient(string apiKeyOrToken)
         : base(
               new RealRapidHttpClient(new HttpClient()),
               NoopLoggerFactory.Get(),
               new RequestSerializer(new RequestDataConverter(NoopLoggerFactory.Get<RequestDataConverter>())),
               "https://api.hubapi.com",
-              apiKey)
+              apiKeyOrToken)
         { }
 
 
