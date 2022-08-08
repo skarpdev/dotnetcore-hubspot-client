@@ -21,14 +21,14 @@ namespace Skarp.HubSpotClient.Associations
         /// <param name="logger"></param>
         /// <param name="serializer"></param>
         /// <param name="hubSpotBaseUrl"></param>
-        /// <param name="apiKey"></param>
+        /// <param name="apiToken"></param>
         public HubSpotAssociationsClient(
             IRapidHttpClient httpClient,
             ILogger logger,
             RequestSerializer serializer,
             string hubSpotBaseUrl,
-            string apiKey)
-             : base(httpClient, logger, serializer, hubSpotBaseUrl, apiKey)
+            string apiToken)
+             : base(httpClient, logger, serializer, hubSpotBaseUrl, apiToken)
         {
         }
 
@@ -40,14 +40,14 @@ namespace Skarp.HubSpotClient.Associations
         /// via the network - if you wish to have support for functional tests and mocking use the "eager" constructor
         /// that takes in all underlying dependecies
         /// </remarks>
-        /// <param name="apiKey">Your API key</param>
-        public HubSpotAssociationsClient(string apiKey)
+        /// <param name="apiToken">Your API token</param>
+        public HubSpotAssociationsClient(string apiToken)
         : base(
               new RealRapidHttpClient(new HttpClient()),
               NoopLoggerFactory.Get(),
               new RequestSerializer(new RequestDataConverter(NoopLoggerFactory.Get<RequestDataConverter>())),
               "https://api.hubapi.com",
-              apiKey)
+              apiToken)
         { }
 
         /// <summary>

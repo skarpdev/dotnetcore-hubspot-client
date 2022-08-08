@@ -21,14 +21,14 @@ namespace Skarp.HubSpotClient.Owner
         /// <param name="logger"></param>
         /// <param name="serializer"></param>
         /// <param name="hubSpotBaseUrl"></param>
-        /// <param name="apiKey"></param>
+        /// <param name="apiToken"></param>
         public HubSpotOwnerClient(
             IRapidHttpClient httpClient,
             ILogger<HubSpotOwnerClient> logger,
             RequestSerializer serializer,
             string hubSpotBaseUrl,
-            string apiKey)
-            : base(httpClient, logger, serializer, hubSpotBaseUrl, apiKey)
+            string apiToken)
+            : base(httpClient, logger, serializer, hubSpotBaseUrl, apiToken)
         {
         }
 
@@ -38,16 +38,16 @@ namespace Skarp.HubSpotClient.Owner
         /// <remarks>
         /// This constructor creates a HubSpotOwnerClient using "real" dependencies that will send requests 
         /// via the network - if you wish to have support for functional tests and mocking use the "eager" constructor
-        /// that takes in all underlying dependecies
+        /// that takes in all underlying dependencies
         /// </remarks>
-        /// <param name="apiKey">Your API key</param>
-        public HubSpotOwnerClient(string apiKey)
+        /// <param name="apiToken">Your API token</param>
+        public HubSpotOwnerClient(string apiToken)
         : base(
               new RealRapidHttpClient(new HttpClient()),
               NoopLoggerFactory.Get(),
               new RequestSerializer(new RequestDataConverter(NoopLoggerFactory.Get<RequestDataConverter>())),
               "https://api.hubapi.com",
-              apiKey)
+              apiToken)
         { }
 
         /// <summary>
