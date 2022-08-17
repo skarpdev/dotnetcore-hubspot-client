@@ -21,7 +21,7 @@ namespace integration.Deal
 
         public HubSpotDealClientIntegrationTest(ITestOutputHelper output) : base(output)
         {
-            _apiKey = Environment.GetEnvironmentVariable("HUBSPOT_API_KEY") ?? "demo";
+            _apiKey = Environment.GetEnvironmentVariable("HUBSPOT_API_KEY") ?? Environment.GetEnvironmentVariable("HUBSPOT_API_TOKEN") ?? "demo";
             _isAppVeyorEnv = (Environment.GetEnvironmentVariable("APPVEYOR") ?? "false").Equals("true", StringComparison.InvariantCultureIgnoreCase);
 ;            _client = new HubSpotDealClient(
                 new RealRapidHttpClient(new HttpClient()),
