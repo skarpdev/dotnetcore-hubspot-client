@@ -4,6 +4,8 @@ image: Visual Studio 2022
 environment:
   HUBSPOT_API_KEY:
     secure: nEkpqjqVe4G73k8gkmpYndR8GGQdK58k98IxzWwoZS4Rvq+bTOR9Yok2ISgjjNWr
+  HUBSPOT_API_TOKEN:
+    secure: nWXtqDplY3BMELyLFkxVlKcMECU4+rs9sJuWaNkFbHik3n9VOeRGPLOGsUN3UMAz
 pull_requests:
   do_not_increment_build_number: true
 branches:
