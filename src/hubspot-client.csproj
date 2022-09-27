@@ -1,6 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net461;net5.0;net6.0</TargetFrameworks>
     <Version>0.21.0</Version>
     <AssemblyName>Skarp.HubSpotClient</AssemblyName>
     <RootNamespace>Skarp.HubSpotClient</RootNamespace>
@@ -24,6 +23,7 @@
 
     <!-- Recommended: Embed symbols containing Source Link in the main file (exe/dll) -->
     <DebugType>embedded</DebugType>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
