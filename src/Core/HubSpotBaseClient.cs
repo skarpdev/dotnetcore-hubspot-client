@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Flurl;
 using Microsoft.Extensions.Logging;
@@ -19,20 +20,21 @@ namespace Skarp.HubSpotClient.Core
         protected readonly RequestSerializer _serializer;
         protected readonly string HubSpotBaseUrl;
         
-        private readonly string _apiKey;
+        private readonly string _apiKeyOrToken;
 
         protected HubSpotBaseClient(
             IRapidHttpClient httpClient,
             ILogger logger,
             RequestSerializer serializer,
             string hubSpotBaseUrl,
-            string apiKey)
+            string apiKeyOrToken
+        )
         {
             HttpClient = httpClient;
             Logger = logger;
             _serializer = serializer;
             HubSpotBaseUrl = hubSpotBaseUrl.TrimEnd('/');
-            _apiKey = apiKey;
+            _apiKeyOrToken = apiKeyOrToken;
         }
 
         /// <summary>
@@ -252,20 +254,30 @@ namespace Skarp.HubSpotClient.Core
         /// <param name="httpMethod">HTTP method to use for the request</param>
         /// <param name="json">Optional json to send with the request</param>
         /// <param name="deserializeFunc">Func to handle deserialization of data when the request goes well</param>
-        /// <returns>A deserialized entity with data when things go well, exceptionns otherwise</returns>
+        /// <returns>A deserialized entity with data when things go well, exceptions otherwise</returns>
         protected async Task<T> SendRequestAsync<T>(string absoluteUriPath, HttpMethod httpMethod, string json,
             Func<string, T> deserializeFunc)
         {
-            var fullUrl = $"{HubSpotBaseUrl}{absoluteUriPath}"
-                .SetQueryParam("hapikey", _apiKey);
-            
-            Logger.LogDebug("Full url: '{0}'", fullUrl);
+            var fullUrl = $"{HubSpotBaseUrl}{absoluteUriPath}";
 
             var request = new HttpRequestMessage
             {
                 Method = httpMethod,
                 RequestUri = new Uri(fullUrl)
             };
+
+            if (_apiKeyOrToken.StartsWith("pat-"))
+            {
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _apiKeyOrToken);
+            }
+            else
+            {
+                Logger.LogWarning("You are using a legacy hapikey, please convert to using private access tokens. Support ends 30'th Nov 2022 at HubSpot. See more here: https://developers.hubspot.com/docs/api/migrate-an-api-key-integration-to-a-private-app");
+                request.RequestUri = fullUrl.SetQueryParam("hapikey", _apiKeyOrToken).ToUri();
+            }
+            
+            Logger.LogDebug("Full url: '{FullUrl}'", fullUrl);
+            
             if (!string.IsNullOrWhiteSpace(json))
             {
                 request.Content = new JsonContent(json);
