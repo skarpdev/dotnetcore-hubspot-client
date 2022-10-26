@@ -52,7 +52,7 @@ public class ContactTest
   [Fact]
   public async Task Getting_contacts_work()
   {
-    var client = new HubSpotContactClient("my-awesome-api-key");
+    var client = new HubSpotContactClient("my-awesome-api-key-or-pat");
     var contact = await client.GetByEmailAsync<ContactHubSpotEntity>("adrian@hubspot.com");
     Assert.NotNull(contact); // victory!
   }
@@ -91,7 +91,7 @@ public class CompanyTest
   [Fact]
   public async Task Getting_company_works()
   {
-    var client = new HubSpotCompanyClient("my-awesome-api-key");
+    var client = new HubSpotCompanyClient("my-awesome-api-key-or-pat");
     var company = await client.GetByIdAsync<CompanyHubSpotEntity>(42L);
     Assert.NotNull(company); // victory!
   }
@@ -121,7 +121,7 @@ public class OwnerTest
   [Fact]
   public async Task Getting_owner_works()
   {
-    var client = new HubSpotLineItemClient("my-awesome-api-key");
+    var client = new HubSpotLineItemClient("my-awesome-api-key-or-pat");
     var lineItem = await client.GetByIdAsync<LineItemHubSpotEntity>(42L);
     Assert.NotNull(lineItem); // victory!
   }
@@ -145,7 +145,7 @@ public class OwnerTest
   [Fact]
   public async Task Getting_owner_works()
   {
-    var client = new HubSpotOwnerClient("my-awesome-api-key");
+    var client = new HubSpotOwnerClient("my-awesome-api-key-or-pat");
     var owner = await client.GetByIdAsync<OwnerHubSpotEntity>(42L);
     Assert.NotNull(owner); // victory!
   }

@@ -20,20 +20,21 @@ namespace Skarp.HubSpotClient.Core
         protected readonly RequestSerializer _serializer;
         protected readonly string HubSpotBaseUrl;
         
-        private readonly string _apiToken;
+        private readonly string _apiKeyOrToken;
 
         protected HubSpotBaseClient(
             IRapidHttpClient httpClient,
             ILogger logger,
             RequestSerializer serializer,
             string hubSpotBaseUrl,
-            string apiToken)
+            string apiKeyOrToken
+        )
         {
             HttpClient = httpClient;
             Logger = logger;
             _serializer = serializer;
             HubSpotBaseUrl = hubSpotBaseUrl.TrimEnd('/');
-            _apiToken = apiToken;
+            _apiKeyOrToken = apiKeyOrToken;
         }
 
         /// <summary>
@@ -259,15 +260,23 @@ namespace Skarp.HubSpotClient.Core
         {
             var fullUrl = $"{HubSpotBaseUrl}{absoluteUriPath}";
 
-            Logger.LogDebug("Full url: '{0}'", fullUrl);
-
             var request = new HttpRequestMessage
             {
                 Method = httpMethod,
                 RequestUri = new Uri(fullUrl)
             };
 
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _apiToken);
+            if (_apiKeyOrToken.StartsWith("pat-"))
+            {
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _apiKeyOrToken);
+            }
+            else
+            {
+                Logger.LogWarning("You are using a legacy hapikey, please convert to using private access tokens. Support ends 30'th Nov 2022 at HubSpot. See more here: https://developers.hubspot.com/docs/api/migrate-an-api-key-integration-to-a-private-app");
+                request.RequestUri = fullUrl.SetQueryParam("hapikey", _apiKeyOrToken).ToUri();
+            }
+            
+            Logger.LogDebug("Full url: '{FullUrl}'", fullUrl);
             
             if (!string.IsNullOrWhiteSpace(json))
             {
