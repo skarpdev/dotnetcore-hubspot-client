@@ -92,7 +92,7 @@ namespace Skarp.HubSpotClient.UnitTest.Core.Requests
 
             var prop = props.Single(q => q.Property == "MyCustomProp");
 
-            Assert.Equal(prop.Value, "Has a value!");
+            Assert.Equal(prop.Value, $"Has a value!");
         }
 
         [Fact]

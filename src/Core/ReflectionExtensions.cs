@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using RapidCore.Reflection;
@@ -98,6 +100,17 @@ namespace Skarp.HubSpotClient.Core
                 return false;
 
             return true;
+        }
+
+        /// <summary>
+        /// Returns true if the given property has the [Key] attribute
+        /// </summary>
+        /// <param name="prop"></param>
+        /// <returns></returns>
+        internal static bool HasKeyAttribute(this PropertyInfo prop)
+        {
+            return prop.GetCustomAttributes(true)
+                .Any(p => p is KeyAttribute);
         }
     }
 }

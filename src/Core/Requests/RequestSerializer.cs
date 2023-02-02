@@ -4,6 +4,7 @@ using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Skarp.HubSpotClient.Core.Interfaces;
+using Skarp.HubSpotClient.CustomObjects.Interfaces;
 
 namespace Skarp.HubSpotClient.Core.Requests
 {
@@ -38,7 +39,7 @@ namespace Skarp.HubSpotClient.Core.Requests
         /// <summary>
         /// Serializes the entity to JSON.
         /// </summary>
-        /// <param name="entity">The entity.</param>
+        /// <param name="obj">The entity.</param>
         /// <returns>The serialized entity</returns>
         public virtual string SerializeEntity(object obj)
         {
@@ -48,37 +49,43 @@ namespace Skarp.HubSpotClient.Core.Requests
         /// <summary>
         /// Serializes the entity to JSON.
         /// </summary>
-        /// <param name="entity">The entity.</param>
-        /// <param name="preformConversion">This by defines whether or not a data conversion is performed on the object so that the HubSpot "property-value" syntax will be used for serialization. If this parameter is set to false no data conversion is performed and a standard object serialization is performed. </param>
+        /// <param name="obj">The entity.</param>
+        /// <param name="performConversion">This by defines whether or not a data conversion is performed on the object so that the HubSpot "property-value" syntax will be used for serialization. If this parameter is set to false no data conversion is performed and a standard object serialization is performed. </param>
         /// <returns>The serialized entity</returns>
         public virtual string SerializeEntity(object obj, bool performConversion)
         {
-            if (obj is IHubSpotEntity entity)
+            switch (obj)
             {
-                var converted = _requestDataConverter.ToHubspotDataEntity(entity, performConversion);
+                case ICustomObjectHubSpotEntity customEntity:
+                {
+                    var converted = _requestDataConverter.ToHubspotDataCustomEntity(customEntity);
+                    customEntity.ToHubSpotDataEntity(ref converted);
 
-                entity.ToHubSpotDataEntity(ref converted);
+                    return JsonConvert.SerializeObject(converted, _jsonSerializerSettings);
+                }
+                case IHubSpotEntity entity:
+                {
+                    var converted = _requestDataConverter.ToHubspotDataEntity(entity, performConversion);
 
-                return JsonConvert.SerializeObject(
-                    converted,
-                    _jsonSerializerSettings);
+                    entity.ToHubSpotDataEntity(ref converted);
+
+                    return JsonConvert.SerializeObject(converted,_jsonSerializerSettings);
+                }
+                default:
+                    return JsonConvert.SerializeObject(obj, _jsonSerializerSettings);
             }
-
-            return JsonConvert.SerializeObject(
-                obj,
-                _jsonSerializerSettings);
         }
 
         /// <summary>
         /// Serializes entity list to JSON.
         /// </summary>
-        /// <param name="entities">The list of entities.</param>
+        /// <param name="objs">The list of entities.</param>
         /// <returns>The serialized list of entities</returns>
         public virtual string SerializeEntities<T>(List<T> objs)
         {
             var result = new StringBuilder("[");
 
-            for (int i = 0; i < objs.Count; i++)
+            for (var i = 0; i < objs.Count; i++)
             {
                 var obj = objs[i];
                 if (obj is IHubSpotEntity entity)
@@ -110,13 +117,13 @@ namespace Skarp.HubSpotClient.Core.Requests
         /// <summary>
         /// Serializes entity list to name/value JSON.
         /// </summary>
-        /// <param name="entities">The list of entities.</param>
+        /// <param name="objs">The list of entities.</param>
         /// <returns>The serialized list of entities</returns>
         public virtual string SerializeEntitiesToNameValueList<T>(IList<T> objs)
         {
             var result = new StringBuilder("[");
 
-            for (int i = 0; i < objs.Count; i++)
+            for (var i = 0; i < objs.Count; i++)
             {
                 var obj = objs[i];
 

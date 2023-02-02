@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -10,6 +11,8 @@ using Newtonsoft.Json;
 using RapidCore.Network;
 using Skarp.HubSpotClient.Core.Interfaces;
 using Skarp.HubSpotClient.Core.Requests;
+using Skarp.HubSpotClient.CustomObjects.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace Skarp.HubSpotClient.Core
 {
@@ -48,19 +51,21 @@ namespace Skarp.HubSpotClient.Core
             where T : IHubSpotEntity, new()
         {
             Logger.LogDebug("Post async for uri path: '{0}' with type: '{1}'", absoluteUriPath, entity.GetType().Name);
-            var httpMethod = HttpMethod.Post;
-
-            return await PutOrPost<T>(absoluteUriPath, entity, true);
+            return await SerializeAndRunRequest<T>(absoluteUriPath, entity, HttpMethod.Post);
         }
 
         protected async Task<T> PutAsync<T>(string absoluteUriPath, IHubSpotEntity entity)
             where T : IHubSpotEntity, new()
         {
             Logger.LogDebug("Post async for uri path: '{0}' with type: '{1}'", absoluteUriPath, entity.GetType().Name);
-            var json = _serializer.SerializeEntity(entity);
-            var httpMethod = HttpMethod.Post;
+            return await SerializeAndRunRequest<T>(absoluteUriPath, entity, HttpMethod.Put);
+        }
 
-            return await PutOrPost<T>(absoluteUriPath, entity, false);
+        protected async Task<T> PatchAsync<T>(string absoluteUriPath, IHubSpotEntity entity)
+            where T : ICustomObjectHubSpotEntity, IHubSpotEntity, new()
+        {
+            Logger.LogDebug("Patch async for uri path: '{0}' with type: '{1}'", absoluteUriPath, entity.GetType().Name);
+            return await SerializeAndRunRequest<T>(absoluteUriPath, entity, new HttpMethod("PATCH"));
         }
 
         /// <summary>
@@ -69,16 +74,16 @@ namespace Skarp.HubSpotClient.Core
         /// <typeparam name="T"></typeparam>
         /// <param name="absoluteUriPath"></param>
         /// <param name="entity"></param>
-        /// <param name="usePost"></param>
+        /// <param name="httpMethod"></param>
         /// <returns></returns>
-        private async Task<T> PutOrPost<T>(string absoluteUriPath, IHubSpotEntity entity, bool usePost)
+        private async Task<T> SerializeAndRunRequest<T>(string absoluteUriPath, IHubSpotEntity entity, HttpMethod httpMethod)
             where T : IHubSpotEntity, new()
         {
             var json = _serializer.SerializeEntity(entity);
 
             var data = await SendRequestAsync<T>(
                 absoluteUriPath,
-                usePost ? HttpMethod.Post : HttpMethod.Put,
+                httpMethod,
                 json,
                 responseData => (T)_serializer.DeserializeEntity<T>(responseData));
 
@@ -305,6 +310,21 @@ namespace Skarp.HubSpotClient.Core
             }
 
             return deserializeFunc(responseData);
+        }
+
+        public string GetCustomIdPropertyUrlAttribute(object data)
+        {
+            var dataProps = data.GetType().GetProperties();
+            foreach (var dataProp in dataProps)
+            {
+                if (dataProp.HasKeyAttribute())
+                {
+                    var serializedName = dataProp.GetPropSerializedName();
+                    return $"idProperty={serializedName ?? dataProp.Name.ToLower()}";
+                }
+                    
+            }
+            return null;
         }
     }
 }

@@ -16,4 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\hubspot-client.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="CustomObject\Dto\" />
+  </ItemGroup>
 </Project>

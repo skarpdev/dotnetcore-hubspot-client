@@ -20,7 +20,7 @@ namespace Skarp.HubSpotClient.LineItem.Interfaces
         /// <param name="entities">The entities.</param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        Task<IEnumerable<T>> CreateBatchAsync<T>(IEnumerable<ILineItemHubSpotEntity> entity) where T : IHubSpotEntity, new();
+        Task<IEnumerable<T>> CreateBatchAsync<T>(IEnumerable<ILineItemHubSpotEntity> entities) where T : IHubSpotEntity, new();
         /// <summary>
         /// Delete a line item from hubspot
         /// </summary>
